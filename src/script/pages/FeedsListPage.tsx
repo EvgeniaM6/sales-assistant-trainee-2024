@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { SideBar } from '../components';
+import { PageRoutes } from '../constants';
 
 function FeedsListPage() {
   const mockFeedsList = [1, 2, 3];
@@ -13,7 +14,7 @@ function FeedsListPage() {
         <ul>
           {mockFeedsList.map((feed) => (
             <li key={feed}>
-              <NavLink to={`/feed/${feed}`}>{feed}</NavLink>
+              <NavLink to={`/${PageRoutes.Feed}/${feed}`}>{feed}</NavLink>
             </li>
           ))}
         </ul>

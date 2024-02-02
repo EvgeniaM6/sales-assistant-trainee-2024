@@ -1,10 +1,11 @@
 import { useNavigate } from 'react-router-dom';
+import { PageRoutes } from '../constants';
 
 function AuthPage() {
   const navigate = useNavigate();
 
   const login = () => {
-    navigate('/feed');
+    navigate(`/${PageRoutes.Feed}`);
   };
 
   return (

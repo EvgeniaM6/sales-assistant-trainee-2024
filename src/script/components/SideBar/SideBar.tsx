@@ -1,4 +1,5 @@
 import { NavLink, useNavigate } from 'react-router-dom';
+import { PageRoutes } from '../../constants';
 
 function SideBar() {
   const navigate = useNavigate();
@@ -6,7 +7,7 @@ function SideBar() {
   const mockChatsList = [1, 2, 3];
   
   const logout = () => {
-    navigate('/auth');
+    navigate(`/${PageRoutes.Auth}`);
   };
 
   return (
@@ -17,12 +18,12 @@ function SideBar() {
         <ul>
           {mockChatsList.map((chat) => (
             <li key={chat}>
-              <NavLink to={`/chat/${chat}`}>{chat}</NavLink>
+              <NavLink to={`/${PageRoutes.Chat}/${chat}`}>{chat}</NavLink>
             </li>
           ))}
         </ul>
       )}
-      <NavLink to={'/feed'}>Upwork feed</NavLink>
+      <NavLink to={`/${PageRoutes.Feed}`}>Upwork feed</NavLink>
       <button onClick={logout}>logout</button>
       <hr />
     </aside>
