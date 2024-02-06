@@ -2,8 +2,12 @@ import { FieldErrors } from 'react-hook-form';
 import { AuthFormValues } from '../../models';
 import errorImg from '../../../assets/images/error.svg';
 
-function ErrorMessage({ errors }: { errors: FieldErrors<AuthFormValues> }) {
+function ErrorMessage({ errors, errorAuth }: { errors: FieldErrors<AuthFormValues>; errorAuth: string }) {
   const errorsArr: string[] = Object.values(errors).map((error) => error?.message?.toString() || '');
+
+  if (errorAuth) {
+    errorsArr.push(errorAuth);
+  }
 
   return (
     <>

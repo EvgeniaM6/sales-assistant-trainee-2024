@@ -3,6 +3,8 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { PageRoutes } from '../../constants';
 import { AuthFormValues } from '../../models';
 import ErrorMessage from './ErrorMessage';
+import { useState } from 'react';
+import { mockFetch } from './mockFetch';
 
 function LogInForm() {
   const navigate = useNavigate();
@@ -13,18 +15,28 @@ function LogInForm() {
     formState: { errors },
   } = useForm<AuthFormValues>({ mode: 'onSubmit', reValidateMode: 'onSubmit' });
 
-  const login: SubmitHandler<AuthFormValues> = (data) => {
-    const { login, password } = data;
-    console.log('login=', login);
-    console.log('password=', password);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(false);
+  const [errorAuth, setErrorAuth] = useState('');
 
-    navigate(`/${PageRoutes.Feed}`);
+  const login: SubmitHandler<AuthFormValues> = async (data) => {
+    setIsCheckingAuth(true);
+    setErrorAuth('');
+    const { login, password } = data;
+
+    try {
+      await mockFetch(login, password);
+      navigate(`/${PageRoutes.Feed}`);
+    } catch (error) {
+      console.log(error);
+      setErrorAuth(error as string);
+      setIsCheckingAuth(false);
+    }
   };
 
   return (
     <div className='auth__block'>
       <h3 className='auth__title'>Log in</h3>
-      <ErrorMessage errors={errors} />
+      <ErrorMessage errors={errors} errorAuth={errorAuth} />
       <form onSubmit={handleSubmit(login)} className='auth__form auth-form'>
         <label htmlFor='login' className='auth__label'>Login</label>
         <input
@@ -40,7 +52,10 @@ function LogInForm() {
           className='auth__input auth-form__item'
           {...register('password', { required: 'Enter your password' })}
         />
-        <button type='submit' className='auth-form__item auth__btn'>Sign in</button>
+        <button type='submit' className='auth-form__item auth__btn'>
+          {isCheckingAuth && <span className='auth__btn-loading'></span>}
+          <span>Sign in</span>
+        </button>
       </form>
     </div>
   );
