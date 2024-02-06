@@ -1,3 +1,3 @@
-import { PageRoutes } from './pageRoutes.model';
+import { PageRoutes } from './pageRoutes';
 
 export { PageRoutes };
