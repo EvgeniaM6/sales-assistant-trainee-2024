@@ -1,25 +1,18 @@
-import React from 'react';
-import logo from './logo.svg';
-import Main from './script/pages/Main';
+import { Route, Routes } from 'react-router-dom';
+import { AuthPage, ChatPage, FeedPage, FeedsListPage, NotFoundPage, VersionPage } from './script/pages';
+import { PageRoutes } from './script/constants';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <Main />
-      </header>
+    <div className="app">
+      <Routes>
+        <Route path={`/${PageRoutes.Auth}`} element={<AuthPage />} />
+        <Route path={`/${PageRoutes.Chat}/:id`} element={<ChatPage />} />
+        <Route path={`/${PageRoutes.Feed}`} element={<FeedsListPage />} />
+        <Route path={`/${PageRoutes.Feed}/:id`} element={<FeedPage />} />
+        <Route path={`/${PageRoutes.Version}`} element={<VersionPage />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Routes>
     </div>
   );
 }
