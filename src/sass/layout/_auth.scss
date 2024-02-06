@@ -25,6 +25,18 @@
       word-break: break-word;
     }
 
+    &__error {
+      display: flex;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: $color-error-background;
+
+      &-paragraph {
+        margin: 0;
+      }
+    }
+
     .auth-form {
       &__item {
         display: block;
