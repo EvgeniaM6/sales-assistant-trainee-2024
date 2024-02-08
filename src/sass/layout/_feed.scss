@@ -1,0 +1,8 @@
+.feed-page {
+  display: flex;
+
+  &__main {
+    flex: 1;
+    background: $color-main-background;
+  }
+}
