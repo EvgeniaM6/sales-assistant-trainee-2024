@@ -3,6 +3,7 @@ import { PageRoutes } from '../../constants';
 import { useState } from 'react';
 import ChatItem from './ChatItem';
 import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-item';
+import CreateChatPopper from './CreateChatPopper';
 
 function SideBar() {
   const navigate = useNavigate();
@@ -26,13 +27,16 @@ function SideBar() {
   };
   const [chatsList, setChatsList] = useState(mockChatsList.data);
   const [uniqueId, setUniqueId] = useState(2);
+  const [isCreating, setIsCreating] = useState(false);
 
-  const addNewChat = () => {
+  const openCreating = () => setIsCreating(true);
+  const closeCreating = () => setIsCreating(false);
+  const addNewChat = (name: string) => {
     const newChatsList = [...chatsList];
     newChatsList.push({
       accountId: 2,
       id: uniqueId,
-      name: "new"
+      name: name
     });
     setUniqueId(uniqueId + 1)
     setChatsList(newChatsList);
@@ -76,10 +80,11 @@ function SideBar() {
   return (
     <aside className='sidebar'>
       <div className='sidebar__main chats'>
-        <button className='chats__new-btn btn-secondary' onClick={addNewChat}>
+        <button className='chats__new-btn btn-secondary' onClick={openCreating}>
           <span className='chats__new-btn-icon'></span>
           <span className='chats__new-btn-text'>New chat</span>
         </button>
+        {isCreating && <CreateChatPopper closeCreating={closeCreating} createChatItem={addNewChat} />}
         {chatsList.length && (
           <ul className='chats__list'>
             {chatsList.map((chat) => (
