@@ -11,11 +11,13 @@ function FeedPage() {
   };
 
   return (
-    <div>
+    <div className='page feed-page'>
       <SideBar />
-      <h2>Feed page</h2>
-      <button onClick={openFeedPage}>back</button>
-      <h3>Feed {id}</h3>
+      <div className='feed-page__main'>
+        <h2>Feed page</h2>
+        <button onClick={openFeedPage}>back</button>
+        <h3>Feed {id}</h3>
+      </div>
     </div>
   );
 }

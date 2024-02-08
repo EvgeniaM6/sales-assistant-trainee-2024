@@ -5,10 +5,12 @@ function ChatPage() {
   let { id } = useParams();
 
   return (
-    <div>
+    <div className='page chat-page'>
       <SideBar />
-      <h2>Chat page</h2>
-      <h3>Chat {id}</h3>
+      <div className='chat-page__main'>
+        <h2>Chat page</h2>
+        <h3>Chat {id}</h3>
+      </div>
     </div>
   );
 }

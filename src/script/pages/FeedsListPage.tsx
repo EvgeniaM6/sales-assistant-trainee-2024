@@ -1,24 +1,10 @@
-import { NavLink } from 'react-router-dom';
-import { SideBar } from '../components';
-import { PageRoutes } from '../constants';
+import { FeedsBlock, SideBar } from '../components';
 
 function FeedsListPage() {
-  const mockFeedsList = [1, 2, 3];
-
   return (
-    <div>
+    <div className='page feeds-list-page'>
       <SideBar />
-      <h2>FeedsList page</h2>
-      <h3>Feeds:</h3>
-      {mockFeedsList.length && (
-        <ul>
-          {mockFeedsList.map((feed) => (
-            <li key={feed}>
-              <NavLink to={`/${PageRoutes.Feed}/${feed}`}>{feed}</NavLink>
-            </li>
-          ))}
-        </ul>
-      )}
+      <FeedsBlock />
     </div>
   );
 }
