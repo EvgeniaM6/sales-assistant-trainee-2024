@@ -10,19 +10,13 @@
 
     &__link {
       display: inline-block;
-      border: 2px solid $color-button-border;
-      background: $color-button-background;
-      border-radius: 8px;
-      padding: 10px 16px;
       color: $color-font;
       transition: all .3s ease-in-out;
 
       &:hover {
         color: $color-font;
         text-decoration: none;
-        background: $color-button-background-hover;
       }
-  
     }
   }
 }

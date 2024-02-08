@@ -76,7 +76,7 @@ function SideBar() {
   return (
     <aside className='sidebar'>
       <div className='sidebar__main chats'>
-        <button className='chats__new-btn' onClick={addNewChat}>
+        <button className='chats__new-btn btn-secondary' onClick={addNewChat}>
           <span className='chats__new-btn-icon'></span>
           <span className='chats__new-btn-text'>New chat</span>
         </button>

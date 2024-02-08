@@ -70,19 +70,6 @@
       align-items: center;
       justify-content: center;
       gap: 8px;
-      border: 2px solid $color-button-border;
-      border-radius: 8px;
-      background-color: $color-button-background;
-
-      &:hover {
-        background-color: $color-button-background-hover;
-      }
-
-      &:active,
-      &:focus {
-        background-color: $color-button-border;
-        outline: none;
-      }
 
       &-loading {
         display: inline-block;

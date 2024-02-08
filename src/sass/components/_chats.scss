@@ -5,20 +5,7 @@
     justify-content: center;
     gap: 8px;
     width: 100%;
-    border: 2px solid $color-button-border;
-    background: $color-button-background;
-    border-radius: 8px;
-    padding: 10px 16px;
     margin-bottom: 12px;
-
-    &:hover {
-      background: $color-button-background-hover;
-    }
-
-    &:active,
-    &:focus {
-      background-color: $color-button-border;
-    }
 
     &-icon {
       display: inline-block;
@@ -98,14 +85,8 @@
     }
   }
 
-  &__popover {
-    position: fixed;
-    z-index: 19;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    cursor: default;
+  &__overlay {
+    background: transparent;
   }
 
   &__popup {

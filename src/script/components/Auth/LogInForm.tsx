@@ -52,7 +52,7 @@ function LogInForm() {
           className='auth__input auth-form__item'
           {...register('password', { required: 'Enter your password' })}
         />
-        <button type='submit' className='auth-form__item auth__btn'>
+        <button type='submit' className='auth-form__item auth__btn btn-secondary'>
           {isCheckingAuth && <span className='auth__btn-loading'></span>}
           <span>Sign in</span>
         </button>
