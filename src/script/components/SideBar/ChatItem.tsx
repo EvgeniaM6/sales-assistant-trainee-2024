@@ -16,16 +16,16 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
 
   const openMore = () => {
     setIsVisible(true);
-  }
+  };
 
   const openDeleting = () => {
     setIsDeleting(true);
     hideMore();
-  }
+  };
 
   const closeDeleting = () => {
     setIsDeleting(false);
-  }
+  };
 
   const hideMore = () => {
     setIsVisible(false);
@@ -67,10 +67,10 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
         )}
         {isDeleting && (
           createPortal(
-            <DeletePopper 
-              id={id} 
-              name={name} 
-              deleteChatItem={deleteChatItem} 
+            <DeletePopper
+              id={id}
+              name={name}
+              deleteChatItem={deleteChatItem}
               closeDeleting={closeDeleting}
             />,
             document.body
@@ -78,7 +78,7 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
         }
       </NavLink>
     </li>
-  )
+  );
 }
 
 export default ChatItem;

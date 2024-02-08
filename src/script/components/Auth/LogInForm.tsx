@@ -46,7 +46,7 @@ function LogInForm() {
           {...register('login', { required: 'Enter your login' })}
         />
         <label htmlFor='password' className='auth__label'>Password</label>
-        <input 
+        <input
           type='password'
           id='password'
           className='auth__input auth-form__item'

@@ -8,6 +8,6 @@ function AuthBlock() {
       <LogInForm />
     </aside>
   );
-};
+}
 
 export default AuthBlock;

@@ -3,4 +3,4 @@ export enum PageRoutes {
   Chat = 'chat',
   Feed = 'feed',
   Version = 'version'
-};
+}

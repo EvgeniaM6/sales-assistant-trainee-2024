@@ -7,23 +7,23 @@ import CreateChatPopper from './CreateChatPopper';
 
 function SideBar() {
   const navigate = useNavigate();
-  let location = useLocation();
+  const location = useLocation();
 
   const mockChatsList = {
-    "success": true,
-    "statusCode": 200,
-    "data": [
+    'success': true,
+    'statusCode': 200,
+    'data': [
       {
-        "accountId": 1,
-        "id": 176,
-        "name": "фівфівівфівф"
+        'accountId': 1,
+        'id': 176,
+        'name': 'фівфівівфівф',
       },
       {
-        "accountId": 1,
-        "id": 159,
-        "name": "\"The Simple Addition of Three Plus Three\""
+        'accountId': 1,
+        'id': 159,
+        'name': '"The Simple Addition of Three Plus Three"',
       },
-    ]
+    ],
   };
   const [chatsList, setChatsList] = useState(mockChatsList.data);
   const [uniqueId, setUniqueId] = useState(2);
@@ -36,11 +36,11 @@ function SideBar() {
     newChatsList.push({
       accountId: 2,
       id: uniqueId,
-      name: name
+      name: name,
     });
-    setUniqueId(uniqueId + 1)
+    setUniqueId(uniqueId + 1);
     setChatsList(newChatsList);
-  }
+  };
 
   const logout = () => {
     navigate(`/${PageRoutes.Auth}`);
@@ -72,7 +72,7 @@ function SideBar() {
     }
 
     console.log('nextChatItem=', nextChatItem);
-    const redirectTo = nextChatItem ? `/${PageRoutes.Chat}/${nextChatItem.id}` : `/${PageRoutes.Feed}`
+    const redirectTo = nextChatItem ? `/${PageRoutes.Chat}/${nextChatItem.id}` : `/${PageRoutes.Feed}`;
     console.log('redirectTo=', redirectTo);
     new Promise((res) => res('')).then(() => navigate(redirectTo));
   };
@@ -100,11 +100,11 @@ function SideBar() {
         )}
       </div>
       <div className='sidebar__footer'>
-        <NavLink 
+        <NavLink
           to={`/${PageRoutes.Feed}`}
           className={() => {
             const isActive = location.pathname === '/' || location.pathname === `/${PageRoutes.Feed}`;
-            return "sidebar__footer-item feed-link" + (isActive ? " active" : "");
+            return 'sidebar__footer-item feed-link' + (isActive ? ' active' : '');
           }}
         >
           <span className='feed-link__icon'></span>
@@ -118,7 +118,6 @@ function SideBar() {
       </div>
     </aside>
   );
-  
 }
 
 export default SideBar;

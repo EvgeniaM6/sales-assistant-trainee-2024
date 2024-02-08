@@ -12,10 +12,10 @@ function CreateChatPopper({ createChatItem, closeCreating }: {
     formState: { errors },
   } = useForm<CreateChatForm>({ mode: 'onSubmit', reValidateMode: 'onSubmit' });
 
-  const createChat: SubmitHandler<CreateChatForm>  = ({ chatName }) => {
+  const createChat: SubmitHandler<CreateChatForm> = ({ chatName }) => {
     createChatItem(chatName);
     closeCreating();
-  }
+  };
 
   return (
     <Popup close={closeCreating} confirm={handleSubmit(createChat)} confirmAction='Create'>

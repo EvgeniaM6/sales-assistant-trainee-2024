@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import { SideBar } from '../components';
 
 function ChatPage() {
-  let { id } = useParams();
+  const { id } = useParams();
 
   return (
     <div className='page chat-page'>

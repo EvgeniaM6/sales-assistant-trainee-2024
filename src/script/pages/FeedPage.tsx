@@ -4,7 +4,7 @@ import { PageRoutes } from '../constants';
 
 function FeedPage() {
   const navigate = useNavigate();
-  let { id } = useParams();
+  const { id } = useParams();
 
   const openFeedPage = () => {
     navigate(`/${PageRoutes.Feed}`);

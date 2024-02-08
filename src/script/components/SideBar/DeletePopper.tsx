@@ -8,7 +8,7 @@ function DeletePopper({ id, name, deleteChatItem, closeDeleting }: {
 }) {
   const deleteChat = () => {
     deleteChatItem(id);
-  }
+  };
 
   return (
     <Popup close={closeDeleting} confirm={deleteChat} confirmAction='Delete'>

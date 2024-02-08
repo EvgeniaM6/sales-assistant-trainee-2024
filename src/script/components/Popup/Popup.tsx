@@ -18,7 +18,7 @@ function Popup({ children, close, confirm, confirmAction }: PopupProps) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 export default Popup;

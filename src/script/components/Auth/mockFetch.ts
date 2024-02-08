@@ -8,7 +8,8 @@ export const mockFetch = (login: string, password: string) => {
       if (isSuccess) {
         res('');
       } else {
-        rej('Login failed')
+        // eslint-disable-next-line prefer-promise-reject-errors
+        rej('Login failed');
       }
     }, 2000);
   });
