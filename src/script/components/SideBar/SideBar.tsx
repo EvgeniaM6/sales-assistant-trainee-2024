@@ -1,4 +1,4 @@
-import { NavLink, useNavigate } from 'react-router-dom';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../constants';
 import { useState } from 'react';
 import ChatItem from './ChatItem';
@@ -6,6 +6,7 @@ import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-
 
 function SideBar() {
   const navigate = useNavigate();
+  let location = useLocation();
 
   const mockChatsList = {
     "success": true,
@@ -94,7 +95,13 @@ function SideBar() {
         )}
       </div>
       <div className='sidebar__footer'>
-        <NavLink to={`/${PageRoutes.Feed}`} className='sidebar__footer-item feed-link'>
+        <NavLink 
+          to={`/${PageRoutes.Feed}`}
+          className={() => {
+            const isActive = location.pathname === '/' || location.pathname === `/${PageRoutes.Feed}`;
+            return "sidebar__footer-item feed-link" + (isActive ? " active" : "");
+          }}
+        >
           <span className='feed-link__icon'></span>
           <span className='feed-link__text'>Upwork feed</span>
         </NavLink>

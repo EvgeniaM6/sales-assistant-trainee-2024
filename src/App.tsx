@@ -8,6 +8,7 @@ function App() {
       <Routes>
         <Route path={`/${PageRoutes.Auth}`} element={<AuthPage />} />
         <Route path={`/${PageRoutes.Chat}/:id`} element={<ChatPage />} />
+        <Route path={`/`} element={<FeedsListPage />} />
         <Route path={`/${PageRoutes.Feed}`} element={<FeedsListPage />} />
         <Route path={`/${PageRoutes.Feed}/:id`} element={<FeedPage />} />
         <Route path={`/${PageRoutes.Version}`} element={<VersionPage />} />
