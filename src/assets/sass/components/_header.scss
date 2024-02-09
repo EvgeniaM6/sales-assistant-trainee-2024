@@ -1,0 +1,38 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 8px;
+
+  &__btn {
+    border-radius: 8px;
+    padding: 12px;
+    width: 48px;
+    height: 48px;
+    border: none;
+    background: none;
+
+    &:hover {
+      background: $color-button-background-hover;
+    }
+  
+    &:active,
+    &:focus {
+      background-color: $color-button-border;
+    }
+
+    &-img {
+      display: block;
+      width: 24px;
+      height: 24px;
+
+      &.collapse {
+        background: url('../../images/collapse-menu.svg') center / cover no-repeat;
+      }
+
+      &.theme {
+        background: url('../../images/dark-mode.svg') center / cover no-repeat;
+      }
+    }
+  }
+}

@@ -5,4 +5,52 @@
     flex: 1;
     background: $color-main-background;
   }
+
+  .feeds {
+    overflow: hidden;
+
+    &__top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0px 32px 8px;
+    }
+
+    &__refresh {
+      &-btn {
+        display: flex;
+        gap: 8px;
+
+        &-icon {
+          display: block;
+          width: 24px;
+          height: 24px;
+          background: url('../../images/refresh.svg') center / cover no-repeat;
+        }
+      }
+    }
+
+    &__content {
+      overflow: auto;
+      height: calc(100vh - 200px);
+
+      &::-webkit-scrollbar-track {
+        background: transparent;
+      }
+  
+      &::-webkit-scrollbar-thumb {
+        background-color: $color-scrollbar;
+        border-radius: 10px;
+      }
+  
+      &::-webkit-scrollbar {
+        width: 7px;
+        height: 7px;
+      }
+    }
+
+    &__list {
+      padding: 8px 32px 0px 32px;
+    }
+  }
 }
