@@ -8,7 +8,7 @@
 
   &__background {
     flex: 1;
-    background: url('../../images/auth-background.jpg') center / cover;
+    background: url('../../images/auth-background.jpg') center / cover no-repeat;
   }
 
   .auth {
@@ -76,7 +76,7 @@
         display: inline-block;
         width: 24px;
         height: 24px;
-        background: url('../../images/loading.svg');
+        background: url('../../images/loading.svg') center / cover no-repeat;
         animation: spin 1s steps(12) infinite;
       }
     }
