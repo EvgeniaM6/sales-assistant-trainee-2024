@@ -1,3 +1,4 @@
+import Select from 'react-select';
 import fetchFeeds from './fetchFeeds.json';
 
 function FeedsPagination() {
@@ -8,6 +9,10 @@ function FeedsPagination() {
   const handleClickPage = (page: string) => {
     console.log(page);
   };
+
+  const pagesOptions = [
+    { value: pageSize, label: pageSize },
+  ];
 
   return (
     <div className="feeds__pagination feeds-pagination">
@@ -20,9 +25,12 @@ function FeedsPagination() {
       <div className="feeds-pagination__divider"></div>
       <div className='feeds-pagination__page-size'>
         <span>Items per page</span>
-        <select name="" id="">
-          <option value="">{pageSize}</option>
-        </select>
+        <Select
+          options={pagesOptions}
+          placeholder={''}
+          defaultValue={pagesOptions[0]}
+          menuPlacement='auto'
+        />
       </div>
       <div className='feeds-pagination__pages'>
         <div className='feeds-pagination__page pagination'>

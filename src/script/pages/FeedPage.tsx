@@ -1,22 +1,16 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { SideBar } from '../components';
-import { PageRoutes } from '../constants';
+import { useParams } from 'react-router-dom';
+import { Feed, Header, SideBar } from '../components';
 
 function FeedPage() {
-  const navigate = useNavigate();
   const { id } = useParams();
-
-  const openFeedPage = () => {
-    navigate(`/${PageRoutes.Feed}`);
-  };
+  console.log('id=', id);
 
   return (
     <div className='page feed-page'>
       <SideBar />
       <div className='feed-page__main'>
-        <h2>Feed page</h2>
-        <button onClick={openFeedPage}>back</button>
-        <h3>Feed {id}</h3>
+        <Header />
+        <Feed id={id || ''} />
       </div>
     </div>
   );
