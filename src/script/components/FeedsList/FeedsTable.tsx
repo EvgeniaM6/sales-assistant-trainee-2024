@@ -8,6 +8,7 @@ import { columns } from './feedColumns';
 import { useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../constants';
 import { FeedItem } from '../../models/feed.model';
+import DateInput from './DataInput';
 
 function FeedsTable({ mockFeedsList }: { mockFeedsList: IUpworkFeedItemDTO[] }) {
   const navigate = useNavigate();
@@ -74,11 +75,12 @@ function FeedsTable({ mockFeedsList }: { mockFeedsList: IUpworkFeedItemDTO[] }) 
                           </div>
                         )}
                       </div>
-                      {(isTitle || isPublished) && (
-                        <input type={isTitle ? 'text' : 'date'} />
+                      {isTitle && (
+                        <input type='text' className='head-cell__input' />
                       )}
+                      {isPublished && <DateInput />}
                       {(headerId === 'keywords' || isScore || isReview) && (
-                        <select name="" id="">
+                        <select name="" id="" className='head-cell__input'>
                           {isReview && <option>All</option>}
                         </select>
                       )}
