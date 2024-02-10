@@ -8,12 +8,17 @@ import { columns } from './feedColumns';
 import { useNavigate } from 'react-router-dom';
 import { PageRoutes } from '../../constants';
 import { FeedItem } from '../../models/feed.model';
-import DateInput from './DataInput';
+import { IOptionInterface } from '../../../public-common/interfaces/dto/common/ioption.interface';
+import FeedsTableHead from './FeedsTableHead';
 
-function FeedsTable({ mockFeedsList }: { mockFeedsList: IUpworkFeedItemDTO[] }) {
+function FeedsTable({ items, keywordsOptions, scoreOptions }: {
+  items: IUpworkFeedItemDTO[];
+  keywordsOptions: IOptionInterface[];
+  scoreOptions: IOptionInterface[];
+}) {
   const navigate = useNavigate();
 
-  const data: FeedItem[] = mockFeedsList.map((feed) => ({
+  const data: FeedItem[] = items.map((feed) => ({
     feedId: feed.id || '',
     url: feed.url,
     title: feed.title,
@@ -31,66 +36,18 @@ function FeedsTable({ mockFeedsList }: { mockFeedsList: IUpworkFeedItemDTO[] }) 
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const openFeedById = (id: string) => {
+  const openFeedById = (id: string): void => {
     navigate(`/${PageRoutes.Feed}/${id}`);
   };
 
   return (
     <div className='feeds__content'>
       <table className='feeds__table feeds-table'>
-        <thead className='feeds-table__head'>
-          {table.getHeaderGroups().map((headerGroup) => (
-            <tr key={headerGroup.id} className='feeds-table__row'>
-              {headerGroup.headers
-                .filter((header) => {
-                  const columnId = header.id;
-                  const haveToSkip = columnId === 'feedId' || columnId === 'url';
-                  return !haveToSkip;
-                })
-                .map((header) => {
-                  const headerId = header.id;
-                  const isTitle = headerId === 'title';
-                  const isPublished = headerId === 'published';
-                  const isScore = headerId === 'score';
-                  const isReview = headerId === 'review';
-                  return (
-                    <th
-                      key={headerId}
-                      className='feeds-table__cell feeds-table__head-cell head-cell'
-                    >
-                      <div className='head-cell__title'>
-                        <div className={`head-cell__title-text ${headerId}`}>
-                          {header.isPlaceholder ?
-                            null :
-                            flexRender(
-                              header.column.columnDef.header,
-                              header.getContext()
-                            )}
-                        </div>
-                        {(isTitle || isPublished || isScore || isReview) && (
-                          <div className='head-cell__sort'>
-                            <button className='head-cell__sort-btn'>
-                              <span className='head-cell__sort-btn-icon'></span>
-                            </button>
-                          </div>
-                        )}
-                      </div>
-                      {isTitle && (
-                        <input type='text' className='head-cell__input' />
-                      )}
-                      {isPublished && <DateInput />}
-                      {(headerId === 'keywords' || isScore || isReview) && (
-                        <select name="" id="" className='head-cell__input'>
-                          {isReview && <option>All</option>}
-                        </select>
-                      )}
-                    </th>
-                  );
-                })
-              }
-            </tr>
-          ))}
-        </thead>
+        <FeedsTableHead
+          table={table}
+          keywordsOptions={keywordsOptions}
+          scoreOptions={scoreOptions}
+        />
         <tbody className='feeds-table__body'>
           {table.getRowModel().rows.map((row) => (
             <tr key={row.id} className='feeds-table__row'>
