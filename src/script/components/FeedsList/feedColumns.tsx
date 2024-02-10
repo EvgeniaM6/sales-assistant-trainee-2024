@@ -41,7 +41,14 @@ export const columns = [
     header: 'Score',
     cell: (info) => {
       const score = info.getValue();
-      return <span className={'feeds-table__cell-score'} style={{backgroundPositionX: `-${score * 10}px`}}>{score}</span>;
+      return (
+        <span
+          className={'feeds-table__cell-score'}
+          style={{backgroundColor: `hsl(${score > 250 ? 180 : score * 180 / 250}deg 100% 80%)`}}
+        >
+          {score}
+        </span>
+      );
     },
   }),
   columnHelper.accessor('review', {

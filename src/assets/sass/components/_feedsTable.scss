@@ -18,9 +18,6 @@
       font-weight: 500;
       padding: 2px 8px;
       border-radius: 20px;
-      background: #bd9f63;
-      background-image: linear-gradient(90deg, #e9456b, #e8726d, #f16d43, #fcab63, #fedc8c, #f9f7ae, #d7ee8e, #a4d86f, #79db76, #5fd38b, #41c674);
-      background-size: 2500px;
     }
   }
 
@@ -63,7 +60,6 @@
           min-width: 86px;
         }
       }
-
     }
 
     &__sort {
@@ -77,6 +73,21 @@
           height: 16px;
           background: url('../../images/sort.svg') center / cover no-repeat;
         }
+      }
+    }
+
+    &__input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid $color-date-input-border;
+      color: $color-date-day-text;
+
+      &:active,
+      &:focus {
+        border: 1px solid $color-btn-background-primary;
+        outline: none;
+        box-shadow: 0 0 0 1px $color-date-input-border-hover;
       }
     }
   }
