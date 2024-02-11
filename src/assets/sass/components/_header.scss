@@ -25,9 +25,14 @@
       display: block;
       width: 24px;
       height: 24px;
+      transition: .5s ease-in-out;
 
       &.collapse {
         background: url('../../images/collapse-menu.svg') center / cover no-repeat;
+      }
+
+      &.open {
+        background: url('../../images/menu.svg') center / cover no-repeat;
       }
 
       &.theme {

@@ -1,7 +1,7 @@
 import { createColumnHelper } from '@tanstack/react-table';
 import { ReviewType } from '../../../public-common/enums/upwork-feed/review-type.enum';
 import { getTimeFromString } from '../../utils/getTimeFromString';
-import { FeedItem } from '../../models/feed.model';
+import { FeedItem } from '../../models';
 
 const columnHelper = createColumnHelper<FeedItem>();
 

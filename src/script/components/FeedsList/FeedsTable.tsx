@@ -1,15 +1,16 @@
-import { IUpworkFeedItemDTO } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   flexRender,
   getCoreRowModel,
   useReactTable,
 } from '@tanstack/react-table';
-import { columns } from './feedColumns';
-import { useNavigate } from 'react-router-dom';
-import { PageRoutes } from '../../constants';
-import { FeedItem } from '../../models/feed.model';
+import { IUpworkFeedItemDTO } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
 import { IOptionInterface } from '../../../public-common/interfaces/dto/common/ioption.interface';
+import { columns } from './feedColumns';
+import { PageRoutes } from '../../constants';
 import FeedsTableHead from './FeedsTableHead';
+import { FeedItem } from '../../models';
 
 function FeedsTable({ items, keywordsOptions, scoreOptions }: {
   items: IUpworkFeedItemDTO[];
@@ -18,7 +19,7 @@ function FeedsTable({ items, keywordsOptions, scoreOptions }: {
 }) {
   const navigate = useNavigate();
 
-  const data: FeedItem[] = items.map((feed) => ({
+  const defaultData: FeedItem[] = items.map((feed) => ({
     feedId: feed.id || '',
     url: feed.url,
     title: feed.title,
@@ -29,6 +30,7 @@ function FeedsTable({ items, keywordsOptions, scoreOptions }: {
     matchedBlogs: feed.matchedBlogs,
     review: feed.review,
   }));
+  const [data] = useState(() => [...defaultData]);
 
   const table = useReactTable({
     data,

@@ -1,11 +1,11 @@
-import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { PageRoutes } from '../../constants';
 import { useState } from 'react';
-import ChatItem from './ChatItem';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-item';
+import { PageRoutes } from '../../constants';
+import ChatItem from './ChatItem';
 import CreateChatPopper from './CreateChatPopper';
 
-function SideBar() {
+function SideBar({ isOpen }: { isOpen: boolean }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -59,7 +59,6 @@ function SideBar() {
       chatIdToRedirect = i;
       return false;
     });
-    console.log('chatIdToRedirect=', chatIdToRedirect);
 
     setChatsList(newChatsList);
 
@@ -71,14 +70,12 @@ function SideBar() {
       nextChatItem = null;
     }
 
-    console.log('nextChatItem=', nextChatItem);
     const redirectTo = nextChatItem ? `/${PageRoutes.Chat}/${nextChatItem.id}` : `/${PageRoutes.Feed}`;
-    console.log('redirectTo=', redirectTo);
     new Promise((res) => res('')).then(() => navigate(redirectTo));
   };
 
   return (
-    <aside className='sidebar'>
+    <aside className={`sidebar ${isOpen ? '' : 'hidden'}`}>
       <div className='sidebar__main chats'>
         <button className='chats__new-btn btn-secondary' onClick={openCreating}>
           <span className='chats__new-btn-icon'></span>

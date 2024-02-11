@@ -11,6 +11,17 @@ body {
 
 .page {
   min-height: 100vh;
+  position: relative;
+
+  &__part {
+    margin-left: 0;
+    transition: .5s ease-in-out;
+
+    &-full {
+      margin-left: 320px;
+      transition: .5s ease-in-out;
+    }
+  }
 }
 
 .active {

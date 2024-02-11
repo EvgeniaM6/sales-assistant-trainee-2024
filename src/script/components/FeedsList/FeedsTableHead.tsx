@@ -1,8 +1,8 @@
 import { Table, flexRender } from '@tanstack/react-table';
-import DateInput from './DataInput';
 import Select from 'react-select';
-import { FeedItem } from '../../models/feed.model';
 import { IOptionInterface } from '../../../public-common/interfaces/dto/common/ioption.interface';
+import DateInput from './DataInput';
+import { FeedItem } from '../../models';
 
 function FeedsTableHead({ table, keywordsOptions, scoreOptions }: {
   table: Table<FeedItem>;
