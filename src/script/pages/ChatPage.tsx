@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Header, SideBar } from '../components';
+import { Chat, Header, SideBar } from '../components';
 
 function ChatPage() {
   const { id } = useParams();
+  console.log('id=', id);
+
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
 
   const toggleOpenSideBar = () => {
@@ -15,8 +17,7 @@ function ChatPage() {
       <SideBar isOpen={isSideBarOpen} />
       <div className={`page__part${isSideBarOpen ? '-full' : ''} chat-page__main`}>
         <Header isSideBarOpen={isSideBarOpen} toggleOpenSideBar={toggleOpenSideBar} />
-        <h2>Chat page</h2>
-        <h3>Chat {id}</h3>
+        <Chat />
       </div>
     </div>
   );

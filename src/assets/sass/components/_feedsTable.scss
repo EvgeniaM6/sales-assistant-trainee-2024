@@ -32,6 +32,8 @@
       padding: 8px 4px;
 
       &-text {
+        flex: 1;
+
         &.title {
           min-width: 230px;
         }
