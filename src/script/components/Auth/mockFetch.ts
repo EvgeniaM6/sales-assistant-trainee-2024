@@ -3,7 +3,7 @@ export const mockFetch = (login: string, password: string) => {
   console.log('password=', password);
 
   return new Promise((res, rej) => {
-    const isSuccess = Math.random() > 0.5;
+    const isSuccess = Math.random() > 0;
     setTimeout(() => {
       if (isSuccess) {
         res('');
