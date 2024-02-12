@@ -6,7 +6,7 @@ function MachedItems({ matchedTitle, matchedData }: {
   matchedData: IUpworkFeedMatchEntityDto[]
 }) {
   return (
-    <div className='feed__matched matched'>
+    <div className='feed__item feed__matched matched'>
       <h4 className='feed__note'>{`Matched ${matchedTitle}`}</h4>
       {matchedData.map((matchedCase) => {
         return (

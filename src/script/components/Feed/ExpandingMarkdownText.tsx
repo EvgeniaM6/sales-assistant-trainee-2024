@@ -11,10 +11,9 @@ function ExpandingMarkdownText({ text }: { text: string }) {
   return (
     <div className='markdown'>
       <div className='markdown__text'>
-        {isDescriptionExpanded ?
-          <ReactMarkdown>{text}</ReactMarkdown> :
-          <ReactMarkdown>{`${text.slice(0, 300)}...`}</ReactMarkdown>
-        }
+        <ReactMarkdown>
+          {isDescriptionExpanded ? text : `${text.slice(0, 300)}...`}
+        </ReactMarkdown>
       </div>
       <div className='markdown__expand'>
         <button className='markdown__expand-btn' onClick={() => toggleDescription(!isDescriptionExpanded)}>
