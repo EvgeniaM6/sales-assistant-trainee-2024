@@ -1,13 +1,21 @@
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { PageRoutes } from '../../constants';
-import { AuthFormValues } from '../../models';
+import { AUTH_ERROR_RESP, PageRoutes } from '../../constants';
+import { AuthFormValues, AuthResponseError } from '../../models';
 import ErrorMessage from './ErrorMessage';
-import { useState } from 'react';
-import { mockFetch } from './mockFetch';
+import { useEffect, useState } from 'react';
+import { useAppDispatch } from '../../hooks';
+import { useLogInMutation } from '../../redux/authApi';
+import { ILoginRequestDTO } from '../../../public-common/interfaces/dto/auth/iadmin-login-request.interface';
+import { setAccessToken, setIsAuthorized, setRefreshToken } from '../../store/authSlice';
+import { IApiResponseDTO } from '../../../public-common/interfaces/dto/common/iapi-response.interface';
+import { ILoginResponseDTO } from '../../../public-common/interfaces/dto/auth/ilogin-response.interfaces';
+import { IAccountResponseDTO } from '../../../public-common/interfaces/dto/account/iaccount-response.interfaces';
 
 function LogInForm() {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+  const [logIn, { isSuccess, error, data, status, reset }] = useLogInMutation();
 
   const {
     register,
@@ -16,22 +24,63 @@ function LogInForm() {
   } = useForm<AuthFormValues>({ mode: 'onSubmit', reValidateMode: 'onSubmit' });
 
   const [isCheckingAuth, setIsCheckingAuth] = useState(false);
-  const [errorAuth, setErrorAuth] = useState('');
+  const [errorAuth, setErrorAuth] = useState<string[]>([]);
 
   const login: SubmitHandler<AuthFormValues> = async (data) => {
     setIsCheckingAuth(true);
-    setErrorAuth('');
+    setErrorAuth([]);
     const { login, password } = data;
 
+    const logInData: ILoginRequestDTO = {
+      email: login,
+      password,
+    };
+
     try {
-      await mockFetch(login, password);
-      navigate(`/${PageRoutes.Feed}`);
+      await logIn(logInData);
     } catch (error) {
-      console.log(error);
-      setErrorAuth(error as string);
+      setErrorAuth([error as string]);
       setIsCheckingAuth(false);
     }
   };
+
+  useEffect(() => {
+    console.log('isSuccess=', isSuccess);
+    console.log('error=', error);
+    console.log('data=', data);
+    console.log('status=', status);
+
+    if (status === 'pending' || status === 'uninitialized') return;
+
+    setIsCheckingAuth(false);
+
+    if (!isSuccess && error) {
+      if ('error' in error) {
+        setErrorAuth([error.error]);
+        return;
+      }
+
+      const errCode = (error as AuthResponseError).data?.error?.errorCode;
+      console.log('errCode=', errCode);
+
+      if (!((errCode || '') in AUTH_ERROR_RESP)) {
+        setErrorAuth(['Opps! Something went wrong. Try again']);
+      } else {
+        const errorsInfo = (error as AuthResponseError).data.error?.filedsValidationErrors;
+        setErrorAuth(AUTH_ERROR_RESP[errCode || ''](errorsInfo));
+      }
+      return;
+    }
+
+    const authData = (data as unknown as IApiResponseDTO).data as ILoginResponseDTO & IAccountResponseDTO;
+
+    dispatch(setIsAuthorized(true));
+    dispatch(setAccessToken(authData.access.accessToken || ''));
+    dispatch(setRefreshToken(authData.access.refreshToken || ''));
+
+    navigate(`/${PageRoutes.Feed}`);
+    reset();
+  }, [isSuccess, error, data, status]);
 
   return (
     <div className='auth__block'>
