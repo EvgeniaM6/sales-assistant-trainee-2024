@@ -2,6 +2,7 @@ import { Suspense, lazy } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { PageRoutes } from './script/constants';
 import { Spin } from './script/components';
+import PrivateRoute from './script/pages/PrivateRoute';
 
 const LazyAuthPage = lazy(() => import('./script/pages/AuthPage'));
 const LazyChatPage = lazy(() => import('./script/pages/ChatPage'));
@@ -20,19 +21,19 @@ function App() {
         />
         <Route
           path={`/${PageRoutes.Chat}/:id`}
-          element={<Suspense fallback={<Spin />}><LazyChatPage /></Suspense>}
+          element={<PrivateRoute><Suspense fallback={<Spin />}><LazyChatPage /></Suspense></PrivateRoute>}
         />
         <Route
           path='/'
-          element={<Suspense fallback={<Spin />}><LazyFeedsListPage /></Suspense>}
+          element={<PrivateRoute><Suspense fallback={<Spin />}><LazyFeedsListPage /></Suspense></PrivateRoute>}
         />
         <Route
           path={`/${PageRoutes.Feed}`}
-          element={<Suspense fallback={<Spin />}><LazyFeedsListPage /></Suspense>}
+          element={<PrivateRoute><Suspense fallback={<Spin />}><LazyFeedsListPage /></Suspense></PrivateRoute>}
         />
         <Route
           path={`/${PageRoutes.Feed}/:id`}
-          element={<Suspense fallback={<Spin />}><LazyFeedPage /></Suspense>}
+          element={<PrivateRoute><Suspense fallback={<Spin />}><LazyFeedPage /></Suspense></PrivateRoute>}
         />
         <Route
           path={`/${PageRoutes.Version}`}

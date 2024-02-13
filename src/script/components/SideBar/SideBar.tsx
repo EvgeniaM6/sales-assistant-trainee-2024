@@ -4,10 +4,13 @@ import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-
 import { PageRoutes } from '../../constants';
 import ChatItem from './ChatItem';
 import CreateChatPopper from './CreateChatPopper';
+import { useAppDispatch } from '../../hooks';
+import { setAccessToken, setIsAuthorized, setRefreshToken } from '../../store/authSlice';
 
 function SideBar({ isOpen }: { isOpen: boolean }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const mockChatsList = {
     'success': true,
@@ -44,6 +47,10 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
 
   const logout = () => {
     navigate(`/${PageRoutes.Auth}`);
+    dispatch(setIsAuthorized(false));
+    dispatch(setAccessToken(''));
+    dispatch(setRefreshToken(''));
+    localStorage.setItem('tokens', '');
   };
 
   const editChatItem = (id: number) => {

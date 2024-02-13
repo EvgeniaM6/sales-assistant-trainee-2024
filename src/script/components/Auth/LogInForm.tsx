@@ -45,23 +45,19 @@ function LogInForm() {
   };
 
   useEffect(() => {
-    console.log('isSuccess=', isSuccess);
-    console.log('error=', error);
-    console.log('data=', data);
-    console.log('status=', status);
-
     if (status === 'pending' || status === 'uninitialized') return;
 
     setIsCheckingAuth(false);
 
     if (!isSuccess && error) {
+      localStorage.setItem('tokens', '');
+
       if ('error' in error) {
         setErrorAuth([error.error]);
         return;
       }
 
       const errCode = (error as AuthResponseError).data?.error?.errorCode;
-      console.log('errCode=', errCode);
 
       if (!((errCode || '') in AUTH_ERROR_RESP)) {
         setErrorAuth(['Opps! Something went wrong. Try again']);
@@ -74,9 +70,12 @@ function LogInForm() {
 
     const authData = (data as unknown as IApiResponseDTO).data as ILoginResponseDTO & IAccountResponseDTO;
 
+    const { accessToken, refreshToken } = authData.access;
+    localStorage.setItem('tokens', JSON.stringify(authData.access));
+
     dispatch(setIsAuthorized(true));
-    dispatch(setAccessToken(authData.access.accessToken || ''));
-    dispatch(setRefreshToken(authData.access.refreshToken || ''));
+    dispatch(setAccessToken(accessToken || ''));
+    dispatch(setRefreshToken(refreshToken || ''));
 
     navigate(`/${PageRoutes.Feed}`);
     reset();
