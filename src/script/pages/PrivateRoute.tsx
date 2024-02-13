@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useRefreshTokenMutation } from '../redux/authApi';
 import { ILoginResponseDTO } from '../../public-common/interfaces/dto/auth/ilogin-response.interfaces';
-import { useAppDispatch, useAppSelector } from '../hooks';
+import { useAppDispatch } from '../hooks';
 import { setAccessToken, setIsAuthorized, setRefreshToken } from '../store/authSlice';
 import { PageRoutes } from '../constants';
 
