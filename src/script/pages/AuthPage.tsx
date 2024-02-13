@@ -1,17 +1,10 @@
-import { useNavigate } from 'react-router-dom';
-import { PageRoutes } from '../constants';
+import { AuthBlock } from '../components';
 
 function AuthPage() {
-  const navigate = useNavigate();
-
-  const login = () => {
-    navigate(`/${PageRoutes.Feed}`);
-  };
-
   return (
-    <div>
-      <h2>Auth page</h2>
-      <button onClick={login}>login</button>
+    <div className='page auth-page'>
+      <AuthBlock />
+      <div className='auth-page__background'></div>
     </div>
   );
 }

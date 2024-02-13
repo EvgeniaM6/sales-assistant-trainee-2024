@@ -1,0 +1,90 @@
+.overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  z-index: 19;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: transparentize($color: #000000, $amount: 0.7);
+  cursor: default;
+}
+
+.popup {
+  background: $color-secondary-background;
+  border-radius: 24px;
+  padding: 32px;
+  width: 500px;
+
+  &__title {
+    padding-right: 32px;
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 27px;
+    position: relative;
+  }
+
+  &__cross {
+    position: absolute;
+    top: 0;
+    right: 0;
+
+    &-btn {
+      padding: 4px;
+      border: none;
+      border-radius: 8px;
+      background: $color-button-background;
+
+      &:hover {
+        background: $color-button-background-hover;
+      }
+
+      &-img {
+        display: block;
+        width: 24px;
+        height: 24px;
+        background: url('../../images/x.svg') center / cover no-repeat;
+      }
+    }
+  }
+
+  &__btns {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+  }
+}
+
+.create {
+  &__label {
+    display: block;
+    word-break: break-word;
+    color: $color-label;
+  }
+
+  &__input {
+    padding: 8px 12px;
+    border: 2px solid #858585;
+    border-radius: 8px;
+    width: 100%;
+
+    &:active,
+    &:focus {
+      border: 2px solid $color-highlight;
+      outline: none;
+    }
+
+    &.input-error {
+      border: 2px solid $color-error;
+    }
+  }
+}
+
+.error-message {
+  color: $color-error;
+}

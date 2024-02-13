@@ -1,0 +1,22 @@
+.markdown {
+  padding: 8px 8px 24px 8px;
+
+  &__text {
+    margin-bottom: 8px;
+  }
+
+  &__expand {
+    border-top: 1px dashed  $color-popup-border;
+    &-btn {
+      border: none;
+      background: none;
+      text-decoration: underline;
+      color: $color-btn-background-primary;
+      padding: 0;
+
+      &:hover {
+        color: $color-btn-background-primary-hover;
+      }
+    }
+  }
+}

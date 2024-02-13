@@ -1,0 +1,19 @@
+.logo {
+  &__image {
+    margin-bottom: 12px;
+
+    &-img {
+      width: 300px;
+    }
+  }
+
+  &__title {
+    text-align: center;
+
+    &-text {
+      color: $color-highlight;
+      font-size: 18px;
+      word-break: break-word;
+    }
+  }
+}

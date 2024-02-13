@@ -1,0 +1,90 @@
+.auth-page {
+  display: flex;
+
+  &__aside {
+    width: 500px;
+    z-index: 1;
+  }
+
+  &__background {
+    flex: 1;
+    background: url('../../images/auth-background.jpg') center / cover no-repeat;
+  }
+
+  .auth {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 50px;
+    padding: 10px 20px;
+    box-shadow: 0 0 20px #031135;
+    overflow: hidden;
+
+    &__title {
+      margin-bottom: 50px;
+      word-break: break-word;
+    }
+
+    &__error {
+      display: flex;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: $color-error-background;
+
+      &-paragraph {
+        margin: 0;
+      }
+    }
+
+    .auth-form {
+      &__item {
+        width: 100%;
+        height: 48px;
+        margin-bottom: 20px;
+
+        &:last-child {
+          margin-bottom: 0px;
+        }
+      }
+    }
+
+    &__label {
+      word-break: break-word;
+      color: $color-label;
+    }
+
+    &__input {
+      padding: 8px 12px;
+      border: 2px solid #858585;
+      border-radius: 8px;
+
+      &:active,
+      &:focus {
+        border: 2px solid $color-highlight;
+        outline: none;
+      }
+    }
+
+    &__btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+
+      &-loading {
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        background: url('../../images/loading.svg') center / cover no-repeat;
+        animation: spin 1s steps(12) infinite;
+      }
+    }
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(-360deg);
+  }
+}

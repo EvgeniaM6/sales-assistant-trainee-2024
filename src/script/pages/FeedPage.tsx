@@ -1,21 +1,23 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { SideBar } from '../components';
-import { PageRoutes } from '../constants';
+import { useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { Feed, Header, SideBar } from '../components';
 
 function FeedPage() {
-  const navigate = useNavigate();
-  let { id } = useParams();
+  const { id } = useParams();
+  console.log('id=', id);
+  const [isSideBarOpen, setIsSideBarOpen] = useState(true);
 
-  const openFeedPage = () => {
-    navigate(`/${PageRoutes.Feed}`);
+  const toggleOpenSideBar = () => {
+    setIsSideBarOpen(!isSideBarOpen);
   };
 
   return (
-    <div>
-      <SideBar />
-      <h2>Feed page</h2>
-      <button onClick={openFeedPage}>back</button>
-      <h3>Feed {id}</h3>
+    <div className='page feed-page'>
+      <SideBar isOpen={isSideBarOpen} />
+      <div className={`page__part${isSideBarOpen ? '-full' : ''} feed-page__main`}>
+        <Header isSideBarOpen={isSideBarOpen} toggleOpenSideBar={toggleOpenSideBar} />
+        <Feed id={id || ''} />
+      </div>
     </div>
   );
 }

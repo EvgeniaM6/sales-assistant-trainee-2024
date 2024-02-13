@@ -1,0 +1,77 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 12px 16px;
+  width: 320px;
+  position: absolute;
+  left: 0;
+  transition: .5s ease-in-out;
+
+  &.hidden {
+    left: -100%;
+  }
+
+  &__main {
+    flex: 1;
+  }
+
+  &__footer-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 48px;
+    width: 288px;
+    padding: 8px 16px 8px 12px;
+    border-radius: 8px;
+  }
+
+  .feed-link {
+    color: $color-font;
+    transition: all .3s ease-in-out;
+
+    &:hover {
+      text-decoration: none;
+      background: $color-button-background-hover;
+    }
+
+    &:active,
+    &:focus {
+      background-color: $color-button-border;
+    }
+
+    &__icon {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background: url('../../images/feed-icon.svg') center / cover no-repeat;
+    }
+  }
+
+  .logout-btn {
+    border: none;
+    background: $color-button-background;
+
+    &:hover {
+      background: $color-button-background-hover;
+    }
+
+    &__icon {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background: url('../../images/avatar-icon.svg') center / cover no-repeat;
+    }
+
+    &__text {
+      flex: 1;
+      text-align: start;
+    }
+
+    &__arrow {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+      background: url('../../images/chevron-right.svg') center / cover no-repeat;
+    }
+  }
+}

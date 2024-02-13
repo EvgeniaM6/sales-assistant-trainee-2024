@@ -1,24 +1,20 @@
-import { NavLink } from 'react-router-dom';
-import { SideBar } from '../components';
-import { PageRoutes } from '../constants';
+import { useState } from 'react';
+import { FeedsBlock, Header, SideBar } from '../components';
 
 function FeedsListPage() {
-  const mockFeedsList = [1, 2, 3];
+  const [isSideBarOpen, setIsSideBarOpen] = useState(true);
+
+  const toggleOpenSideBar = () => {
+    setIsSideBarOpen(!isSideBarOpen);
+  };
 
   return (
-    <div>
-      <SideBar />
-      <h2>FeedsList page</h2>
-      <h3>Feeds:</h3>
-      {mockFeedsList.length && (
-        <ul>
-          {mockFeedsList.map((feed) => (
-            <li key={feed}>
-              <NavLink to={`/${PageRoutes.Feed}/${feed}`}>{feed}</NavLink>
-            </li>
-          ))}
-        </ul>
-      )}
+    <div className='page feeds-list-page'>
+      <SideBar isOpen={isSideBarOpen} />
+      <div className={`page__part${isSideBarOpen ? '-full' : ''} feeds-list-page__main feeds`}>
+        <Header isSideBarOpen={isSideBarOpen} toggleOpenSideBar={toggleOpenSideBar} />
+        <FeedsBlock />
+      </div>
     </div>
   );
 }

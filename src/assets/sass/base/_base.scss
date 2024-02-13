@@ -1,0 +1,39 @@
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+.app {
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.page {
+  min-height: 100vh;
+  position: relative;
+
+  &__part {
+    margin-left: 0;
+    transition: .5s ease-in-out;
+
+    &-full {
+      margin-left: 320px;
+      transition: .5s ease-in-out;
+    }
+  }
+}
+
+.active {
+  background: $color-active-background;
+}
+
+button {
+  transition: background-color .3s ease-in-out;
+
+  &:active,
+  &:focus {
+    outline: none;
+  }
+}

@@ -1,0 +1,19 @@
+.spin-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+  .spin {
+    width: 100px;
+    height: 100px;
+    background: url('../../images/loading.svg') center / cover no-repeat;
+    animation: spin 1s steps(12) infinite;
+  }
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(-360deg);
+  }
+}

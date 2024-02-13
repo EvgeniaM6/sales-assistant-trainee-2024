@@ -1,0 +1,71 @@
+.feeds-pagination {
+  display: flex;
+  gap: 12px;
+  padding: 7px 0px 8px 0px;
+  border-top: 1px solid $color-popup-border;
+
+  &__divider {
+    width: 1px;
+    height: 40px;
+    background: $color-popup-border;
+  }
+
+  &__info {
+    padding: 12px 8px;
+
+    .info__bold {
+      font-weight: 600;
+    }
+  }
+
+  &__page-size {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  select {
+    height: 100%;
+  }
+
+  &__pages {
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+
+    .pagination {
+      &__item {
+        padding: 12px;
+
+        &.btn-secondary {
+          padding: 10px 12px;
+        }
+      }
+
+      &__btn {
+        &-icon {
+          display: block;
+          width: 24px;
+          height: 24px;
+
+          &.first {
+            background: url('../../images/first.svg');
+          }
+
+          &.previous {
+            background: url('../../images/chevron-left.svg');
+          }
+
+          &.next {
+            background: url('../../images/chevron-right.svg');
+          }
+
+          &.last {
+            background: url('../../images/last.svg');
+          }
+        }
+      }
+    }
+  }
+}
