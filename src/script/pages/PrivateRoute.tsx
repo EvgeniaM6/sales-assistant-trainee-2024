@@ -7,13 +7,11 @@ import { setAccessToken, setIsAuthorized, setRefreshToken } from '../store/authS
 import { PageRoutes } from '../constants';
 
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
-  console.log('render PrivateRoute');
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [refreshUserToken, { isSuccess, error, data, status }] = useRefreshTokenMutation();
 
   const access = JSON.parse(localStorage.getItem('tokens') || 'null');
-  console.log('access=', access);
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -22,13 +20,6 @@ const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   useEffect(() => {
-    console.log('useEffect, [isSuccess, error, data, status]');
-
-    console.log('isSuccess=', isSuccess);
-    console.log('error=', error);
-    console.log('data=', data);
-    console.log('status=', status);
-
     if (status === 'pending' || status === 'uninitialized') return;
 
     if (!isSuccess) {
