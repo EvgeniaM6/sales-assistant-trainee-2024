@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-item';
 import { PageRoutes } from '../../constants';
 import ChatItem from './ChatItem';
 import CreateChatPopper from './CreateChatPopper';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setAccessToken, setIsAuthorized, setRefreshToken } from '../../store/authSlice';
 
 function SideBar({ isOpen }: { isOpen: boolean }) {
@@ -46,12 +46,19 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   };
 
   const logout = () => {
-    navigate(`/${PageRoutes.Auth}`);
     dispatch(setIsAuthorized(false));
     dispatch(setAccessToken(''));
     dispatch(setRefreshToken(''));
     localStorage.setItem('tokens', '');
   };
+
+  const { refreshToken } = useAppSelector((store) => store.auth);
+
+  useEffect(() => {
+    if (!refreshToken) {
+      navigate(`/${PageRoutes.Auth}`);
+    }
+  }, [refreshToken]);
 
   const editChatItem = (id: number) => {
     console.log('editChatItem', id);
