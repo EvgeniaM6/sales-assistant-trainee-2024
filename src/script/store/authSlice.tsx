@@ -4,6 +4,7 @@ import { IAccountDTO } from '../../public-common/interfaces/dto/account/iaccount
 
 const initialState: AuthState = {
   isAuthorized: false,
+  isLoadingRecoverUser: true,
   userData: null,
 };
 
@@ -14,6 +15,9 @@ const authSlice = createSlice({
     setIsAuthorized(state, action: PayloadAction<boolean>) {
       return { ...state, isAuthorized: action.payload };
     },
+    setIsLoadingRecoverUser(state, action: PayloadAction<boolean>) {
+      return { ...state, isLoadingRecoverUser: action.payload };
+    },
     setUserData(state, action: PayloadAction<IAccountDTO>) {
       return { ...state, userData: action.payload };
     },
@@ -23,5 +27,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { setIsAuthorized, setUserData, logOut } = authSlice.actions;
+export const { setIsAuthorized, setIsLoadingRecoverUser, setUserData, logOut } = authSlice.actions;
 export default authSlice.reducer;

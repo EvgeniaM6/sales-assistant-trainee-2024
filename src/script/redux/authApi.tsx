@@ -6,7 +6,7 @@ import { ILoginRequestDTO } from '../../public-common/interfaces/dto/auth/iadmin
 import { AuthRoutes } from '../../public-common/enums/routes/auth-routes.enum';
 import { IAccountResponseDTO } from '../../public-common/interfaces/dto/account/iaccount-response.interfaces';
 import { ITokenRequestDTO } from '../../public-common/interfaces/dto/auth/irefresh-token-request.interface';
-import { IApiResponseDTO } from '../../public-common/interfaces/dto/common/iapi-response.interface';
+import { IApiResponseDTO, IApiResponseGenericDTO } from '../../public-common/interfaces/dto/common/iapi-response.interface';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
@@ -20,7 +20,7 @@ export const authApi = createApi({
           'accept': 'application/json',
           'Content-type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: values,
       }),
     }),
     refreshToken: build.mutation<IApiResponseDTO, ITokenRequestDTO>({
@@ -31,10 +31,19 @@ export const authApi = createApi({
           'accept': 'application/json',
           'Content-type': 'application/json',
         },
-        body: JSON.stringify(values),
+        body: values,
+      }),
+    }),
+    recoverUser: build.query<IApiResponseGenericDTO<IAccountResponseDTO>, { accessToken: string }>({
+      query: ({ accessToken }: { accessToken: string }) => ({
+        url: `/api/v1/${AuthRoutes.BasePrefix}/${AuthRoutes.RecoverUser}`,
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'accept': 'application/json',
+        },
       }),
     }),
   }),
 });
 
-export const { useLogInMutation, useRefreshTokenMutation } = authApi;
+export const { useLogInMutation, useRefreshTokenMutation, useRecoverUserQuery } = authApi;

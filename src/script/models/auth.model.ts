@@ -3,6 +3,7 @@ import { IApiResponseDTO } from '../../public-common/interfaces/dto/common/iapi-
 
 export type AuthState = {
   isAuthorized: boolean;
+  isLoadingRecoverUser: boolean;
   userData: IAccountDTO | null;
 };
 

@@ -38,7 +38,7 @@ function LogInForm() {
     setIsCheckingAuth(false);
 
     if (!isSuccess && error) {
-      localStorage.setItem('tokens', '');
+      localStorage.removeItem('tokens');
 
       if ('error' in error) {
         setErrorAuth([error.error]);

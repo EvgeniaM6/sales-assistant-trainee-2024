@@ -45,7 +45,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
 
   const logout = () => {
     dispatch(logOut());
-    localStorage.setItem('tokens', '');
+    localStorage.removeItem('tokens');
   };
 
   const editChatItem = (id: number) => {
