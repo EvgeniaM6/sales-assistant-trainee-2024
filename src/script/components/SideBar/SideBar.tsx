@@ -7,7 +7,7 @@ import CreateChatPopper from './CreateChatPopper';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logOut } from '../../store/authSlice';
 import { mockChatsList } from './mockChatsList';
-import { usePopper } from 'react-popper';
+import { PopupTooltip } from '../Popup';
 
 function SideBar({ isOpen }: { isOpen: boolean }) {
   const navigate = useNavigate();
@@ -21,11 +21,6 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   const [isShowLogout, setIsShowLogout] = useState(false);
 
   const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
-  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
-
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: 'bottom-end',
-  });
 
   const openLogout = () => {
     setIsShowLogout(true);
@@ -120,20 +115,12 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
           <span className='logout-btn__arrow'></span>
         </button>
         {isShowLogout && (
-          <>
-            <div className='overlay overlay-tooltip' onClick={hideLogout} />
-            <div
-              ref={setPopperElement}
-              style={{ ...styles.popper}}
-              className='popup popup-tooltip'
-              {...attributes.popper}
-            >
-              <button className='popup__btn' onClick={logout}>
-                <span className='popup__btn-icon popup__btn-logout'></span>
-                <span>Logout</span>
-              </button>
-            </div>
-          </>
+          <PopupTooltip close={hideLogout} refElem={referenceElement}>
+            <button className='popup__btn' onClick={logout}>
+              <span className='popup__btn-icon popup__btn-logout'></span>
+              <span>Logout</span>
+            </button>
+          </PopupTooltip>
         )}
       </div>
     </aside>

@@ -6,6 +6,11 @@ export type PopupProps = ComponentPropsWithoutRef<'div'> & {
   confirmAction: string;
 };
 
+export type PopupTooltipProps = ComponentPropsWithoutRef<'div'> & {
+  close: () => void;
+  refElem: HTMLButtonElement | null;
+};
+
 export type CreateChatForm = {
   chatName: string;
 };

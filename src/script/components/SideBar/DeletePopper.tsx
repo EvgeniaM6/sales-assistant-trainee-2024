@@ -1,4 +1,4 @@
-import Popup from '../Popup/Popup';
+import { Popup } from '../Popup';
 
 function DeletePopper({ id, name, deleteChatItem, closeDeleting }: {
   id: number;
