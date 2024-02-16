@@ -1,35 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-item';
 import { PageRoutes } from '../../constants';
 import ChatItem from './ChatItem';
 import CreateChatPopper from './CreateChatPopper';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setAccessToken, setIsAuthorized, setRefreshToken } from '../../store/authSlice';
+import { useAppDispatch } from '../../hooks';
+import { logOut } from '../../store/authSlice';
+import { mockChatsList } from './mockChatsList';
 
 function SideBar({ isOpen }: { isOpen: boolean }) {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
 
-  const mockChatsList = {
-    'success': true,
-    'statusCode': 200,
-    'data': [
-      {
-        'accountId': 1,
-        'id': 176,
-        'name': 'фівфівівфівф',
-      },
-      {
-        'accountId': 1,
-        'id': 159,
-        'name': '"The Simple Addition of Three Plus Three"',
-      },
-    ],
-  };
   const [chatsList, setChatsList] = useState(mockChatsList.data);
-  const [uniqueId, setUniqueId] = useState(2);
+  const [uniqueId, setUniqueId] = useState(mockChatsList.data.length);
   const [isCreating, setIsCreating] = useState(false);
 
   const openCreating = () => setIsCreating(true);
@@ -46,19 +31,9 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   };
 
   const logout = () => {
-    dispatch(setIsAuthorized(false));
-    dispatch(setAccessToken(''));
-    dispatch(setRefreshToken(''));
+    dispatch(logOut());
     localStorage.setItem('tokens', '');
   };
-
-  const { refreshToken } = useAppSelector((store) => store.auth);
-
-  useEffect(() => {
-    if (!refreshToken) {
-      navigate(`/${PageRoutes.Auth}`);
-    }
-  }, [refreshToken]);
 
   const editChatItem = (id: number) => {
     console.log('editChatItem', id);

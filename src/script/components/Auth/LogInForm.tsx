@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { useLogInMutation } from '../../redux/authApi';
 import { ILoginRequestDTO } from '../../../public-common/interfaces/dto/auth/iadmin-login-request.interface';
-import { setAccessToken, setIsAuthorized, setRefreshToken } from '../../store/authSlice';
+import { setIsAuthorized, setUserData } from '../../store/authSlice';
 import { IApiResponseDTO } from '../../../public-common/interfaces/dto/common/iapi-response.interface';
 import { ILoginResponseDTO } from '../../../public-common/interfaces/dto/auth/ilogin-response.interfaces';
 import { IAccountResponseDTO } from '../../../public-common/interfaces/dto/account/iaccount-response.interfaces';
@@ -45,25 +45,23 @@ function LogInForm() {
         return;
       }
 
-      const errCode = (error as AuthResponseError).data?.error?.errorCode;
+      const errCode = (error as AuthResponseError).data?.error?.errorCode || '';
 
-      if (!((errCode || '') in AUTH_ERROR_RESP)) {
-        setErrorAuth(['Opps! Something went wrong. Try again']);
-      } else {
+      if (errCode in AUTH_ERROR_RESP) {
         const errorsInfo = (error as AuthResponseError).data.error?.filedsValidationErrors;
-        setErrorAuth(AUTH_ERROR_RESP[errCode || ''](errorsInfo));
+        setErrorAuth(AUTH_ERROR_RESP[errCode](errorsInfo));
+      } else {
+        setErrorAuth(['Oops! Something went wrong. Try again']);
       }
       return;
     }
 
-    const authData = (data as unknown as IApiResponseDTO).data as ILoginResponseDTO & IAccountResponseDTO;
+    const authData = (data as unknown as IApiResponseDTO)?.data as ILoginResponseDTO & IAccountResponseDTO;
 
-    const { accessToken, refreshToken } = authData.access;
     localStorage.setItem('tokens', JSON.stringify(authData.access));
 
     dispatch(setIsAuthorized(true));
-    dispatch(setAccessToken(accessToken || ''));
-    dispatch(setRefreshToken(refreshToken || ''));
+    dispatch(setUserData(authData.account));
 
     navigate(`/${PageRoutes.Feed}`);
     reset();
