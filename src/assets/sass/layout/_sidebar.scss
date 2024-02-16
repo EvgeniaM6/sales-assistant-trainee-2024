@@ -15,14 +15,16 @@
     flex: 1;
   }
 
-  &__footer-item {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    min-height: 48px;
-    width: 288px;
-    padding: 8px 16px 8px 12px;
-    border-radius: 8px;
+  &__footer {
+    &-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-height: 48px;
+      width: 288px;
+      padding: 8px 16px 8px 12px;
+      border-radius: 8px;
+    }
   }
 
   .feed-link {
@@ -56,6 +58,7 @@
     }
 
     &__icon {
+      flex-shrink: 0;
       display: inline-block;
       width: 24px;
       height: 24px;
@@ -65,9 +68,12 @@
     &__text {
       flex: 1;
       text-align: start;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     &__arrow {
+      flex-shrink: 0;
       display: inline-block;
       width: 24px;
       height: 24px;

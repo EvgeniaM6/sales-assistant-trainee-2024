@@ -10,6 +10,10 @@
   bottom: 0;
   background: transparentize($color: #000000, $amount: 0.7);
   cursor: default;
+
+  &-tooltip {
+    background: transparent;
+  }
 }
 
 .popup {
@@ -17,6 +21,15 @@
   border-radius: 24px;
   padding: 32px;
   width: 500px;
+
+  &-tooltip {
+    border: 1px solid $color-popup-border;
+    border-radius: 12px;
+    width: 288px;
+    padding: 8px 0px;
+    background: $color-button-background;
+    z-index: 20;
+  }
 
   &__title {
     padding-right: 32px;

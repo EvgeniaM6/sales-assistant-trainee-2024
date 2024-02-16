@@ -4,18 +4,36 @@ import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-
 import { PageRoutes } from '../../constants';
 import ChatItem from './ChatItem';
 import CreateChatPopper from './CreateChatPopper';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logOut } from '../../store/authSlice';
 import { mockChatsList } from './mockChatsList';
+import { usePopper } from 'react-popper';
 
 function SideBar({ isOpen }: { isOpen: boolean }) {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
+  const { userData } = useAppSelector((store) => store.auth);
 
   const [chatsList, setChatsList] = useState(mockChatsList.data);
   const [uniqueId, setUniqueId] = useState(mockChatsList.data.length);
   const [isCreating, setIsCreating] = useState(false);
+  const [isShowLogout, setIsShowLogout] = useState(false);
+
+  const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
+  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
+
+  const { styles, attributes } = usePopper(referenceElement, popperElement, {
+    placement: 'bottom-end',
+  });
+
+  const openLogout = () => {
+    setIsShowLogout(true);
+  };
+
+  const hideLogout = () => {
+    setIsShowLogout(false);
+  };
 
   const openCreating = () => setIsCreating(true);
   const closeCreating = () => setIsCreating(false);
@@ -96,11 +114,27 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
           <span className='feed-link__icon'></span>
           <span className='feed-link__text'>Upwork feed</span>
         </NavLink>
-        <button onClick={logout} className='sidebar__footer-item logout-btn'>
+        <button onClick={openLogout} className='sidebar__footer-item logout-btn' ref={setReferenceElement}>
           <span className='logout-btn__icon'></span>
-          <span className='logout-btn__text'>logout</span>
+          <span className='logout-btn__text'>{userData?.email || 'user'}</span>
           <span className='logout-btn__arrow'></span>
         </button>
+        {isShowLogout && (
+          <>
+            <div className='overlay overlay-tooltip' onClick={hideLogout} />
+            <div
+              ref={setPopperElement}
+              style={{ ...styles.popper}}
+              className='popup popup-tooltip'
+              {...attributes.popper}
+            >
+              <button className='popup__btn' onClick={logout}>
+                <span className='popup__btn-icon popup__btn-logout'></span>
+                <span>Logout</span>
+              </button>
+            </div>
+          </>
+        )}
       </div>
     </aside>
   );

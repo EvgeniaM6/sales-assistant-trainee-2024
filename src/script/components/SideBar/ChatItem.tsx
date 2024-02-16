@@ -47,11 +47,11 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
         </button>
         {isVisible && (
           <>
-            <div className='chats__overlay overlay' onClick={hideMore} />
+            <div className='overlay overlay-tooltip' onClick={hideMore} />
             <div
               ref={setPopperElement}
               style={{ ...styles.popper}}
-              className='chats__popup popup'
+              className='popup popup-tooltip'
               {...attributes.popper}
             >
               <button className='popup__btn' onClick={() => editChatItem(id)}>

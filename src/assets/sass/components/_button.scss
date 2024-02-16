@@ -58,3 +58,36 @@
     background-color: $color-button-border;
   }
 }
+
+.popup {
+  &__btn {
+    display: flex;
+    gap: 8px;
+    border: none;
+    background: $color-button-background;
+    width: 100%;
+    padding: 6px 16px 6px 12px;
+
+    &:hover {
+      background: $color-button-background-hover;
+    }
+
+    &-icon {
+      display: inline-block;
+      width: 24px;
+      height: 24px;
+    }
+
+    &-edit {
+      background: url('../../images/edit.svg') center / cover no-repeat;
+    }
+
+    &-delete {
+      background: url('../../images/delete.svg') center / cover no-repeat;
+    }
+
+    &-logout {
+      background: url('../../images/logout.svg') center / cover no-repeat;
+    }
+  }
+}
