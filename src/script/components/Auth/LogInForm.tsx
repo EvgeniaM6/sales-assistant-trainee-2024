@@ -1,7 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { AUTH_ERROR_RESP, PageRoutes } from '../../constants';
-import { AuthFormValues, AuthResponseError } from '../../models';
+import { AuthResponseError } from '../../models';
 import ErrorMessage from './ErrorMessage';
 import { useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
@@ -21,27 +21,15 @@ function LogInForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<AuthFormValues>({ mode: 'onSubmit', reValidateMode: 'onSubmit' });
+  } = useForm<ILoginRequestDTO>({ mode: 'onSubmit', reValidateMode: 'onSubmit' });
 
   const [isCheckingAuth, setIsCheckingAuth] = useState(false);
   const [errorAuth, setErrorAuth] = useState<string[]>([]);
 
-  const login: SubmitHandler<AuthFormValues> = async (data) => {
+  const login: SubmitHandler<ILoginRequestDTO> = async (logInData) => {
     setIsCheckingAuth(true);
     setErrorAuth([]);
-    const { login, password } = data;
-
-    const logInData: ILoginRequestDTO = {
-      email: login,
-      password,
-    };
-
-    try {
-      await logIn(logInData);
-    } catch (error) {
-      setErrorAuth([error as string]);
-      setIsCheckingAuth(false);
-    }
+    await logIn(logInData);
   };
 
   useEffect(() => {
@@ -91,7 +79,7 @@ function LogInForm() {
           type='text'
           id='login'
           className='auth__input auth-form__item'
-          {...register('login', { required: 'Enter your login' })}
+          {...register('email', { required: 'Enter your login' })}
         />
         <label htmlFor='password' className='auth__label'>Password</label>
         <input
