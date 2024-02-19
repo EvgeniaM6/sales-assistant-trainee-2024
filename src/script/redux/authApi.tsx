@@ -12,7 +12,7 @@ export const authApi = createApi({
   reducerPath: 'authApi',
   baseQuery: baseQueryWithReauth,
   endpoints: (build) => ({
-    logIn: build.mutation<ILoginResponseDTO & IAccountResponseDTO, ILoginRequestDTO>({
+    logIn: build.mutation<IApiResponseGenericDTO<ILoginResponseDTO & IAccountResponseDTO>, ILoginRequestDTO>({
       query: (values: ILoginRequestDTO) => ({
         url: `${BaseRoutes.V1}/${AuthRoutes.BasePrefix}/${AuthRoutes.Login}`,
         method: REQUEST_METHODS.POST,

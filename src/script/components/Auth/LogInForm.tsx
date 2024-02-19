@@ -8,7 +8,6 @@ import { useAppDispatch } from '../../hooks';
 import { useLogInMutation } from '../../redux/authApi';
 import { ILoginRequestDTO } from '../../../public-common/interfaces/dto/auth/iadmin-login-request.interface';
 import { setIsAuthorized, setUserData } from '../../store/authSlice';
-import { IApiResponseDTO } from '../../../public-common/interfaces/dto/common/iapi-response.interface';
 import { ILoginResponseDTO } from '../../../public-common/interfaces/dto/auth/ilogin-response.interfaces';
 import { IAccountResponseDTO } from '../../../public-common/interfaces/dto/account/iaccount-response.interfaces';
 
@@ -56,7 +55,7 @@ function LogInForm() {
       return;
     }
 
-    const authData = (data as unknown as IApiResponseDTO)?.data as ILoginResponseDTO & IAccountResponseDTO;
+    const authData = data?.data as ILoginResponseDTO & IAccountResponseDTO;
 
     localStorage.setItem('tokens', JSON.stringify(authData.access));
 
