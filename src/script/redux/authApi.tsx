@@ -1,32 +1,21 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import { BASE_URL, REQUEST_METHODS } from '../constants';
-import fetch from 'isomorphic-fetch';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { REQUEST_METHODS } from '../constants';
 import { ILoginResponseDTO } from '../../public-common/interfaces/dto/auth/ilogin-response.interfaces';
 import { ILoginRequestDTO } from '../../public-common/interfaces/dto/auth/iadmin-login-request.interface';
 import { AuthRoutes } from '../../public-common/enums/routes/auth-routes.enum';
 import { IAccountResponseDTO } from '../../public-common/interfaces/dto/account/iaccount-response.interfaces';
-import { ITokenRequestDTO } from '../../public-common/interfaces/dto/auth/irefresh-token-request.interface';
-import { IApiResponseDTO, IApiResponseGenericDTO } from '../../public-common/interfaces/dto/common/iapi-response.interface';
+import { IApiResponseGenericDTO } from '../../public-common/interfaces/dto/common/iapi-response.interface';
+import { BaseRoutes } from '../../public-common/enums/routes/base-routes.enum';
+import { baseQueryWithReauth } from './baseQueryWithReauth';
 
 export const authApi = createApi({
   reducerPath: 'authApi',
-  baseQuery: fetchBaseQuery({ baseUrl: BASE_URL, fetchFn: fetch }),
+  baseQuery: baseQueryWithReauth,
   endpoints: (build) => ({
     logIn: build.mutation<ILoginResponseDTO & IAccountResponseDTO, ILoginRequestDTO>({
       query: (values: ILoginRequestDTO) => ({
-        url: `/api/v1/${AuthRoutes.BasePrefix}/${AuthRoutes.Login}`,
+        url: `${BaseRoutes.V1}/${AuthRoutes.BasePrefix}/${AuthRoutes.Login}`,
         method: REQUEST_METHODS.POST,
-        headers: {
-          'accept': 'application/json',
-          'Content-type': 'application/json',
-        },
-        body: values,
-      }),
-    }),
-    refreshToken: build.mutation<IApiResponseDTO, ITokenRequestDTO>({
-      query: (values: ITokenRequestDTO) => ({
-        url: `/api/v1/${AuthRoutes.BasePrefix}/${AuthRoutes.RefreshToken}`,
-        method: REQUEST_METHODS.PUT,
         headers: {
           'accept': 'application/json',
           'Content-type': 'application/json',
@@ -36,7 +25,7 @@ export const authApi = createApi({
     }),
     recoverUser: build.query<IApiResponseGenericDTO<IAccountResponseDTO>, { accessToken: string }>({
       query: ({ accessToken }: { accessToken: string }) => ({
-        url: `/api/v1/${AuthRoutes.BasePrefix}/${AuthRoutes.RecoverUser}`,
+        url: `${BaseRoutes.V1}/${AuthRoutes.BasePrefix}/${AuthRoutes.RecoverUser}`,
         headers: {
           'Authorization': `Bearer ${accessToken}`,
           'accept': 'application/json',
@@ -46,4 +35,4 @@ export const authApi = createApi({
   }),
 });
 
-export const { useLogInMutation, useRefreshTokenMutation, useRecoverUserQuery } = authApi;
+export const { useLogInMutation, useRecoverUserQuery } = authApi;
