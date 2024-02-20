@@ -23,10 +23,6 @@ function FeedsBlock() {
     getFeeds(getFeedsReq);
   }, []);
 
-  useEffect(() => {
-    console.log('data=', data);
-  }, [data]);
-
   const refresh = (): void => {
     getFeeds(getFeedsReq);
   };
