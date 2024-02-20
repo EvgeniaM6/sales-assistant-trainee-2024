@@ -45,7 +45,12 @@ export const baseQueryWithReauth: BaseQueryFn<
       const newTokens: IAccessDTO = refreshData.data.access;
       localStorage.setItem('tokens', JSON.stringify(newTokens));
 
-      result = await baseQuery(args, api, extraOptions);
+      const newArgs: FetchArgs = { ...args as FetchArgs };
+      if (newArgs.headers && 'Authorization' in newArgs.headers) {
+        newArgs.headers['Authorization'] = `Bearer ${newTokens.accessToken}`;
+      }
+
+      result = await baseQuery(newArgs, api, extraOptions);
     } else {
       api.dispatch(logOut());
       localStorage.removeItem('tokens');
