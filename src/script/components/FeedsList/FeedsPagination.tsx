@@ -1,8 +1,9 @@
 import Select from 'react-select';
-import fetchFeeds from './fetchFeeds.json';
+import { IPaginatedResultDTO } from '../../../public-common/interfaces/dto/common/ipaginated-result.interface';
+import { IUpworkFeedItemDTO } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
 
-function FeedsPagination() {
-  const { pageNumber, pageSize, totalCount, totalPages } = fetchFeeds.data.items;
+function FeedsPagination({ feedsData }: { feedsData: IPaginatedResultDTO<IUpworkFeedItemDTO> }) {
+  const { pageNumber, pageSize, totalCount, totalPages } = feedsData;
   const countOnPage = pageNumber * pageSize;
 
   const pagesArr = [pageNumber, pageNumber + 1, pageNumber + 2, pageNumber + 3, pageNumber + 4];

@@ -47,7 +47,7 @@ function FeedsBlock() {
           keywordsOptions={data.data.keywordsOptions}
           scoreOptions={data.data.scoreOptions}
         />}
-        <FeedsPagination />
+        {data && !isLoading && <FeedsPagination feedsData={data.data.items} />}
       </div>
     </main>
   );
