@@ -1,12 +1,35 @@
-import { useReducer } from 'react';
-import fetchFeeds from './fetchFeeds.json';
+import { useEffect } from 'react';
 import { IUpworkFeedItemDTO } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
 import FeedsTable from './FeedsTable';
 import FeedsPagination from './FeedsPagination';
+import { useGetFeedsMutation } from '../../redux/feedsApi';
+import { getLocalStorageTokens } from '../../utils';
+import Spin from '../Spin/Spin';
+import { RequestGetFeeds } from '../../models';
 
 function FeedsBlock() {
-  const { items: { items }, keywordsOptions, scoreOptions } = fetchFeeds.data;
-  const refresh = useReducer(() => ({}), {})[1];
+  const { accessToken } = getLocalStorageTokens();
+  const getFeedsReq: RequestGetFeeds = {
+    accessToken,
+    values: {
+      pageSize: 20,
+      pageNumber: 1,
+    },
+  };
+
+  const [getFeeds, { data, isLoading }] = useGetFeedsMutation();
+
+  useEffect(() => {
+    getFeeds(getFeedsReq);
+  }, []);
+
+  useEffect(() => {
+    console.log('data=', data);
+  }, [data]);
+
+  const refresh = (): void => {
+    getFeeds(getFeedsReq);
+  };
 
   return (
     <main className='feeds__main'>
@@ -22,11 +45,12 @@ function FeedsBlock() {
         </div>
       </div>
       <div className='feeds__list'>
-        <FeedsTable
-          items={items as IUpworkFeedItemDTO[]}
-          keywordsOptions={keywordsOptions}
-          scoreOptions={scoreOptions}
-        />
+        {isLoading && <Spin />}
+        {data && !isLoading && <FeedsTable
+          items={data.data.items.items as IUpworkFeedItemDTO[]}
+          keywordsOptions={data.data.keywordsOptions}
+          scoreOptions={data.data.scoreOptions}
+        />}
         <FeedsPagination />
       </div>
     </main>
