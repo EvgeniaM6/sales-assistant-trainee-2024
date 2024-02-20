@@ -1,6 +1,6 @@
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { CreateChatForm } from '../../models';
-import Popup from '../Popup/Popup';
+import { Popup } from '../Popup';
 
 function CreateChatPopper({ createChatItem, closeCreating }: {
   createChatItem: (name: string) => void;

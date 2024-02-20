@@ -4,30 +4,31 @@ import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-
 import { PageRoutes } from '../../constants';
 import ChatItem from './ChatItem';
 import CreateChatPopper from './CreateChatPopper';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { logOut } from '../../store/authSlice';
+import { mockChatsList } from './mockChatsList';
+import { PopupTooltip } from '../Popup';
 
 function SideBar({ isOpen }: { isOpen: boolean }) {
   const navigate = useNavigate();
   const location = useLocation();
+  const dispatch = useAppDispatch();
+  const { userData } = useAppSelector((store) => store.auth);
 
-  const mockChatsList = {
-    'success': true,
-    'statusCode': 200,
-    'data': [
-      {
-        'accountId': 1,
-        'id': 176,
-        'name': 'фівфівівфівф',
-      },
-      {
-        'accountId': 1,
-        'id': 159,
-        'name': '"The Simple Addition of Three Plus Three"',
-      },
-    ],
-  };
   const [chatsList, setChatsList] = useState(mockChatsList.data);
-  const [uniqueId, setUniqueId] = useState(2);
+  const [uniqueId, setUniqueId] = useState(mockChatsList.data.length);
   const [isCreating, setIsCreating] = useState(false);
+  const [isShowLogout, setIsShowLogout] = useState(false);
+
+  const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
+
+  const openLogout = () => {
+    setIsShowLogout(true);
+  };
+
+  const hideLogout = () => {
+    setIsShowLogout(false);
+  };
 
   const openCreating = () => setIsCreating(true);
   const closeCreating = () => setIsCreating(false);
@@ -43,7 +44,8 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   };
 
   const logout = () => {
-    navigate(`/${PageRoutes.Auth}`);
+    dispatch(logOut());
+    localStorage.removeItem('tokens');
   };
 
   const editChatItem = (id: number) => {
@@ -107,11 +109,19 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
           <span className='feed-link__icon'></span>
           <span className='feed-link__text'>Upwork feed</span>
         </NavLink>
-        <button onClick={logout} className='sidebar__footer-item logout-btn'>
+        <button onClick={openLogout} className='sidebar__footer-item logout-btn' ref={setReferenceElement}>
           <span className='logout-btn__icon'></span>
-          <span className='logout-btn__text'>logout</span>
+          <span className='logout-btn__text'>{userData?.email || 'user'}</span>
           <span className='logout-btn__arrow'></span>
         </button>
+        {isShowLogout && (
+          <PopupTooltip close={hideLogout} refElem={referenceElement}>
+            <button className='popup__btn' onClick={logout}>
+              <span className='popup__btn-icon popup__btn-logout'></span>
+              <span>Logout</span>
+            </button>
+          </PopupTooltip>
+        )}
       </div>
     </aside>
   );

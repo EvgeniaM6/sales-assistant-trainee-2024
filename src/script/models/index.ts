@@ -1,5 +1,14 @@
-import { AuthFormValues } from './auth.model';
-import { FeedItem } from './feed.model';
-import { CreateChatForm, PopupProps } from './popup.model';
+import { AuthResponseError, AuthState } from './auth.model';
+import { FeedItem, RequestGetFeeds, ResponseGetFeeds } from './feed.model';
+import { CreateChatForm, PopupProps, PopupTooltipProps } from './popup.model';
 
-export type { AuthFormValues, CreateChatForm, FeedItem, PopupProps };
+export type {
+  AuthState,
+  AuthResponseError,
+  CreateChatForm,
+  FeedItem,
+  PopupProps,
+  PopupTooltipProps,
+  RequestGetFeeds,
+  ResponseGetFeeds,
+};

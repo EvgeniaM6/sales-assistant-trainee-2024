@@ -1,3 +1,4 @@
+import getLocalStorageTokens from './getLocalStorageTokens';
 import { getTimeFromString } from './getTimeFromString';
 
-export { getTimeFromString };
+export { getTimeFromString, getLocalStorageTokens };
