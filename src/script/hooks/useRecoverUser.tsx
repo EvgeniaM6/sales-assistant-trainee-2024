@@ -3,18 +3,19 @@ import { IAccessDTO } from '../../public-common/interfaces/dto/auth/iaccess.inte
 import { useRecoverUserQuery } from '../redux/authApi';
 import { useAppDispatch, useAppSelector } from './reduxHooks';
 import { logOut, setIsAuthorized, setIsLoadingRecoverUser, setUserData } from '../store/authSlice';
+import { getLocalStorageTokens } from '../utils';
 
 function useRecoverUser() {
   const dispatch = useAppDispatch();
   const { isLoadingRecoverUser } = useAppSelector((store) => store.auth);
-  const tokens: IAccessDTO | null = JSON.parse(localStorage.getItem('tokens') || 'null');
+  const { accessToken }: IAccessDTO = getLocalStorageTokens();
 
   const {
     data,
     error,
     isError,
     isLoading,
-  } = useRecoverUserQuery({ accessToken: tokens?.accessToken || '' });
+  } = useRecoverUserQuery({ accessToken });
 
   useEffect(() => {
     if (isLoading) return;

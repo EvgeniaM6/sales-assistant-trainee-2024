@@ -10,6 +10,7 @@ import { ILoginRequestDTO } from '../../../public-common/interfaces/dto/auth/iad
 import { setIsAuthorized, setUserData } from '../../store/authSlice';
 import { ILoginResponseDTO } from '../../../public-common/interfaces/dto/auth/ilogin-response.interfaces';
 import { IAccountResponseDTO } from '../../../public-common/interfaces/dto/account/iaccount-response.interfaces';
+import { QueryStatus } from '@reduxjs/toolkit/query';
 
 function LogInForm() {
   const navigate = useNavigate();
@@ -20,7 +21,7 @@ function LogInForm() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<ILoginRequestDTO>({ mode: 'onSubmit', reValidateMode: 'onSubmit' });
+  } = useForm<ILoginRequestDTO>({ reValidateMode: 'onSubmit' });
 
   const [isCheckingAuth, setIsCheckingAuth] = useState(false);
   const [errorAuth, setErrorAuth] = useState<string[]>([]);
@@ -32,7 +33,7 @@ function LogInForm() {
   };
 
   useEffect(() => {
-    if (status === 'pending' || status === 'uninitialized') return;
+    if (status === QueryStatus.pending || status === QueryStatus.uninitialized) return;
 
     setIsCheckingAuth(false);
 

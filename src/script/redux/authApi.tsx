@@ -6,6 +6,7 @@ import { AuthRoutes } from '../../public-common/enums/routes/auth-routes.enum';
 import { IAccountResponseDTO } from '../../public-common/interfaces/dto/account/iaccount-response.interfaces';
 import { IApiResponseGenericDTO } from '../../public-common/interfaces/dto/common/iapi-response.interface';
 import { BaseRoutes } from '../../public-common/enums/routes/base-routes.enum';
+import { IAdLoginRequestDTO } from '../../public-common/interfaces/dto/auth/iadmin-ad-login-request.interface';
 import { baseQueryWithReauth } from './baseQueryWithReauth';
 
 export const authApi = createApi({
@@ -23,8 +24,8 @@ export const authApi = createApi({
         body: values,
       }),
     }),
-    recoverUser: build.query<IApiResponseGenericDTO<IAccountResponseDTO>, { accessToken: string }>({
-      query: ({ accessToken }: { accessToken: string }) => ({
+    recoverUser: build.query<IApiResponseGenericDTO<IAccountResponseDTO>, IAdLoginRequestDTO>({
+      query: ({ accessToken }: IAdLoginRequestDTO) => ({
         url: `${BaseRoutes.V1}/${AuthRoutes.BasePrefix}/${AuthRoutes.RecoverUser}`,
         headers: {
           'Authorization': `Bearer ${accessToken}`,

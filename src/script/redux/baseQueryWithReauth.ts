@@ -8,6 +8,7 @@ import { ITokenRequestDTO } from '../../public-common/interfaces/dto/auth/irefre
 import { IApiResponseGenericDTO } from '../../public-common/interfaces/dto/common/iapi-response.interface';
 import { IAccountResponseDTO } from '../../public-common/interfaces/dto/account/iaccount-response.interfaces';
 import { ILoginResponseDTO } from '../../public-common/interfaces/dto/auth/ilogin-response.interfaces';
+import { getLocalStorageTokens } from '../utils';
 
 const baseQuery = fetchBaseQuery({ baseUrl: BASE_URL, fetchFn: fetch });
 
@@ -22,10 +23,10 @@ export const baseQueryWithReauth: BaseQueryFn<
   const isFetchingLogin = (args as FetchArgs).url === loginUrl;
 
   if (result.error && (result.error.status === 401 || result.error.status === 403) && !isFetchingLogin) {
-    const tokens: IAccessDTO | null = JSON.parse(localStorage.getItem('tokens') || 'null');
+    const { refreshToken }: IAccessDTO = getLocalStorageTokens();
 
     const body: ITokenRequestDTO = {
-      token: tokens?.refreshToken || '',
+      token: refreshToken,
     };
 
     const refreshResult = await baseQuery(
