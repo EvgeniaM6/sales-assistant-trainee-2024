@@ -1,4 +1,5 @@
+import getLocalStorageTheme from './getLocalStorageTheme';
 import getLocalStorageTokens from './getLocalStorageTokens';
 import { getTimeFromString } from './getTimeFromString';
 
-export { getTimeFromString, getLocalStorageTokens };
+export { getTimeFromString, getLocalStorageTheme, getLocalStorageTokens };

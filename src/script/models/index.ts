@@ -1,6 +1,7 @@
 import { AuthResponseError, AuthState } from './auth.model';
 import { FeedItem, RequestGetFeeds, ResponseGetFeeds } from './feed.model';
 import { CreateChatForm, PopupProps, PopupTooltipProps } from './popup.model';
+import { ThemeContextComponents } from './theme.model';
 
 export type {
   AuthState,
@@ -11,4 +12,5 @@ export type {
   PopupTooltipProps,
   RequestGetFeeds,
   ResponseGetFeeds,
+  ThemeContextComponents,
 };
