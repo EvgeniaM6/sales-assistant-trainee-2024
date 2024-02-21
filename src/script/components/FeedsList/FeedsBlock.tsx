@@ -1,31 +1,28 @@
 import { useEffect } from 'react';
-import { IUpworkFeedItemDTO } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
 import FeedsTable from './FeedsTable';
 import FeedsPagination from './FeedsPagination';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
 import { getLocalStorageTokens } from '../../utils';
-import Spin from '../Spin/Spin';
+import { useAppSelector } from '../../hooks';
 import { RequestGetFeeds } from '../../models';
 
 function FeedsBlock() {
-  const { accessToken } = getLocalStorageTokens();
-  const getFeedsReq: RequestGetFeeds = {
-    accessToken,
-    values: {
-      pageSize: 20,
-      pageNumber: 1,
-    },
-  };
+  const feedsValues = useAppSelector((store) => store.feeds);
 
-  const [getFeeds, { data, isLoading }] = useGetFeedsMutation();
-
-  useEffect(() => {
-    getFeeds(getFeedsReq);
-  }, []);
+  const [getFeeds] = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' });
 
   const refresh = (): void => {
+    const { accessToken } = getLocalStorageTokens();
+    const getFeedsReq: RequestGetFeeds = {
+      accessToken,
+      values: feedsValues,
+    };
     getFeeds(getFeedsReq);
   };
+
+  useEffect(() => {
+    refresh();
+  }, []);
 
   return (
     <main className='feeds__main'>
@@ -41,13 +38,8 @@ function FeedsBlock() {
         </div>
       </div>
       <div className='feeds__list'>
-        {isLoading && <Spin />}
-        {data && !isLoading && <FeedsTable
-          items={data.data.items.items as IUpworkFeedItemDTO[]}
-          keywordsOptions={data.data.keywordsOptions}
-          scoreOptions={data.data.scoreOptions}
-        />}
-        {data && !isLoading && <FeedsPagination feedsData={data.data.items} />}
+        <FeedsTable/>
+        <FeedsPagination />
       </div>
     </main>
   );
