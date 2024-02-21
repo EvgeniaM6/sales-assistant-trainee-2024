@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { AUTH_ERROR_RESP, PageRoutes } from '../../constants';
 import { AuthResponseError } from '../../models';
 import ErrorMessage from './ErrorMessage';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { useLogInMutation } from '../../redux/authApi';
 import { ILoginRequestDTO } from '../../../public-common/interfaces/dto/auth/iadmin-login-request.interface';
@@ -11,11 +11,13 @@ import { setIsAuthorized, setUserData } from '../../store/authSlice';
 import { ILoginResponseDTO } from '../../../public-common/interfaces/dto/auth/ilogin-response.interfaces';
 import { IAccountResponseDTO } from '../../../public-common/interfaces/dto/account/iaccount-response.interfaces';
 import { QueryStatus } from '@reduxjs/toolkit/query';
+import { ThemeContext } from '../../../App';
 
 function LogInForm() {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const [logIn, { isSuccess, error, data, status, reset }] = useLogInMutation();
+  const { theme } = useContext(ThemeContext);
 
   const {
     register,
@@ -86,7 +88,7 @@ function LogInForm() {
           className='auth__input auth-form__item'
           {...register('password', { required: 'Enter your password' })}
         />
-        <button type='submit' className='auth-form__item auth__btn btn-secondary'>
+        <button type='submit' className={`auth-form__item auth__btn btn-secondary ${theme}`}>
           {isCheckingAuth && <span className='auth__btn-loading'></span>}
           <span>Sign in</span>
         </button>

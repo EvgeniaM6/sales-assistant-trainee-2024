@@ -1,11 +1,14 @@
 import Select from 'react-select';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { IPaginatedResultDTO } from '../../../public-common/interfaces/dto/common/ipaginated-result.interface';
 import { IUpworkFeedItemDTO } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
 import Spin from '../Spin/Spin';
+import { ThemeContext } from '../../../App';
 
 function FeedsPagination() {
+  const { theme } = useContext(ThemeContext);
+
   const [
     { pageNumber, pageSize, totalCount, totalPages },
     setFeedsPage,
@@ -69,7 +72,7 @@ function FeedsPagination() {
         {pagesArr.map((page) => (
           <div className='feeds-pagination__page pagination' key={page}>
             <button
-              className={`pagination__item pagination__btn ${page === pageNumber ? 'btn-secondary' : ''}`}
+              className={`pagination__item pagination__btn ${page === pageNumber ? 'btn-secondary' : ''} ${theme}`}
               onClick={() => handleClickPage(`${page}`)}
             >
               {page}

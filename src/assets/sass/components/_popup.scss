@@ -29,6 +29,11 @@
     padding: 8px 0px;
     background: $color-button-background;
     z-index: 20;
+
+    &.dark {
+      border: 1px solid $color-popup-border-dark;
+      background: $color-button-background-dark;
+    }
   }
 
   &__title {

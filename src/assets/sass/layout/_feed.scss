@@ -4,6 +4,10 @@
   &__main {
     flex: 1;
     background: $color-main-background;
+
+    &.dark {
+      background: $color-main-background-dark;
+    }
   }
 
   .feed {

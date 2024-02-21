@@ -22,7 +22,7 @@ function App() {
   return (
     <ThemeContext.Provider value={{ theme, setTheme }}>
       {isLoadingRecoverUser ? <Spin /> :
-        <div className="app">
+        <div className={`app ${theme}`}>
           <Routes>
             <Route
               path={`/${PageRoutes.Auth}`}

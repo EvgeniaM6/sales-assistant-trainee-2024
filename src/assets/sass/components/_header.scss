@@ -38,7 +38,7 @@
       &.theme {
         background: url('../../images/dark-mode.svg') center / cover no-repeat;
 
-        &-dark {
+        &.dark {
           background: url('../../images/light-mode.svg') center / cover no-repeat;
         }
       }

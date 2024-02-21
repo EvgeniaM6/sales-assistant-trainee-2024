@@ -28,7 +28,7 @@ function Header({ isSideBarOpen, toggleOpenSideBar }: {
       </div>
       <div className='header__item'>
         <button className='header__btn' onClick={toggleTheme}>
-          <span className={`header__btn-img theme ${theme ? `theme-${theme}` : ''}`}></span>
+          <span className={`header__btn-img theme ${theme}`}></span>
         </button>
       </div>
     </header>

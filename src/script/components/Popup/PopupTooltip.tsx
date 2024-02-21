@@ -1,12 +1,14 @@
 import { usePopper } from 'react-popper';
 import { PopupTooltipProps } from '../../models';
-import { useRef } from 'react';
+import { useContext, useRef } from 'react';
+import { ThemeContext } from '../../../App';
 
 function PopupTooltip({ children, close, refElem, isOnTop }: PopupTooltipProps) {
   const popperElement = useRef<HTMLDivElement | null>(null);
   const { styles, attributes } = usePopper(popperElement.current, refElem, {
     placement: 'bottom-end',
   });
+  const { theme } = useContext(ThemeContext);
 
   return (
     <>
@@ -18,7 +20,7 @@ function PopupTooltip({ children, close, refElem, isOnTop }: PopupTooltipProps) 
           top: `${isOnTop ? 'auto': '100%'}`,
           bottom: `${isOnTop ? '100%': 'auto'}`,
         }}
-        className='popup popup-tooltip'
+        className={`popup popup-tooltip ${theme}`}
         {...attributes.popper}
       >
         {children}

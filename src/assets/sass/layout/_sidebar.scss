@@ -7,15 +7,22 @@
   left: 0;
   transition: .5s ease-in-out;
 
+  &.dark {
+    background: $color-secondary-background-dark;
+  }
+
   &.hidden {
     left: -100%;
   }
 
   &__main {
     flex: 1;
+    padding-bottom: 12px;
   }
 
   &__footer {
+    padding-top: 12px;
+
     &-item {
       position: relative;
       min-height: 48px;
@@ -46,11 +53,29 @@
       background-color: $color-button-border;
     }
 
+    &.dark {
+      color: $color-font-secondary;
+      background: $color-button-background-dark;
+  
+      &:hover {
+        background: $color-button-background-dark-hover;
+      }
+
+      &:active,
+      &:focus {
+        background-color: $color-button-border-dark;
+      }
+    }
+
     &__icon {
       display: inline-block;
       width: 24px;
       height: 24px;
       background: url('../../images/feed-icon.svg') center / cover no-repeat;
+
+      &.dark {
+        background: url('../../images/feed-icon-dark.svg') center / cover no-repeat;
+      }
     }
   }
 
@@ -62,12 +87,25 @@
       background: $color-button-background-hover;
     }
 
+    &.dark {
+      color: $color-font-secondary;
+      background: $color-button-background-dark;
+  
+      &:hover {
+        background: $color-button-background-dark-hover;
+      }
+    }
+
     &__icon {
       flex-shrink: 0;
       display: inline-block;
       width: 24px;
       height: 24px;
       background: url('../../images/avatar-icon.svg') center / cover no-repeat;
+
+      &.dark {
+        background: url('../../images/avatar-icon-dark.svg') center / cover no-repeat;
+      }
     }
 
     &__text {
@@ -83,6 +121,10 @@
       width: 24px;
       height: 24px;
       background: url('../../images/chevron-right.svg') center / cover no-repeat;
+
+      &.dark {
+        background: url('../../images/chevron-right-dark.svg') center / cover no-repeat;
+      }
     }
   }
 }

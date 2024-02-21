@@ -1,12 +1,14 @@
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import FeedsTable from './FeedsTable';
 import FeedsPagination from './FeedsPagination';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
 import { getLocalStorageTokens } from '../../utils';
 import { useAppSelector } from '../../hooks';
 import { RequestGetFeeds } from '../../models';
+import { ThemeContext } from '../../../App';
 
 function FeedsBlock() {
+  const { theme } = useContext(ThemeContext);
   const feedsValues = useAppSelector((store) => store.feeds);
 
   const [getFeeds] = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' });
@@ -31,7 +33,7 @@ function FeedsBlock() {
           <h2 className='feeds__title-text'>Upwork feed</h2>
         </div>
         <div className='feeds__refresh'>
-          <button className='feeds__refresh-btn btn-secondary' onClick={refresh}>
+          <button className={`feeds__refresh-btn btn-secondary ${theme}`} onClick={refresh}>
             <span className='feeds__refresh-btn-icon'></span>
             <span className='feeds__refresh-btn-text'>Refresh RSS</span>
           </button>

@@ -4,6 +4,10 @@
   &__aside {
     width: 500px;
     z-index: 1;
+
+    &.dark {
+      background: $color-secondary-background-dark;
+    }
   }
 
   &__background {

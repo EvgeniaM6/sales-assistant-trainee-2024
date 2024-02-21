@@ -1,6 +1,10 @@
+import { useContext } from 'react';
+import { ThemeContext } from '../../../App';
 import { PopupProps } from '../../models';
 
 function Popup({ children, close, confirm, confirmAction }: PopupProps) {
+  const { theme } = useContext(ThemeContext);
+
   return (
     <div className='overlay'>
       <div className='popup'>
@@ -12,7 +16,7 @@ function Popup({ children, close, confirm, confirmAction }: PopupProps) {
           </div>
           {children}
           <div className='popup__btns'>
-            <button className='popup__btns-btn btn-secondary' onClick={close}>No, Keep it</button>
+            <button className={`popup__btns-btn btn-secondary ${theme}`} onClick={close}>No, Keep it</button>
             <button className='popup__btns-btn btn-primary' onClick={confirm}>{`Yes, ${confirmAction} it`}</button>
           </div>
         </div>
