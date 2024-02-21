@@ -6,9 +6,19 @@
 
   .spin {
     width: 100px;
-    height: 100px;
+    aspect-ratio: 1 / 1;
     background: url('../../images/loading.svg') center / cover no-repeat;
     animation: spin 1s steps(12) infinite;
+  }
+
+  &-inset {
+    height: 100%;
+    min-width: 50px;
+
+    .spin {
+      width: 50%;
+      max-width: 100px;
+    }
   }
 }
 
