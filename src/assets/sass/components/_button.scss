@@ -3,6 +3,9 @@
   background: $color-btn-background-primary;
   border-radius: 8px;
   padding: 12px 16px;
+  font-size: 16px;
+  line-height: 28px;
+  font-weight: 500;
   color: $color-font-secondary;
 
   &:hover {
@@ -12,6 +15,20 @@
   &:active,
   &:focus {
     background-color: $color-btn-background-primary-focus;
+  }
+
+  &.dark {
+    color: $color-font;
+    background: $color-btn-background-primary-dark;
+
+    &:hover {
+      background: $color-btn-background-primary-hover;
+    }
+  
+    &:active,
+    &:focus {
+      background-color: $color-btn-background-primary-focus;
+    }
   }
 }
 
@@ -71,7 +88,7 @@
 
   &.dark {
     color: $color-font-dark;
-    border: 2px solid $color-button-border-dark;
+    border: 2px solid $color-btn-secondary-dark-focus;
     background: $color-button-background-dark;
 
     &:hover {
@@ -80,7 +97,7 @@
   
     &:active,
     &:focus {
-      background-color: $color-button-border-dark;
+      background-color: $color-btn-secondary-dark-focus;
     }
   }
 }
