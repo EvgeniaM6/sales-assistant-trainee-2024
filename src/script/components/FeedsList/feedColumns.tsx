@@ -2,18 +2,21 @@ import { createColumnHelper } from '@tanstack/react-table';
 import { ReviewType } from '../../../public-common/enums/upwork-feed/review-type.enum';
 import { getTimeFromString } from '../../utils/getTimeFromString';
 import { FeedItem } from '../../models';
+import { NavLink } from 'react-router-dom';
 
 const columnHelper = createColumnHelper<FeedItem>();
 
 export const columns = [
   columnHelper.accessor('feedId', {}),
-  columnHelper.accessor('url', {}),
   columnHelper.accessor('title', {
     header: 'Title',
     cell: (info) => {
       const title = info.getValue();
-      const url: string = info.row.getValue('url');
-      return <a href={url} target='_blank' rel="noreferrer">{title}</a>;
+      return (
+        <NavLink to={info.row.getValue('feedId')}>
+          {title}
+        </NavLink>
+      );
     },
   }),
   columnHelper.accessor((row) => row.published, {

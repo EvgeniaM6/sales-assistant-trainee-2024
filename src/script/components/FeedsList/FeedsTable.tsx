@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import {
   flexRender,
   getCoreRowModel,
@@ -8,12 +7,10 @@ import {
 import { useGetFeedsMutation } from '../../redux/feedsApi';
 import Spin from '../Spin/Spin';
 import { columns } from './feedColumns';
-import { PageRoutes } from '../../constants';
 import FeedsTableHead from './FeedsTableHead';
 import { FeedItem } from '../../models';
 
 function FeedsTable() {
-  const navigate = useNavigate();
   const { data: feedsData, isLoading } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
 
   const [data, setData] = useState<FeedItem[]>([]);
@@ -23,7 +20,6 @@ function FeedsTable() {
 
     const newData: FeedItem[] = feedsData.data.items.items.map((feed) => ({
       feedId: feed.id || '',
-      url: feed.url,
       title: feed.title,
       published: feed.published,
       keywords: feed.keywords,
@@ -42,10 +38,6 @@ function FeedsTable() {
     getCoreRowModel: getCoreRowModel(),
   });
 
-  const openFeedById = (id: string): void => {
-    navigate(`/${PageRoutes.Feed}/${id}`);
-  };
-
   return (
     <div className='feeds__content'>
       {isLoading ? <Spin isInset={true} /> :
@@ -59,14 +51,13 @@ function FeedsTable() {
                 {row.getVisibleCells()
                   .filter((cell) => {
                     const columnId = cell.column.id;
-                    const haveToSkip = columnId === 'feedId' || columnId === 'url';
+                    const haveToSkip = columnId === 'feedId';
                     return !haveToSkip;
                   })
                   .map((cell) => (
                     <td
                       key={cell.id}
                       className='feeds-table__cell'
-                      onClick={() => openFeedById(cell.row.getValue('feedId'))}
                     >
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </td>
