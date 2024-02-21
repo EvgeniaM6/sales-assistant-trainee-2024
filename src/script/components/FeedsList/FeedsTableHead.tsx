@@ -1,14 +1,14 @@
 import { Table, flexRender } from '@tanstack/react-table';
 import Select from 'react-select';
-import { IOptionInterface } from '../../../public-common/interfaces/dto/common/ioption.interface';
+import { useGetFeedsMutation } from '../../redux/feedsApi';
 import DateInput from './DataInput';
 import { FeedItem } from '../../models';
 
-function FeedsTableHead({ table, keywordsOptions, scoreOptions }: {
+function FeedsTableHead({ table }: {
   table: Table<FeedItem>;
-  keywordsOptions: IOptionInterface[];
-  scoreOptions: IOptionInterface[];
 }) {
+  const { data: feedsData } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
+
   const reviewOptions = [
     { value: 'all', label: 'All' },
     { value: 'like', label: 'Like' },
@@ -54,19 +54,19 @@ function FeedsTableHead({ table, keywordsOptions, scoreOptions }: {
                     )}
                   </div>
                   {isTitle && (
-                    <input type='text' className='head-cell__input' />
+                    <input type='text' className='head-cell__input' id='title' />
                   )}
                   {isPublished && <DateInput />}
                   {(headerId === 'keywords') && (
                     <Select
-                      options={keywordsOptions}
+                      options={feedsData ? feedsData.data.keywordsOptions : []}
                       placeholder={''}
                       isClearable={true}
                     />
                   )}
                   {isScore && (
                     <Select
-                      options={scoreOptions}
+                      options={feedsData ? feedsData.data.scoreOptions : []}
                       placeholder={''}
                       isClearable={true}
                     />

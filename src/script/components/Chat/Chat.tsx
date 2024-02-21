@@ -1,15 +1,13 @@
 import ReactMarkdown from 'react-markdown';
 import fetchMessages from './fetchMessages.json';
 import { useEffect, useRef, useState } from 'react';
-import { useAutosizeTextArea } from '../../hooks';
+import TextareaAutosize from 'react-textarea-autosize';
 
 function Chat() {
   const messagesArr = fetchMessages.data;
   const [value, setValue] = useState('');
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const [maxHeightMessages, setMaxHeightMessages] = useState(textAreaRef.current?.style.height);
-
-  useAutosizeTextArea(textAreaRef.current, value);
 
   const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
     const val = evt.target?.value;
@@ -49,14 +47,15 @@ function Chat() {
       </div>
       <div className='chat__input'>
         <form className='chat__form'>
-          <textarea
+          <TextareaAutosize
             className='chat__form-textarea'
-            name=""
-            id=""
+            name='chat'
+            id='chat'
+            autoComplete='off'
             placeholder='Write a question...'
             onChange={handleChange}
             ref={textAreaRef}
-            rows={1}
+            maxRows={15}
             value={value}
           />
           <div className='chat__form-submit submit'>

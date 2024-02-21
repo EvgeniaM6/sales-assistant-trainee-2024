@@ -1,10 +1,10 @@
 import { usePopper } from 'react-popper';
 import { PopupTooltipProps } from '../../models';
-import { useState } from 'react';
+import { useRef } from 'react';
 
-function PopupTooltip({ children, close, refElem }: PopupTooltipProps) {
-  const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
-  const { styles, attributes } = usePopper(refElem, popperElement, {
+function PopupTooltip({ children, close, refElem, isOnTop }: PopupTooltipProps) {
+  const popperElement = useRef<HTMLDivElement | null>(null);
+  const { styles, attributes } = usePopper(popperElement.current, refElem, {
     placement: 'bottom-end',
   });
 
@@ -12,8 +12,12 @@ function PopupTooltip({ children, close, refElem }: PopupTooltipProps) {
     <>
       <div className='overlay overlay-tooltip' onClick={close} />
       <div
-        ref={setPopperElement}
-        style={{ ...styles.popper}}
+        ref={popperElement}
+        style={{
+          ...styles.popper,
+          top: `${isOnTop ? 'auto': '100%'}`,
+          bottom: `${isOnTop ? '100%': 'auto'}`,
+        }}
         className='popup popup-tooltip'
         {...attributes.popper}
       >

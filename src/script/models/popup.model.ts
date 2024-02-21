@@ -9,6 +9,7 @@ export type PopupProps = ComponentPropsWithoutRef<'div'> & {
 export type PopupTooltipProps = ComponentPropsWithoutRef<'div'> & {
   close: () => void;
   refElem: HTMLButtonElement | null;
+  isOnTop?: boolean;
 };
 
 export type CreateChatForm = {

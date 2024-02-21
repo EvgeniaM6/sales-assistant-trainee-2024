@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom';
 import { PageRoutes } from '../../constants';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { createPortal } from 'react-dom';
 import DeletePopper from './DeletePopper';
 import { PopupTooltip } from '../Popup';
@@ -31,17 +31,17 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
     setIsVisible(false);
   };
 
-  const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
+  const referenceElement = useRef<HTMLButtonElement | null>(null);
 
   return (
     <li key={id} className='chats__item'>
       <NavLink to={`/${PageRoutes.Chat}/${id}`} className='chats__link'>
         <span className='chats__link-text'>{name}</span>
-        <button className='chats__link-btn' onClick={openMore} ref={setReferenceElement}>
+        <button className='chats__link-btn' onClick={openMore} ref={referenceElement}>
           <span className='chats__link-btn-icon'></span>
         </button>
         {isVisible && (
-          <PopupTooltip close={hideMore} refElem={referenceElement}>
+          <PopupTooltip close={hideMore} refElem={referenceElement.current}>
             <button className='popup__btn' onClick={() => editChatItem(id)}>
               <span className='popup__btn-icon popup__btn-edit'></span>
               <span>Edit</span>

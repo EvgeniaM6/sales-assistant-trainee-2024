@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-item';
 import { PageRoutes } from '../../constants';
@@ -20,7 +20,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   const [isCreating, setIsCreating] = useState(false);
   const [isShowLogout, setIsShowLogout] = useState(false);
 
-  const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
+  const referenceElement = useRef<HTMLButtonElement | null>(null);
 
   const openLogout = () => {
     setIsShowLogout(true);
@@ -99,29 +99,33 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
         )}
       </div>
       <div className='sidebar__footer'>
-        <NavLink
-          to={`/${PageRoutes.Feed}`}
-          className={() => {
-            const isActive = location.pathname === '/' || location.pathname === `/${PageRoutes.Feed}`;
-            return 'sidebar__footer-item feed-link' + (isActive ? ' active' : '');
-          }}
-        >
-          <span className='feed-link__icon'></span>
-          <span className='feed-link__text'>Upwork feed</span>
-        </NavLink>
-        <button onClick={openLogout} className='sidebar__footer-item logout-btn' ref={setReferenceElement}>
-          <span className='logout-btn__icon'></span>
-          <span className='logout-btn__text'>{userData?.email || 'user'}</span>
-          <span className='logout-btn__arrow'></span>
-        </button>
-        {isShowLogout && (
-          <PopupTooltip close={hideLogout} refElem={referenceElement}>
-            <button className='popup__btn' onClick={logout}>
-              <span className='popup__btn-icon popup__btn-logout'></span>
-              <span>Logout</span>
-            </button>
-          </PopupTooltip>
-        )}
+        <div className="sidebar__footer-item">
+          <NavLink
+            to={`/${PageRoutes.Feed}`}
+            className={() => {
+              const isActive = location.pathname === '/' || location.pathname === `/${PageRoutes.Feed}`;
+              return 'sidebar__footer-btn feed-link' + (isActive ? ' active' : '');
+            }}
+          >
+            <span className='feed-link__icon'></span>
+            <span className='feed-link__text'>Upwork feed</span>
+          </NavLink>
+        </div>
+        <div className="sidebar__footer-item">
+          <button onClick={openLogout} className='sidebar__footer-btn logout-btn' ref={referenceElement}>
+            <span className='logout-btn__icon'></span>
+            <span className='logout-btn__text'>{userData?.email || 'user'}</span>
+            <span className='logout-btn__arrow'></span>
+          </button>
+          {isShowLogout && (
+            <PopupTooltip close={hideLogout} refElem={referenceElement.current} isOnTop={true} >
+              <button className='popup__btn' onClick={logout}>
+                <span className='popup__btn-icon popup__btn-logout'></span>
+                <span>Logout</span>
+              </button>
+            </PopupTooltip>
+          )}
+        </div>
       </div>
     </aside>
   );
