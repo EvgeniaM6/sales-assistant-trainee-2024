@@ -54,7 +54,7 @@ function FeedsTableHead({ table }: {
                     )}
                   </div>
                   {isTitle && (
-                    <input type='text' className='head-cell__input' />
+                    <input type='text' className='head-cell__input' id='title' />
                   )}
                   {isPublished && <DateInput />}
                   {(headerId === 'keywords') && (

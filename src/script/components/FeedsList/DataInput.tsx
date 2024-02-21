@@ -15,6 +15,7 @@ function DateInput() {
       showPopperArrow={false}
       formatWeekDay={(nameOfDay: string) => nameOfDay.slice(0, 3).toUpperCase()}
       className='head-cell__input'
+      id='published'
     />
   );
 }
