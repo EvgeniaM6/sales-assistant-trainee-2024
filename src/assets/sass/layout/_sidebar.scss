@@ -17,13 +17,18 @@
 
   &__footer {
     &-item {
+      position: relative;
+      min-height: 48px;
+      width: 288px;
+      border-radius: 8px;
+    }
+
+    &-btn {
       display: flex;
       align-items: center;
       gap: 8px;
-      min-height: 48px;
-      width: 288px;
-      padding: 8px 16px 8px 12px;
-      border-radius: 8px;
+      padding: 12px;
+      width: 100%;
     }
   }
 
