@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-item';
 import { PageRoutes } from '../../constants';
@@ -6,9 +6,11 @@ import ChatItem from './ChatItem';
 import CreateChatPopper from './CreateChatPopper';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logOut } from '../../store/authSlice';
-import { mockChatsList } from './mockChatsList';
 import { PopupTooltip } from '../Popup';
 import { ThemeContext } from '../../../App';
+import { useGetChatsQuery } from '../../redux/chatApi';
+import { getLocalStorageTokens } from '../../utils';
+import Spin from '../Spin/Spin';
 
 function SideBar({ isOpen }: { isOpen: boolean }) {
   const navigate = useNavigate();
@@ -16,11 +18,23 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   const dispatch = useAppDispatch();
   const { userData } = useAppSelector((store) => store.auth);
 
-  const [chatsList, setChatsList] = useState(mockChatsList.data);
-  const [uniqueId, setUniqueId] = useState(mockChatsList.data.length);
+  const [chatsList, setChatsList] = useState<IChatItem[]>([]);
+  const [uniqueId, setUniqueId] = useState(0);
   const [isCreating, setIsCreating] = useState(false);
   const [isShowLogout, setIsShowLogout] = useState(false);
   const { theme } = useContext(ThemeContext);
+
+  const { accessToken } = getLocalStorageTokens();
+  const {
+    data,
+    isLoading,
+  } = useGetChatsQuery({ accessToken });
+
+  useEffect(() => {
+    if (data) {
+      setChatsList(data.data);
+    }
+  }, [data]);
 
   const referenceElement = useRef<HTMLButtonElement | null>(null);
 
@@ -86,19 +100,22 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
           <span className='chats__new-btn-text'>New chat</span>
         </button>
         {isCreating && <CreateChatPopper closeCreating={closeCreating} createChatItem={addNewChat} />}
-        {chatsList.length && (
-          <ul className='chats__list'>
-            {chatsList.map((chat) => (
-              <ChatItem
-                key={chat.id}
-                id={chat.id}
-                name={chat.name}
-                deleteChatItem={deleteChatItem}
-                editChatItem={editChatItem}
-              />
-            ))}
-          </ul>
-        )}
+        <ul className='chats__list'>
+          {isLoading && <Spin isInset={true} />}
+          {chatsList.length && (
+            <>
+              {chatsList.map((chat) => (
+                <ChatItem
+                  key={chat.id}
+                  id={chat.id}
+                  name={chat.name}
+                  deleteChatItem={deleteChatItem}
+                  editChatItem={editChatItem}
+                />
+              ))}
+            </>
+          )}
+        </ul>
       </div>
       <div className='sidebar__footer'>
         <div className='sidebar__footer-item'>

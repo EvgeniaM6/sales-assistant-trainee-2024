@@ -3,16 +3,18 @@ import authSlice from './authSlice';
 import { authApi } from '../redux/authApi';
 import { feedsApi } from '../redux/feedsApi';
 import feedsSlice from './feedsSlice';
+import { chatApi } from '../redux/chatApi';
 
 const store = configureStore({
   reducer: {
     [authApi.reducerPath]: authApi.reducer,
     [feedsApi.reducerPath]: feedsApi.reducer,
+    [chatApi.reducerPath]: chatApi.reducer,
     auth: authSlice,
     feeds: feedsSlice,
   },
   middleware: (getDefaultMiddlware) =>
-    getDefaultMiddlware().concat([authApi.middleware, feedsApi.middleware]),
+    getDefaultMiddlware().concat([authApi.middleware, feedsApi.middleware, chatApi.middleware]),
 });
 
 export default store;
