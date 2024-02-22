@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
+import { ThemeContext } from '../../../App';
 
 function ExpandingMarkdownText({ text }: { text: string }) {
+  const { theme } = useContext(ThemeContext);
   const [isDescriptionExpanded, setIsDescriptionExpanded] = useState(false);
 
   const toggleDescription = (toOpen: boolean) => {
@@ -16,7 +18,7 @@ function ExpandingMarkdownText({ text }: { text: string }) {
         </ReactMarkdown>
       </div>
       <div className='markdown__expand'>
-        <button className='markdown__expand-btn' onClick={() => toggleDescription(!isDescriptionExpanded)}>
+        <button className={`markdown__expand-btn ${theme}`} onClick={() => toggleDescription(!isDescriptionExpanded)}>
           {isDescriptionExpanded ? 'Collapse' : 'Expand'}
         </button>
       </div>

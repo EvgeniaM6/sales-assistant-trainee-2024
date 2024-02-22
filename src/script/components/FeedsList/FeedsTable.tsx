@@ -68,7 +68,7 @@ function FeedsTable() {
                           <span
                             className={'feeds-table__cell-score'}
                             style={{
-                              backgroundColor: `hsl(${score > 250 ? 180 : score * 180 / 250}deg 100% ${theme === 'dark'? '30%' : '100%'})`,
+                              backgroundColor: `hsl(${score > 250 ? 180 : score * 180 / 250}deg 100% ${theme === 'dark'? '30%' : '80%'})`,
                             }}
                           >
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}

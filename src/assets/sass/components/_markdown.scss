@@ -7,6 +7,7 @@
 
   &__expand {
     border-top: 1px dashed  $color-popup-border;
+
     &-btn {
       border: none;
       background: none;
@@ -16,6 +17,14 @@
 
       &:hover {
         color: $color-btn-background-primary-hover;
+      }
+
+      &.dark {
+        color: $color-btn-background-primary-dark;
+
+        &:hover {
+          color: $color-btn-background-primary-dark-hover;
+        }
       }
     }
   }
