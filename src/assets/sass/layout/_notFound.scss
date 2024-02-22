@@ -4,17 +4,19 @@
   align-items: center;
   background: $color-main-background;
 
+  &.dark {
+    background: $color-main-background-dark;
+  }
+
   .not-found {
     text-align: center;
     width: 40%;
 
     &__link {
       display: inline-block;
-      color: $color-font;
       transition: all .3s ease-in-out;
 
       &:hover {
-        color: $color-font;
         text-decoration: none;
       }
     }

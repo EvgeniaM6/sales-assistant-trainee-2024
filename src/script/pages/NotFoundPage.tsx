@@ -7,7 +7,7 @@ function NotFoundPage() {
   const { theme } = useContext(ThemeContext);
 
   return (
-    <div className='page not-found-page'>
+    <div className={`page not-found-page ${theme}`}>
       <div className='not-found'>
         <h1>Oops!</h1>
         <h2>404 - Page not found</h2>
