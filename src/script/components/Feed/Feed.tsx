@@ -1,17 +1,16 @@
+import { useContext } from 'react';
 import { NavLink } from 'react-router-dom';
 import { PageRoutes } from '../../constants';
-import fetchFeed from './fetchFeed.json';
 import ExpandingMarkdownText from './ExpandingMarkdownText';
 import MachedItems from './MachedItems';
 import { IUpworkFeedMatchEntityDto } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-match-entity.dto';
+import { IUpworkFeedDetailItemDTO } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-detail-item.dto';
 import { getTimeFromString } from '../../utils';
 import { ThemeContext } from '../../../App';
-import { useContext } from 'react';
 
-function Feed({ id }: { id: string }) {
-  console.log(id);
+function Feed({ data }: { data: IUpworkFeedDetailItemDTO }) {
   const { theme } = useContext(ThemeContext);
-  const { title, description, score, url, published, keywords, matchedCasesData, matchedBlogsData } = fetchFeed.data;
+  const { title, description, score, url, published, keywords, matchedCasesData, matchedBlogsData } = data;
 
   return (
     <main className='feed'>

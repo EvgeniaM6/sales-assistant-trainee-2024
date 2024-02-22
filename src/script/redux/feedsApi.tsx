@@ -3,7 +3,7 @@ import { REQUEST_METHODS } from '../constants';
 import { baseQueryWithReauth } from './baseQueryWithReauth';
 import { BaseRoutes } from '../../public-common/enums/routes/base-routes.enum';
 import { UpworkFeedsRoutesEnum } from '../../public-common/enums/routes/upwork-feeds-routes.enum';
-import { RequestGetFeeds, ResponseGetFeeds } from '../models';
+import { RequestGetFeedById, RequestGetFeeds, ResponseGetFeedById, ResponseGetFeeds } from '../models';
 
 export const feedsApi = createApi({
   reducerPath: 'feedsApi',
@@ -21,7 +21,17 @@ export const feedsApi = createApi({
         body: values,
       }),
     }),
+    getFeedById: build.query<ResponseGetFeedById, RequestGetFeedById>({
+      query: ({ accessToken, id }: RequestGetFeedById) => ({
+        url: `${BaseRoutes.V1}/${UpworkFeedsRoutesEnum.BasePrefix}/${id}`,
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'accept': 'application/json',
+          'Content-type': 'application/json',
+        },
+      }),
+    }),
   }),
 });
 
-export const { useGetFeedsMutation } = feedsApi;
+export const { useGetFeedsMutation, useGetFeedByIdQuery } = feedsApi;
