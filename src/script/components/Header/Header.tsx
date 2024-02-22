@@ -22,12 +22,12 @@ function Header({ isSideBarOpen, toggleOpenSideBar }: {
   return (
     <header className='header'>
       <div className='header__item'>
-        <button className='header__btn' onClick={toggleOpenSideBar}>
-          <span className={`header__btn-img ${isSideBarOpen ? 'collapse' : 'open'}`}></span>
+        <button className={`header__btn ${theme}`} onClick={toggleOpenSideBar}>
+          <span className={`header__btn-img ${isSideBarOpen ? 'collapse' : 'open'} ${theme}`}></span>
         </button>
       </div>
       <div className='header__item'>
-        <button className='header__btn' onClick={toggleTheme}>
+        <button className={`header__btn ${theme}`} onClick={toggleTheme}>
           <span className={`header__btn-img theme ${theme}`}></span>
         </button>
       </div>

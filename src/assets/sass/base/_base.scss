@@ -11,6 +11,7 @@ body {
 
   &.dark {
     color: $color-font-dark;
+    background: $color-secondary-background-dark;
   }
 }
 
@@ -44,4 +45,8 @@ button {
   &:focus {
     outline: none;
   }
+}
+
+.dark a {
+  color: $color-btn-background-primary-dark;
 }

@@ -29,11 +29,20 @@
 
         &.bot {
           background: $color-active-background;
+
+          &.dark {
+            background: $color-active-background-dark;
+          }
         }
 
         &.user {
           border: 1px solid $color-popup-border;
           background: $color-main-background;
+
+          &.dark {
+            border: 1px solid $color-popup-border-dark;
+            background: $color-main-background-dark;
+          }
         }
 
         &__author {
@@ -45,10 +54,18 @@
 
             &.bot {
               background: url('../../images/bot-icon.svg') center / cover no-repeat;
+
+              &.dark {
+                background: url('../../images/bot-icon-dark.svg') center / cover no-repeat;
+              }
             }
 
             &.user {
               background: url('../../images/user-icon.svg') center / cover no-repeat;
+
+              &.dark {
+                background: url('../../images/user-icon-dark.svg') center / cover no-repeat;
+              }
             }
           }
         }
@@ -84,6 +101,16 @@
           outline: none;
           box-shadow: 0 0 0 1px $color-date-input-border-hover;
         }
+
+        &.dark {
+          background: $color-secondary-background-dark;
+          border: 1px solid $color-label;
+          color: $color-font-dark;
+        }
+
+        &::placeholder.dark {
+          color: $color-font-dark;
+        }
       }
     }
 
@@ -94,8 +121,12 @@
       }
 
       &::-webkit-scrollbar-thumb {
-        background-color: $color-scrollbar;
+        background-color: rgba($color: $color-scrollbar, $alpha: 0.5);
         border-radius: 10px;
+
+        &:hover {
+          background-color: $color-scrollbar;
+        }
       }
 
       &::-webkit-scrollbar {
@@ -114,15 +145,19 @@
       padding: 8px;
       border: none;
       border-radius: 50%;
-      background: $color-btn-background-primary;
+      background: none;
+      opacity: 50%;
 
       &:hover {
-        background: $color-btn-background-primary-hover;
+        padding: 7px;
+        border: 1px solid $color-btn-background-primary;
+        background: $color-btn-background-primary-dark-hover;
+        box-shadow: 0 2px 8px 0 rgba($color: $color-btn-background-primary, $alpha: 40%);
       }
 
-      &:active,
-      &:focus {
-        background: $color-btn-background-primary-focus;
+      &.dark:hover {
+        border: 1px solid $color-btn-background-primary-dark;
+        background: $color-btn-background-primary-dark-hover;
       }
 
       &-icon {
@@ -130,7 +165,30 @@
         width: 24px;
         height: 24px;
         background: url('../../images/send.svg') center / cover no-repeat;
+
+        &.dark {
+          background: url('../../images/send-dark.svg') center / cover no-repeat;
+        }
       }
     }
   }
+
+  textarea:focus + .submit {
+    .submit__btn {
+      background: $color-btn-background-primary;
+      opacity: 100%;
+
+      &.dark {
+        background: $color-btn-background-primary-dark;
+      }
+  
+      &-icon {
+        background: url('../../images/send-focus.svg') center / cover no-repeat;
+
+        &.dark {
+          background: url('../../images/send-dark-focus.svg') center / cover no-repeat;
+        }
+      }
+    }
+  } 
 }
