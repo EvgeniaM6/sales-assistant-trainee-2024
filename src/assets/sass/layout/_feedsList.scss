@@ -4,6 +4,10 @@
   &__main {
     flex: 1;
     background: $color-main-background;
+
+    &.dark {
+      background: $color-main-background-dark;
+    }
   }
 
   .feeds {
@@ -26,6 +30,10 @@
           width: 24px;
           height: 24px;
           background: url('../../images/refresh.svg') center / cover no-repeat;
+
+          &.dark {
+            background: url('../../images/refresh-dark.svg') center / cover no-repeat;
+          }
         }
       }
     }
@@ -39,8 +47,12 @@
       }
   
       &::-webkit-scrollbar-thumb {
-        background-color: $color-scrollbar;
+        background-color: rgba($color: $color-scrollbar, $alpha: 0.5);
         border-radius: 10px;
+
+        &:hover {
+          background-color: $color-scrollbar;
+        }
       }
   
       &::-webkit-scrollbar {

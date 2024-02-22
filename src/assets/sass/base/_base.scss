@@ -8,6 +8,11 @@ body {
   font-family: 'Poppins', sans-serif;
   font-size: 16px;
   line-height: 24px;
+
+  &.dark {
+    color: $color-font-dark;
+    background: $color-secondary-background-dark;
+  }
 }
 
 .page {
@@ -27,6 +32,10 @@ body {
 
 .active {
   background: $color-active-background;
+
+  &.dark {
+    background: $color-active-background-dark;
+  }
 }
 
 button {
@@ -36,4 +45,8 @@ button {
   &:focus {
     outline: none;
   }
+}
+
+.dark a {
+  color: $color-btn-background-primary-dark;
 }

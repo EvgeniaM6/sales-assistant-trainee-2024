@@ -1,22 +1,35 @@
 $color-main-background: #f6f7f8;
 $color-secondary-background: #ffffff;
+$color-main-background-dark: #181a1f;
+$color-secondary-background-dark: #131314;
 
 $color-btn-background-primary: #0f62fe;
 $color-btn-background-primary-hover: #0b43aa;
 $color-btn-background-primary-focus: #093485;
+$color-btn-background-primary-dark: #5B94FE;
+$color-btn-background-primary-dark-hover: #3E7FFF;
 
 $color-button-background: #ffffff;
 $color-button-background-hover: #f0f5ff;
 $color-button-border: #abbde0;
+$color-button-background-dark: #131314;
+$color-button-background-dark-hover: #181b29;
+$color-button-border-dark: #252733;
+
+$color-btn-secondary-dark-focus: #3760ad;
 
 $color-error: #ab0000;
 
 $color-highlight: #0f62fe;
 
 $color-error-background: #fae1e5;
+$color-error-background-dark: #3d2b2e;
 
 $color-active-background: #ebecf0;
+$color-active-background-dark: #252733;
+
 $color-keyword: #ebecf0;
+$color-keyword-dark: #252733;
 
 $color-label: #70737a;
 
@@ -28,7 +41,10 @@ $color-date-day-text: #414752;
 
 $color-font: #131314;
 $color-font-secondary: #ffffff;
+$color-font-dark: #ebecf0;
+$color-font-table-dark: #c9ced6;
 
 $color-scrollbar: #989898;
 
 $color-popup-border: #d5d7db;
+$color-popup-border-dark: #414752;

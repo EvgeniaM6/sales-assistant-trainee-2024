@@ -1,11 +1,14 @@
+import { useContext } from 'react';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import { CreateChatForm } from '../../models';
 import { Popup } from '../Popup';
+import { ThemeContext } from '../../../App';
 
 function CreateChatPopper({ createChatItem, closeCreating }: {
   createChatItem: (name: string) => void;
   closeCreating: () => void;
 }) {
+  const { theme } = useContext(ThemeContext);
   const {
     register,
     handleSubmit,
@@ -23,10 +26,11 @@ function CreateChatPopper({ createChatItem, closeCreating }: {
       <form className='create__form'>
         <label className='create__label' htmlFor='chatName'>Chat history name</label>
         <input
-          className={`create__input ${errors.chatName ? 'input-error' : ''}`}
+          className={`create__input ${errors.chatName ? 'input-error' : ''} ${theme}`}
           type='text'
           id='chatName'
           {...register('chatName', { required: 'This input is required' })}
+          autoComplete='off'
         />
         {errors.chatName && <p className='error-message'>{errors.chatName.message}</p>}
       </form>

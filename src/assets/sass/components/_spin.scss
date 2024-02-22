@@ -4,6 +4,14 @@
   justify-content: center;
   height: 100vh;
 
+  &.dark {
+    background: rgba($color: $color-main-background-dark, $alpha: 0.8);
+
+    .spin {
+      filter: invert(1);
+    }
+  }
+
   .spin {
     width: 100px;
     aspect-ratio: 1 / 1;

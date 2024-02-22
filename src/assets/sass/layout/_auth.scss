@@ -4,6 +4,10 @@
   &__aside {
     width: 500px;
     z-index: 1;
+
+    &.dark {
+      background: $color-secondary-background-dark;
+    }
   }
 
   &__background {
@@ -32,6 +36,10 @@
       border-radius: 8px;
       background: $color-error-background;
 
+      &.dark {
+        background: $color-error-background-dark;
+      }
+
       &-paragraph {
         margin: 0;
       }
@@ -58,11 +66,22 @@
       padding: 8px 12px;
       border: 2px solid #858585;
       border-radius: 8px;
+      transition: background-color 5000s ease-in-out 0s, color 5000s ease-in-out 0s;
 
       &:active,
       &:focus {
         border: 2px solid $color-highlight;
         outline: none;
+      }
+
+      &.dark {
+        background: $color-secondary-background-dark;
+        border: 1px solid $color-label;
+        color: $color-font-dark;
+      }
+
+      &::placeholder.dark {
+        color: $color-font-dark;
       }
     }
 

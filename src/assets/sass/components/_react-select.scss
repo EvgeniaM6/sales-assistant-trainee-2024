@@ -1,0 +1,52 @@
+.react-select {
+  &__menu-list {
+    &::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background-color: rgba($color: $color-scrollbar, $alpha: 0.5);
+      border-radius: 10px;
+
+      &:hover {
+        background-color: $color-scrollbar;
+      }
+    }
+
+    &::-webkit-scrollbar {
+      width: 7px;
+    }
+  }
+}
+
+.dark {
+  .react-select {
+    &__control {
+      background: $color-secondary-background-dark;
+      border: 1px solid $color-label;
+      color: $color-font-dark;
+    }
+  
+    &::placeholder {
+      color: $color-font-dark;
+    };
+
+    &__single-value {
+      color: $color-font-dark;
+    }
+
+    &__menu {
+      background: $color-secondary-background-dark;
+    }
+
+    &__option {
+      &--is-focused {
+        background: $color-button-background-dark-hover;
+      }
+
+      &--is-selected {
+        background: $color-btn-secondary-dark-focus;
+      }
+    }
+  }
+}

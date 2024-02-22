@@ -3,6 +3,9 @@
   background: $color-btn-background-primary;
   border-radius: 8px;
   padding: 12px 16px;
+  font-size: 16px;
+  line-height: 28px;
+  font-weight: 500;
   color: $color-font-secondary;
 
   &:hover {
@@ -12,6 +15,20 @@
   &:active,
   &:focus {
     background-color: $color-btn-background-primary-focus;
+  }
+
+  &.dark {
+    color: $color-font;
+    background: $color-btn-background-primary-dark;
+
+    &:hover {
+      background: $color-btn-background-primary-hover;
+    }
+  
+    &:active,
+    &:focus {
+      background-color: $color-btn-background-primary-focus;
+    }
   }
 }
 
@@ -27,6 +44,19 @@
   &:active,
   &:focus {
     background-color: $color-button-border;
+  }
+
+  &.dark {
+    color: $color-font-secondary;
+
+    &:hover {
+      background: $color-button-background-dark-hover;
+    }
+  
+    &:active,
+    &:focus {
+      background-color: $color-button-border-dark;
+    }
   }
 
   &:disabled {
@@ -57,6 +87,21 @@
   &:focus {
     background-color: $color-button-border;
   }
+
+  &.dark {
+    color: $color-font-dark;
+    border: 2px solid $color-btn-secondary-dark-focus;
+    background: $color-button-background-dark;
+
+    &:hover {
+      background: $color-button-background-dark-hover;
+    }
+  
+    &:active,
+    &:focus {
+      background-color: $color-btn-secondary-dark-focus;
+    }
+  }
 }
 
 .popup {
@@ -72,6 +117,15 @@
       background: $color-button-background-hover;
     }
 
+    &.dark {
+      color: $color-font-dark;
+      background: $color-button-background-dark;
+  
+      &:hover {
+        background: $color-button-background-dark-hover;
+      }
+    }
+
     &-icon {
       display: inline-block;
       width: 24px;
@@ -80,14 +134,26 @@
 
     &-edit {
       background: url('../../images/edit.svg') center / cover no-repeat;
+
+      &.dark {
+        background: url('../../images/edit-dark.svg') center / cover no-repeat;
+      }
     }
 
     &-delete {
       background: url('../../images/delete.svg') center / cover no-repeat;
+
+      &.dark {
+        background: url('../../images/delete-dark.svg') center / cover no-repeat;
+      }
     }
 
     &-logout {
       background: url('../../images/logout.svg') center / cover no-repeat;
+
+      &.dark {
+        background: url('../../images/logout-dark.svg') center / cover no-repeat;
+      }
     }
   }
 }

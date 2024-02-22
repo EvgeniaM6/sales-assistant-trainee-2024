@@ -4,7 +4,7 @@ function Logo() {
   return (
     <div className='logo'>
       <div className='logo__image'>
-        <img src={logoImg} alt="abcloudz logo" className='logo__image-img'/>
+        <img src={logoImg} alt='abcloudz logo' className='logo__image-img'/>
       </div>
       <div className='logo__title'>
         <h1 className='logo__title-text'>Sales Assistant</h1>

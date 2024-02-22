@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useContext, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-item';
 import { PageRoutes } from '../../constants';
@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logOut } from '../../store/authSlice';
 import { mockChatsList } from './mockChatsList';
 import { PopupTooltip } from '../Popup';
+import { ThemeContext } from '../../../App';
 
 function SideBar({ isOpen }: { isOpen: boolean }) {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   const [uniqueId, setUniqueId] = useState(mockChatsList.data.length);
   const [isCreating, setIsCreating] = useState(false);
   const [isShowLogout, setIsShowLogout] = useState(false);
+  const { theme } = useContext(ThemeContext);
 
   const referenceElement = useRef<HTMLButtonElement | null>(null);
 
@@ -77,10 +79,10 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   };
 
   return (
-    <aside className={`sidebar ${isOpen ? '' : 'hidden'}`}>
+    <aside className={`sidebar ${isOpen ? '' : 'hidden'} ${theme}`}>
       <div className='sidebar__main chats'>
-        <button className='chats__new-btn btn-secondary' onClick={openCreating}>
-          <span className='chats__new-btn-icon'></span>
+        <button className={`chats__new-btn btn-secondary ${theme}`} onClick={openCreating}>
+          <span className={`chats__new-btn-icon ${theme}`}></span>
           <span className='chats__new-btn-text'>New chat</span>
         </button>
         {isCreating && <CreateChatPopper closeCreating={closeCreating} createChatItem={addNewChat} />}
@@ -99,28 +101,28 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
         )}
       </div>
       <div className='sidebar__footer'>
-        <div className="sidebar__footer-item">
+        <div className='sidebar__footer-item'>
           <NavLink
             to={`/${PageRoutes.Feed}`}
             className={() => {
               const isActive = location.pathname === '/' || location.pathname === `/${PageRoutes.Feed}`;
-              return 'sidebar__footer-btn feed-link' + (isActive ? ' active' : '');
+              return `sidebar__footer-btn feed-link ${theme} ${isActive ? ' active' : ''}`;
             }}
           >
-            <span className='feed-link__icon'></span>
+            <span className={`feed-link__icon ${theme}`}></span>
             <span className='feed-link__text'>Upwork feed</span>
           </NavLink>
         </div>
-        <div className="sidebar__footer-item">
-          <button onClick={openLogout} className='sidebar__footer-btn logout-btn' ref={referenceElement}>
-            <span className='logout-btn__icon'></span>
+        <div className='sidebar__footer-item'>
+          <button onClick={openLogout} className={`sidebar__footer-btn logout-btn ${theme}`} ref={referenceElement}>
+            <span className={`logout-btn__icon ${theme}`}></span>
             <span className='logout-btn__text'>{userData?.email || 'user'}</span>
-            <span className='logout-btn__arrow'></span>
+            <span className={`logout-btn__arrow ${theme}`}></span>
           </button>
           {isShowLogout && (
             <PopupTooltip close={hideLogout} refElem={referenceElement.current} isOnTop={true} >
-              <button className='popup__btn' onClick={logout}>
-                <span className='popup__btn-icon popup__btn-logout'></span>
+              <button className={`popup__btn ${theme}`} onClick={logout}>
+                <span className={`popup__btn-icon popup__btn-logout ${theme}`}></span>
                 <span>Logout</span>
               </button>
             </PopupTooltip>

@@ -4,6 +4,10 @@
   align-items: center;
   background: $color-main-background;
 
+  &.dark {
+    background: $color-main-background-dark;
+  }
+
   .version-table {
     font-size: 20px;
 

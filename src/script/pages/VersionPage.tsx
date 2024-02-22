@@ -1,6 +1,11 @@
+import { useContext } from 'react';
+import { ThemeContext } from '../../App';
+
 function VersionPage() {
+  const { theme } = useContext(ThemeContext);
+
   return (
-    <div className='page version-page'>
+    <div className={`page version-page ${theme}`}>
       <table className='version-table'>
         <thead className='version-table__head'>
           <tr className='version-table__row'>

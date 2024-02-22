@@ -1,12 +1,15 @@
+import { useContext } from 'react';
 import { Table, flexRender } from '@tanstack/react-table';
 import Select from 'react-select';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
 import DateInput from './DataInput';
 import { FeedItem } from '../../models';
+import { ThemeContext } from '../../../App';
 
 function FeedsTableHead({ table }: {
   table: Table<FeedItem>;
 }) {
+  const { theme } = useContext(ThemeContext);
   const { data: feedsData } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
 
   const reviewOptions = [
@@ -54,7 +57,7 @@ function FeedsTableHead({ table }: {
                     )}
                   </div>
                   {isTitle && (
-                    <input type='text' className='head-cell__input' id='title' />
+                    <input type='text' className={`head-cell__input ${theme}`} id='title' />
                   )}
                   {isPublished && <DateInput />}
                   {(headerId === 'keywords') && (
@@ -62,6 +65,8 @@ function FeedsTableHead({ table }: {
                       options={feedsData ? feedsData.data.keywordsOptions : []}
                       placeholder={''}
                       isClearable={true}
+                      className={`react-select-container ${theme}`}
+                      classNamePrefix='react-select'
                     />
                   )}
                   {isScore && (
@@ -69,6 +74,8 @@ function FeedsTableHead({ table }: {
                       options={feedsData ? feedsData.data.scoreOptions : []}
                       placeholder={''}
                       isClearable={true}
+                      className={`react-select-container ${theme}`}
+                      classNamePrefix='react-select'
                     />
                   )}
                   {isReview && (
@@ -76,6 +83,8 @@ function FeedsTableHead({ table }: {
                       options={reviewOptions}
                       placeholder={''}
                       isClearable={true}
+                      className={`react-select-container ${theme}`}
+                      classNamePrefix='react-select'
                     />
                   )}
                 </th>

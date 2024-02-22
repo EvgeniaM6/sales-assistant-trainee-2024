@@ -21,6 +21,17 @@
       background-color: $color-button-border;
     }
 
+    &.dark {
+      &:hover {
+        background: $color-button-background-dark-hover;
+      }
+    
+      &:active,
+      &:focus {
+        background-color: $color-btn-secondary-dark-focus;
+      }
+    }
+
     &-img {
       display: block;
       width: 24px;
@@ -29,14 +40,26 @@
 
       &.collapse {
         background: url('../../images/collapse-menu.svg') center / cover no-repeat;
+
+        &.dark {
+          background: url('../../images/collapse-menu-dark.svg') center / cover no-repeat;
+        }
       }
 
       &.open {
         background: url('../../images/menu.svg') center / cover no-repeat;
+
+        &.dark {
+          background: url('../../images/menu-dark.svg') center / cover no-repeat;
+        }
       }
 
       &.theme {
         background: url('../../images/dark-mode.svg') center / cover no-repeat;
+
+        &.dark {
+          background: url('../../images/light-mode.svg') center / cover no-repeat;
+        }
       }
     }
   }

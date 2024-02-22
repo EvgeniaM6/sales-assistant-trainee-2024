@@ -2,6 +2,29 @@
   font-size: 14px;
   line-height: 20px;
 
+  &.dark {
+    color: $color-font-table-dark;
+
+    .feeds-table {
+      &__keyword {
+        background: $color-keyword-dark;
+        color: $color-font-secondary;
+      }
+
+      &__cell {
+        box-shadow: inset 0 -1px 0 0 $color-popup-border-dark;
+
+        &-score {
+          color: $color-font-secondary;
+        }
+      }
+
+      &__head-cell {
+        box-shadow: inset 0 -2px 0 0 $color-popup-border-dark;
+      }
+    }
+  }
+
   &__cell {
     box-shadow: inset 0 -1px 0 0 $color-popup-border;
     padding: 8px;
@@ -90,6 +113,16 @@
         border: 1px solid $color-btn-background-primary;
         outline: none;
         box-shadow: 0 0 0 1px $color-date-input-border-hover;
+      }
+
+      &.dark {
+        background: $color-secondary-background-dark;
+        border: 1px solid $color-label;
+        color: $color-font-dark;
+      }
+
+      &::placeholder.dark {
+        color: $color-font-dark;
       }
     }
   }
