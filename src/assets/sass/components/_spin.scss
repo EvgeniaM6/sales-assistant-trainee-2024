@@ -6,6 +6,10 @@
 
   &.dark {
     background: rgba($color: $color-main-background-dark, $alpha: 0.8);
+
+    .spin {
+      filter: invert(1);
+    }
   }
 
   .spin {

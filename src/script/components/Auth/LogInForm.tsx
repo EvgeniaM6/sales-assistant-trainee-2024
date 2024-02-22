@@ -78,14 +78,14 @@ function LogInForm() {
         <input
           type='text'
           id='login'
-          className='auth__input auth-form__item'
+          className={`auth__input auth-form__item ${theme}`}
           {...register('email', { required: 'Enter your login' })}
         />
         <label htmlFor='password' className='auth__label'>Password</label>
         <input
           type='password'
           id='password'
-          className='auth__input auth-form__item'
+          className={`auth__input auth-form__item ${theme}`}
           {...register('password', { required: 'Enter your password' })}
         />
         <button type='submit' className={`auth-form__item auth__btn btn-secondary ${theme}`}>
