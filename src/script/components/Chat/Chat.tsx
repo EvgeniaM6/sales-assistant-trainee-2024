@@ -66,7 +66,7 @@ function Chat() {
             value={value}
           />
           <div className='chat__form-submit submit'>
-            <button className={`submit__btn ${theme}`} type="submit">
+            <button className={`submit__btn ${theme}`} type='submit'>
               <span className={`submit__btn-icon ${theme}`}></span>
             </button>
           </div>

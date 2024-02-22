@@ -101,7 +101,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
         )}
       </div>
       <div className='sidebar__footer'>
-        <div className="sidebar__footer-item">
+        <div className='sidebar__footer-item'>
           <NavLink
             to={`/${PageRoutes.Feed}`}
             className={() => {
@@ -113,7 +113,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
             <span className='feed-link__text'>Upwork feed</span>
           </NavLink>
         </div>
-        <div className="sidebar__footer-item">
+        <div className='sidebar__footer-item'>
           <button onClick={openLogout} className={`sidebar__footer-btn logout-btn ${theme}`} ref={referenceElement}>
             <span className={`logout-btn__icon ${theme}`}></span>
             <span className='logout-btn__text'>{userData?.email || 'user'}</span>

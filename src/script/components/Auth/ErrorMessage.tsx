@@ -18,7 +18,7 @@ function ErrorMessage({ errors, errorAuth }: { errors: FieldErrors<ILoginRequest
         <div className={`auth__error ${theme}`}>
           <>
             <div>
-              <img src={errorImg} alt="error" />
+              <img src={errorImg} alt='error' />
             </div>
             <div>
               <p className='auth__error-paragraph'>Error</p>

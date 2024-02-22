@@ -34,7 +34,7 @@ function FeedsBlock() {
         </div>
         <div className='feeds__refresh'>
           <button className={`feeds__refresh-btn btn-secondary ${theme}`} onClick={refresh}>
-            <span className='feeds__refresh-btn-icon'></span>
+            <span className={`feeds__refresh-btn-icon ${theme}`}></span>
             <span className='feeds__refresh-btn-text'>Refresh RSS</span>
           </button>
         </div>
