@@ -4,10 +4,18 @@
   padding: 7px 0px 8px 0px;
   border-top: 1px solid $color-popup-border;
 
+  &.dark {
+    border-top: 1px solid $color-popup-border-dark;
+  }
+
   &__divider {
     width: 1px;
     height: 40px;
     background: $color-popup-border;
+
+    &.dark {
+      background: $color-popup-border-dark;
+    }
   }
 
   &__info {
@@ -51,18 +59,34 @@
 
           &.first {
             background: url('../../images/first.svg');
+
+            &.dark {
+              background: url('../../images/first-dark.svg');
+            }
           }
 
           &.previous {
             background: url('../../images/chevron-left.svg');
+
+            &.dark {
+              background: url('../../images/chevron-left-dark.svg');
+            }
           }
 
           &.next {
             background: url('../../images/chevron-right.svg');
+
+            &.dark {
+              background: url('../../images/chevron-right-dark.svg');
+            }
           }
 
           &.last {
             background: url('../../images/last.svg');
+
+            &.dark {
+              background: url('../../images/last-dark.svg');
+            }
           }
         }
       }

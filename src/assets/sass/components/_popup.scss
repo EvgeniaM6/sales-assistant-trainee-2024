@@ -121,6 +121,16 @@
     &.input-error {
       border: 2px solid $color-error;
     }
+
+    &.dark {
+      background: $color-secondary-background-dark;
+      border: 1px solid $color-label;
+      color: $color-font-dark;
+    }
+
+    &::placeholder.dark {
+      color: $color-font-dark;
+    }
   }
 }
 

@@ -41,14 +41,14 @@ function FeedsPagination() {
   const pagesOptions = [10, 20].map((num) => ({ value: num, label: num }));
 
   return (
-    <div className="feeds__pagination feeds-pagination">
-      <div className="feeds-pagination__info info">
+    <div className={`feeds__pagination feeds-pagination ${theme}`}>
+      <div className='feeds-pagination__info info'>
         <span>Items shown:</span>
         <span className='info__bold'>{` ${countOnPage - pageSize + 1}-${countOnPage} `}</span>
         <span>out of</span>
         <span className='info__bold'>{` ${totalCount}`}</span>
       </div>
-      <div className="feeds-pagination__divider"></div>
+      <div className={`feeds-pagination__divider ${theme}`}></div>
       <div className='feeds-pagination__page-size'>
         <span>Items per page</span>
         {isLoading ? <Spin isInset={true} /> : <Select
@@ -56,17 +56,19 @@ function FeedsPagination() {
           placeholder={''}
           defaultValue={pagesOptions.find(({ value }) => value === pageSize)}
           menuPlacement='auto'
+          className={`react-select-container ${theme}`}
+          classNamePrefix='react-select'
         />}
       </div>
       <div className='feeds-pagination__pages'>
         <div className='feeds-pagination__page pagination'>
-          <button className='pagination__item pagination__btn' disabled>
-            <span className='pagination__btn-icon first'></span>
+          <button className={`pagination__item pagination__btn ${theme}`} disabled>
+            <span className={`pagination__btn-icon first ${theme}`}></span>
           </button>
         </div>
         <div className='feeds-pagination__page pagination'>
-          <button className='pagination__item pagination__btn' disabled>
-            <span className='pagination__btn-icon previous'></span>
+          <button className={`pagination__item pagination__btn ${theme}`} disabled>
+            <span className={`pagination__btn-icon previous ${theme}`}></span>
           </button>
         </div>
         {pagesArr.map((page) => (
@@ -83,16 +85,16 @@ function FeedsPagination() {
           <span className='pagination__item'>{'...'}</span>
         </div>
         <div className='feeds-pagination__page pagination'>
-          <button className='pagination__item pagination__btn'>{totalPages}</button>
+          <button className={`pagination__item pagination__btn ${theme}`}>{totalPages}</button>
         </div>
         <div className='feeds-pagination__page pagination'>
-          <button className='pagination__item pagination__btn'>
-            <span className='pagination__btn-icon next'></span>
+          <button className={`pagination__item pagination__btn ${theme}`}>
+            <span className={`pagination__btn-icon next ${theme}`}></span>
           </button>
         </div>
         <div className='feeds-pagination__page pagination'>
-          <button className='pagination__item pagination__btn'>
-            <span className='pagination__btn-icon last'></span>
+          <button className={`pagination__item pagination__btn ${theme}`}>
+            <span className={`pagination__btn-icon last ${theme}`}></span>
           </button>
         </div>
       </div>

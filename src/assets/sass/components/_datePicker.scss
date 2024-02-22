@@ -103,3 +103,54 @@
     }
   }
 }
+
+.dark {
+  .react-datepicker {
+    background: $color-main-background-dark;
+
+    &__header {
+      background: $color-main-background-dark;
+    }
+
+    &__navigation {
+      &:hover {
+        background: $color-button-background-dark-hover;
+      }
+
+      &-icon {
+        filter: invert(1);
+      }
+    }
+
+    &__current-month,
+    &__day-name {
+      color: $color-font-secondary;
+    }
+
+    &__day {
+      &:not(.react-datepicker__day--disabled) {
+        color: $color-font-secondary;
+      }
+
+      &--keyboard-selected,
+      &--selected {
+        color: $color-font-dark;
+        border: 2px solid $color-btn-secondary-dark-focus;
+        background: $color-button-background-dark;
+      }
+
+      &:hover {
+        background: $color-button-background-dark-hover;
+      }
+    
+      &:active,
+      &:focus {
+        background-color: $color-btn-secondary-dark-focus;
+      }
+
+      &--disabled {
+        opacity: 0.5;
+      }
+    }
+  }
+}

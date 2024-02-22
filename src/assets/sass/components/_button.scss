@@ -47,6 +47,8 @@
   }
 
   &.dark {
+    color: $color-font-secondary;
+
     &:hover {
       background: $color-button-background-dark-hover;
     }
