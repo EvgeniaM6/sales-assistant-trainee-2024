@@ -5,12 +5,13 @@ import ExpandingMarkdownText from './ExpandingMarkdownText';
 import MachedItems from './MachedItems';
 import { IUpworkFeedMatchEntityDto } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-match-entity.dto';
 import { IUpworkFeedDetailItemDTO } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-detail-item.dto';
-import { getTimeFromString } from '../../utils';
+import { getClassNameByScore, getTimeFromString } from '../../utils';
 import { ThemeContext } from '../../../App';
 
 function Feed({ data }: { data: IUpworkFeedDetailItemDTO }) {
   const { theme } = useContext(ThemeContext);
   const { title, description, score, url, published, keywords, matchedCasesData, matchedBlogsData } = data;
+  const scoreClassName = getClassNameByScore(score);
 
   return (
     <main className='feed'>
@@ -27,10 +28,7 @@ function Feed({ data }: { data: IUpworkFeedDetailItemDTO }) {
             <h4 className='feed__note'>Project info</h4>
             <div className='feed-info__details'>
               <div className='feed-info__details-item score'>
-                <span
-                  className='score__content'
-                  style={{backgroundColor: `hsl(${score > 250 ? 180 : score * 180 / 250}deg 100% ${theme === 'dark'? '30%' : '80%'})`}}
-                >
+                <span className={`score__content score-${scoreClassName}`}>
                   {score}
                 </span>
               </div>

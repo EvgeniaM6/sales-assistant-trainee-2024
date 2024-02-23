@@ -33,39 +33,39 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
     setIsVisible(false);
   };
 
-  const referenceElement = useRef<HTMLButtonElement | null>(null);
+  const referenceElement = useRef<HTMLLIElement | null>(null);
 
   return (
-    <li key={id} className='chats__item'>
+    <li key={id} className='chats__item' ref={referenceElement}>
       <NavLink to={`/${PageRoutes.Chat}/${id}`} className={`chats__link ${theme}`}>
         <span className='chats__link-text'>{name}</span>
-        <button className={`chats__link-btn ${theme}`} onClick={openMore} ref={referenceElement}>
-          <span className={`chats__link-btn-icon ${theme}`}></span>
-        </button>
-        {isVisible && (
-          <PopupTooltip close={hideMore} refElem={referenceElement}>
-            <button className={`popup__btn ${theme}`} onClick={() => editChatItem(id)}>
-              <span className={`popup__btn-icon popup__btn-edit ${theme}`}></span>
-              <span>Edit</span>
-            </button>
-            <button className={`popup__btn ${theme}`} onClick={openDeleting}>
-              <span className={`popup__btn-icon popup__btn-delete ${theme}`}></span>
-              <span>Delete</span>
-            </button>
-          </PopupTooltip>
-        )}
-        {isDeleting && (
-          createPortal(
-            <DeletePopper
-              id={id}
-              name={name}
-              deleteChatItem={deleteChatItem}
-              closeDeleting={closeDeleting}
-            />,
-            document.body
-          ))
-        }
       </NavLink>
+      <button className={`chats__link-btn ${theme}`} onClick={openMore}>
+        <span className={`chats__link-btn-icon ${theme}`}></span>
+      </button>
+      {isVisible && (
+        <PopupTooltip close={hideMore} refElem={referenceElement}>
+          <button className={`popup__btn ${theme}`} onClick={() => editChatItem(id)}>
+            <span className={`popup__btn-icon popup__btn-edit ${theme}`}></span>
+            <span>Edit</span>
+          </button>
+          <button className={`popup__btn ${theme}`} onClick={openDeleting}>
+            <span className={`popup__btn-icon popup__btn-delete ${theme}`}></span>
+            <span>Delete</span>
+          </button>
+        </PopupTooltip>
+      )}
+      {isDeleting && (
+        createPortal(
+          <DeletePopper
+            id={id}
+            name={name}
+            deleteChatItem={deleteChatItem}
+            closeDeleting={closeDeleting}
+          />,
+          document.body
+        ))
+      }
     </li>
   );
 }
