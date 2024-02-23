@@ -1,37 +1,21 @@
 import ReactMarkdown from 'react-markdown';
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useRef } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { ThemeContext } from '../../../App';
 import { IMessageDTO } from '../../../public-common/interfaces/dto/message/imessage-dto';
 
 function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
   const { theme } = useContext(ThemeContext);
-  const [value, setValue] = useState('');
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
-  const [maxHeightMessages, setMaxHeightMessages] = useState(textAreaRef.current?.style.height);
-
-  const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const val = evt.target?.value;
-    setValue(val);
-  };
 
   const handleSubmitForm: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
     console.log('e=', e);
   };
 
-  useEffect(() => {
-    setMaxHeightMessages(textAreaRef.current?.style.height);
-  }, [textAreaRef.current?.style.height, value]);
-
   return (
     <main className='chat'>
-      <div
-        className='chat__messages'
-        style={{
-          height: `calc(100vh - 72px - 32px - ${maxHeightMessages})`,
-        }}
-      >
+      <div className='chat__messages'>
         {[...messagesArr]
           .sort(({ created: createdA }, { created: createdB }) => {
             return new Date(createdA) > new Date(createdB) ? 1 : -1;
@@ -51,7 +35,7 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
           })
         }
       </div>
-      <div className='chat__input'>
+      <div className={`chat__input ${theme}`}>
         <form className='chat__form' onSubmit={handleSubmitForm}>
           <TextareaAutosize
             className={`chat__form-textarea ${theme}`}
@@ -59,10 +43,8 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
             id='chat'
             autoComplete='off'
             placeholder='Write a question...'
-            onChange={handleChange}
             ref={textAreaRef}
             maxRows={15}
-            value={value}
           />
           <div className='chat__form-submit submit'>
             <button className={`submit__btn ${theme}`} type='submit'>

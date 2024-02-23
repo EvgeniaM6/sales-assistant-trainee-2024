@@ -12,6 +12,7 @@ import FeedsTableHead from './FeedsTableHead';
 import { FeedItem } from '../../models';
 import { ThemeContext } from '../../../App';
 import { PageRoutes } from '../../constants';
+import { getClassNameByScore } from '../../utils';
 
 function FeedsTable() {
   const navigate = useNavigate();
@@ -69,17 +70,13 @@ function FeedsTable() {
                     const id = cell.column.id;
                     if (id === 'score') {
                       const score = cell.getValue() as number;
+                      const scoreClassName = getClassNameByScore(score);
                       return (
                         <td
                           key={cell.id}
                           className='feeds-table__cell'
                         >
-                          <span
-                            className={'feeds-table__cell-score'}
-                            style={{
-                              backgroundColor: `hsl(${score > 250 ? 180 : score * 180 / 250}deg 100% ${theme === 'dark'? '30%' : '80%'})`,
-                            }}
-                          >
+                          <span className={`feeds-table__cell-score score-${scoreClassName}`}>
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </span>
                         </td>
