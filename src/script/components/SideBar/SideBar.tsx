@@ -137,7 +137,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
             <span className={`logout-btn__arrow ${theme}`}></span>
           </button>
           {isShowLogout && (
-            <PopupTooltip close={hideLogout} refElem={referenceElement.current} isOnTop={true} >
+            <PopupTooltip close={hideLogout} refElem={referenceElement}>
               <button className={`popup__btn ${theme}`} onClick={logout}>
                 <span className={`popup__btn-icon popup__btn-logout ${theme}`}></span>
                 <span>Logout</span>

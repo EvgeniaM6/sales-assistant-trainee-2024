@@ -1,14 +1,22 @@
 import { useContext, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { Chat, Header, SideBar } from '../components';
+import { Chat, Header, SideBar, Spin } from '../components';
 import { ThemeContext } from '../../App';
+import { getLocalStorageTokens } from '../utils';
+import { useGetMessagesByChatIdQuery } from '../redux/messageApi';
 
 function ChatPage() {
   const { id } = useParams();
-  console.log('id=', id);
+  if (!id) return null;
 
   const [isSideBarOpen, setIsSideBarOpen] = useState(true);
   const { theme } = useContext(ThemeContext);
+
+  const { accessToken } = getLocalStorageTokens();
+  const {
+    data,
+    isLoading,
+  } = useGetMessagesByChatIdQuery({ accessToken, id });
 
   const toggleOpenSideBar = () => {
     setIsSideBarOpen(!isSideBarOpen);
@@ -19,7 +27,8 @@ function ChatPage() {
       <SideBar isOpen={isSideBarOpen} />
       <div className={`page__part${isSideBarOpen ? '-full' : ''} chat-page__main ${theme}`}>
         <Header isSideBarOpen={isSideBarOpen} toggleOpenSideBar={toggleOpenSideBar} />
-        <Chat />
+        {isLoading && <Spin />}
+        {data && !isLoading && <Chat messagesArr={data.data} />}
       </div>
     </div>
   );

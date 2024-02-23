@@ -1,11 +1,10 @@
 import ReactMarkdown from 'react-markdown';
-import fetchMessages from './fetchMessages.json';
 import { useContext, useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { ThemeContext } from '../../../App';
+import { IMessageDTO } from '../../../public-common/interfaces/dto/message/imessage-dto';
 
-function Chat() {
-  const messagesArr = fetchMessages.data;
+function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
   const { theme } = useContext(ThemeContext);
   const [value, setValue] = useState('');
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
@@ -30,10 +29,10 @@ function Chat() {
       <div
         className='chat__messages'
         style={{
-          maxHeight: `calc(100vh - 72px - 32px - ${maxHeightMessages})`,
+          height: `calc(100vh - 72px - 32px - ${maxHeightMessages})`,
         }}
       >
-        {messagesArr
+        {[...messagesArr]
           .sort(({ created: createdA }, { created: createdB }) => {
             return new Date(createdA) > new Date(createdB) ? 1 : -1;
           })

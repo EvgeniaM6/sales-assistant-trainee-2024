@@ -13,7 +13,7 @@ export type RequestGetFeeds = {
   accessToken: string,
   values: IGetWebDocumentsRequestDTO,
 };
-export type RequestGetFeedById = {
+export type RequestGetById = {
   accessToken: string,
   id: string,
 };

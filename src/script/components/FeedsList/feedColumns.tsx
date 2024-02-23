@@ -3,6 +3,7 @@ import { ReviewType } from '../../../public-common/enums/upwork-feed/review-type
 import { getTimeFromString } from '../../utils/getTimeFromString';
 import { FeedItem } from '../../models';
 import { NavLink } from 'react-router-dom';
+import { PageRoutes } from '../../constants';
 
 const columnHelper = createColumnHelper<FeedItem>();
 
@@ -13,7 +14,7 @@ export const columns = [
     cell: (info) => {
       const title = info.getValue();
       return (
-        <NavLink to={info.row.getValue('feedId')}>
+        <NavLink to={`/${PageRoutes.Feed}/${info.row.getValue('feedId')}`}>
           {title}
         </NavLink>
       );

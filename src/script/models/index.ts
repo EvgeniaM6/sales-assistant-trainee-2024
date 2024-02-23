@@ -1,6 +1,6 @@
 import { AuthResponseError, AuthState } from './auth.model';
-import { RequestGetChats, ResponseGetChats } from './chat.model';
-import { FeedItem, RequestGetFeedById, RequestGetFeeds, ResponseGetFeedById, ResponseGetFeeds } from './feed.model';
+import { RequestGetChats, RespGetMessagesByChatId, ResponseGetChats } from './chat.model';
+import { FeedItem, RequestGetById, RequestGetFeeds, ResponseGetFeedById, ResponseGetFeeds } from './feed.model';
 import { CreateChatForm, PopupProps, PopupTooltipProps } from './popup.model';
 import { ThemeContextComponents } from './theme.model';
 
@@ -12,10 +12,11 @@ export type {
   PopupProps,
   PopupTooltipProps,
   RequestGetFeeds,
-  RequestGetFeedById,
+  RequestGetById,
   ResponseGetFeeds,
   ResponseGetFeedById,
   ThemeContextComponents,
   RequestGetChats,
   ResponseGetChats,
+  RespGetMessagesByChatId,
 };
