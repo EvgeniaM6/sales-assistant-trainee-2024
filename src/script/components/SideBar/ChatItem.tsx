@@ -43,7 +43,7 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
           <span className={`chats__link-btn-icon ${theme}`}></span>
         </button>
         {isVisible && (
-          <PopupTooltip close={hideMore} refElem={referenceElement.current}>
+          <PopupTooltip close={hideMore} refElem={referenceElement}>
             <button className={`popup__btn ${theme}`} onClick={() => editChatItem(id)}>
               <span className={`popup__btn-icon popup__btn-edit ${theme}`}></span>
               <span>Edit</span>
