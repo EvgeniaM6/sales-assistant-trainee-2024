@@ -1,11 +1,14 @@
 import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { IAccessDTO } from '../../public-common/interfaces/dto/auth/iaccess.interface';
 import { useRecoverUserQuery } from '../redux/authApi';
 import { useAppDispatch, useAppSelector } from './reduxHooks';
 import { logOut, setIsAuthorized, setIsLoadingRecoverUser, setUserData } from '../store/authSlice';
 import { getLocalStorageTokens } from '../utils';
+import { PageRoutes } from '../constants';
 
 function useRecoverUser() {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { isLoadingRecoverUser } = useAppSelector((store) => store.auth);
   const { accessToken }: IAccessDTO = getLocalStorageTokens();
@@ -29,8 +32,12 @@ function useRecoverUser() {
   }, [isLoading, data, error, isError]);
 
   const handleStorageEvent = (e: StorageEvent) => {
-    if (e.key === 'tokens' && e.newValue === null) {
-      dispatch(logOut());
+    if (e.key === 'tokens') {
+      if (e.newValue === null) {
+        dispatch(logOut());
+      } else if (e.oldValue === null) {
+        navigate(`/${PageRoutes.Feed}`);
+      }
     }
   };
 
