@@ -5,6 +5,7 @@ import { IPaginatedResultDTO } from '../../../public-common/interfaces/dto/commo
 import { IUpworkFeedItemDTO } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
 import Spin from '../Spin/Spin';
 import { ThemeContext } from '../../../App';
+import { FeedsPageSizeOption } from '../../models';
 
 function FeedsPagination() {
   const { theme } = useContext(ThemeContext);
@@ -38,7 +39,7 @@ function FeedsPagination() {
     console.log(page);
   };
 
-  const pagesOptions = [10, 20].map((num) => ({ value: num, label: num }));
+  const pagesOptions: FeedsPageSizeOption[] = [10, 20].map((num) => ({ value: num, label: num }));
 
   return (
     <div className={`feeds__pagination feeds-pagination ${theme}`}>
@@ -51,10 +52,11 @@ function FeedsPagination() {
       <div className={`feeds-pagination__divider ${theme}`}></div>
       <div className='feeds-pagination__page-size'>
         <span>Items per page</span>
-        {isLoading ? <Spin isInset={true} /> : <Select
+        {isLoading && <Spin isInset={true} />}
+        {!isLoading && data && <Select
           options={pagesOptions}
           placeholder={''}
-          defaultValue={pagesOptions.find(({ value }) => value === pageSize)}
+          defaultValue={pagesOptions.find(({ value }) => value === data.data.items.pageSize)}
           menuPlacement='auto'
           className={`react-select-container ${theme}`}
           classNamePrefix='react-select'

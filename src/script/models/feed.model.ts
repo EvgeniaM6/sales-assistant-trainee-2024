@@ -17,3 +17,8 @@ export type RequestGetById = {
   accessToken: string,
   id: string,
 };
+
+export type FeedsPageSizeOption = {
+  value: number;
+  label: number;
+};
