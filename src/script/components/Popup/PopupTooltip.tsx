@@ -1,14 +1,26 @@
 import { usePopper } from 'react-popper';
 import { PopupTooltipProps } from '../../models';
-import { useContext, useRef } from 'react';
+import { useContext, useLayoutEffect, useRef, useState } from 'react';
 import { ThemeContext } from '../../../App';
 
 function PopupTooltip({ children, close, refElem }: PopupTooltipProps) {
   const popperElement = useRef<HTMLDivElement | null>(null);
-  const { styles, attributes } = usePopper(popperElement.current, refElem.current, {
-    placement: 'bottom-end',
-  });
+  const [isVisible, setIsVisible] = useState(false);
+
+  const { styles, attributes } = usePopper(
+    refElem.current,
+    popperElement.current,
+    {
+      placement: 'bottom-end',
+      strategy: 'fixed',
+    }
+  );
+
   const { theme } = useContext(ThemeContext);
+
+  useLayoutEffect(() => {
+    setIsVisible(true);
+  }, []);
 
   return (
     <>
@@ -21,7 +33,7 @@ function PopupTooltip({ children, close, refElem }: PopupTooltipProps) {
         className={`popup popup-tooltip ${theme}`}
         {...attributes.popper}
       >
-        {children}
+        {isVisible && children}
       </div>
     </>
   );

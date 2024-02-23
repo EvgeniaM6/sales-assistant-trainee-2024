@@ -33,14 +33,14 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
     setIsVisible(false);
   };
 
-  const referenceElement = useRef<HTMLButtonElement | null>(null);
+  const referenceElement = useRef<HTMLLIElement | null>(null);
 
   return (
-    <li key={id} className='chats__item'>
+    <li key={id} className='chats__item' ref={referenceElement}>
       <NavLink to={`/${PageRoutes.Chat}/${id}`} className={`chats__link ${theme}`}>
         <span className='chats__link-text'>{name}</span>
       </NavLink>
-      <button className={`chats__link-btn ${theme}`} onClick={openMore} ref={referenceElement}>
+      <button className={`chats__link-btn ${theme}`} onClick={openMore}>
         <span className={`chats__link-btn-icon ${theme}`}></span>
       </button>
       {isVisible && (

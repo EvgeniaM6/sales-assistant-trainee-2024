@@ -8,7 +8,7 @@ export type PopupProps = ComponentPropsWithoutRef<'div'> & {
 
 export type PopupTooltipProps = ComponentPropsWithoutRef<'div'> & {
   close: () => void;
-  refElem: React.MutableRefObject<HTMLButtonElement | null>;
+  refElem: React.MutableRefObject<HTMLElement | null>;
 };
 
 export type CreateChatForm = {
