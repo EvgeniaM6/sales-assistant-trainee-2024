@@ -1,4 +1,4 @@
-import Select from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
 import { useContext, useEffect, useState } from 'react';
 import { IPaginatedResultDTO } from '../../../public-common/interfaces/dto/common/ipaginated-result.interface';
@@ -6,9 +6,12 @@ import { IUpworkFeedItemDTO } from '../../../public-common/interfaces/dto/upwork
 import Spin from '../Spin/Spin';
 import { ThemeContext } from '../../../App';
 import { FeedsPageSizeOption } from '../../models';
+import { useAppDispatch } from '../../hooks';
+import { setPageSize } from '../../store/feedsSlice';
 
 function FeedsPagination() {
   const { theme } = useContext(ThemeContext);
+  const dispatch = useAppDispatch();
 
   const [
     { pageNumber, pageSize, totalCount, totalPages },
@@ -41,6 +44,11 @@ function FeedsPagination() {
 
   const pagesOptions: FeedsPageSizeOption[] = [10, 20].map((num) => ({ value: num, label: num }));
 
+  const handleChangePageSize = (newValue: SingleValue<FeedsPageSizeOption>) => {
+    if (!newValue) return;
+    dispatch(setPageSize(newValue.value));
+  };
+
   return (
     <div className={`feeds__pagination feeds-pagination ${theme}`}>
       <div className='feeds-pagination__info info'>
@@ -60,6 +68,7 @@ function FeedsPagination() {
           menuPlacement='auto'
           className={`react-select-container ${theme}`}
           classNamePrefix='react-select'
+          onChange={handleChangePageSize}
         />}
       </div>
       <div className='feeds-pagination__pages'>
