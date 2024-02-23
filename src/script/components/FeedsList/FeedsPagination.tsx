@@ -8,13 +8,14 @@ import { ThemeContext } from '../../../App';
 import { FeedsPageSizeOption } from '../../models';
 import { useAppDispatch } from '../../hooks';
 import { setPageSize } from '../../store/feedsSlice';
+import FeedsPaginationPages from './FeedsPaginationPages';
 
 function FeedsPagination() {
   const { theme } = useContext(ThemeContext);
   const dispatch = useAppDispatch();
 
   const [
-    { pageNumber, pageSize, totalCount, totalPages },
+    { pageNumber, pageSize, totalCount },
     setFeedsPage,
   ] = useState<IPaginatedResultDTO<IUpworkFeedItemDTO>>({
     totalCount: 0,
@@ -32,15 +33,6 @@ function FeedsPagination() {
   }, [data]);
 
   const countOnPage = pageNumber * pageSize;
-
-  const pagesArr: number[] = [];
-  for (let i = 0; i < 5; i++) {
-    pagesArr.push(pageNumber + i);
-  }
-
-  const handleClickPage = (page: string) => {
-    console.log(page);
-  };
 
   const pagesOptions: FeedsPageSizeOption[] = [10, 20].map((num) => ({ value: num, label: num }));
 
@@ -71,44 +63,7 @@ function FeedsPagination() {
           onChange={handleChangePageSize}
         />}
       </div>
-      <div className='feeds-pagination__pages'>
-        <div className='feeds-pagination__page pagination'>
-          <button className={`pagination__item pagination__btn ${theme}`} disabled>
-            <span className={`pagination__btn-icon first ${theme}`}></span>
-          </button>
-        </div>
-        <div className='feeds-pagination__page pagination'>
-          <button className={`pagination__item pagination__btn ${theme}`} disabled>
-            <span className={`pagination__btn-icon previous ${theme}`}></span>
-          </button>
-        </div>
-        {pagesArr.map((page) => (
-          <div className='feeds-pagination__page pagination' key={page}>
-            <button
-              className={`pagination__item pagination__btn ${page === pageNumber ? 'btn-secondary' : ''} ${theme}`}
-              onClick={() => handleClickPage(`${page}`)}
-            >
-              {page}
-            </button>
-          </div>
-        ))}
-        <div className='feeds-pagination__page pagination'>
-          <span className='pagination__item'>{'...'}</span>
-        </div>
-        <div className='feeds-pagination__page pagination'>
-          <button className={`pagination__item pagination__btn ${theme}`}>{totalPages}</button>
-        </div>
-        <div className='feeds-pagination__page pagination'>
-          <button className={`pagination__item pagination__btn ${theme}`}>
-            <span className={`pagination__btn-icon next ${theme}`}></span>
-          </button>
-        </div>
-        <div className='feeds-pagination__page pagination'>
-          <button className={`pagination__item pagination__btn ${theme}`}>
-            <span className={`pagination__btn-icon last ${theme}`}></span>
-          </button>
-        </div>
-      </div>
+      <FeedsPaginationPages />
     </div>
   );
 }
