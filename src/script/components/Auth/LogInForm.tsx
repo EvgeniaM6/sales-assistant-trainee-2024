@@ -1,8 +1,7 @@
 import { useNavigate } from 'react-router-dom';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import { AUTH_ERROR_RESP, PageRoutes } from '../../constants';
-import { AuthResponseError } from '../../models';
-import ErrorMessage from './ErrorMessage';
+import { PageRoutes } from '../../constants';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 import { useContext, useEffect, useState } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { useLogInMutation } from '../../redux/authApi';
@@ -12,6 +11,7 @@ import { ILoginResponseDTO } from '../../../public-common/interfaces/dto/auth/il
 import { IAccountResponseDTO } from '../../../public-common/interfaces/dto/account/iaccount-response.interfaces';
 import { QueryStatus } from '@reduxjs/toolkit/query';
 import { ThemeContext } from '../../../App';
+import { getErrorsArr } from '../../utils';
 
 function LogInForm() {
   const navigate = useNavigate();
@@ -26,11 +26,11 @@ function LogInForm() {
   } = useForm<ILoginRequestDTO>({ reValidateMode: 'onSubmit' });
 
   const [isCheckingAuth, setIsCheckingAuth] = useState(false);
-  const [errorAuth, setErrorAuth] = useState<string[]>([]);
+  const [errorsArr, setErrorsArr] = useState<string[]>([]);
 
   const login: SubmitHandler<ILoginRequestDTO> = async (logInData) => {
     setIsCheckingAuth(true);
-    setErrorAuth([]);
+    setErrorsArr([]);
     await logIn(logInData);
   };
 
@@ -39,24 +39,7 @@ function LogInForm() {
 
     setIsCheckingAuth(false);
 
-    if (!isSuccess && error) {
-      localStorage.removeItem('tokens');
-
-      if ('error' in error) {
-        setErrorAuth([error.error]);
-        return;
-      }
-
-      const errCode = (error as AuthResponseError).data?.error?.errorCode || '';
-
-      if (errCode in AUTH_ERROR_RESP) {
-        const errorsInfo = (error as AuthResponseError).data.error?.filedsValidationErrors;
-        setErrorAuth(AUTH_ERROR_RESP[errCode](errorsInfo));
-      } else {
-        setErrorAuth(['Oops! Something went wrong. Try again']);
-      }
-      return;
-    }
+    if (!isSuccess && error) return;
 
     const authData = data?.data as ILoginResponseDTO & IAccountResponseDTO;
 
@@ -69,10 +52,21 @@ function LogInForm() {
     reset();
   }, [isSuccess, error, data, status]);
 
+  useEffect(() => {
+    const errorsArr: string[] = Object.values(errors).map((error) => error?.message?.toString() || '');
+
+    if (error) {
+      localStorage.removeItem('tokens');
+      errorsArr.push(...getErrorsArr(error));
+    }
+
+    setErrorsArr(errorsArr);
+  }, [errors, error]);
+
   return (
     <div className='auth__block'>
       <h3 className='auth__title'>Log in</h3>
-      <ErrorMessage errors={errors} errorAuth={errorAuth} />
+      <ErrorMessage errorsArr={errorsArr} />
       <form onSubmit={handleSubmit(login)} className='auth__form auth-form'>
         <label htmlFor='login' className='auth__label'>Login</label>
         <input

@@ -1,0 +1,15 @@
+.error {
+  display: flex;
+  gap: 12px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: $color-error-background;
+
+  &.dark {
+    background: $color-error-background-dark;
+  }
+
+  &-paragraph {
+    margin: 0;
+  }
+}

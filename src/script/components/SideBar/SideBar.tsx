@@ -8,26 +8,30 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logOut } from '../../store/authSlice';
 import { PopupTooltip } from '../Popup';
 import { ThemeContext } from '../../../App';
-import { useGetChatsQuery } from '../../redux/chatApi';
-import { getLocalStorageTokens } from '../../utils';
+import { useCreateChatMutation, useGetChatsQuery } from '../../redux/chatApi';
+import { getErrorsArr, getLocalStorageTokens } from '../../utils';
 import Spin from '../Spin/Spin';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 function SideBar({ isOpen }: { isOpen: boolean }) {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { userData } = useAppSelector((store) => store.auth);
+  const [createChat, { isSuccess, error, data: createData, status }] = useCreateChatMutation();
 
   const [chatsList, setChatsList] = useState<IChatItem[]>([]);
-  const [uniqueId, setUniqueId] = useState(0);
   const [isCreating, setIsCreating] = useState(false);
   const [isShowLogout, setIsShowLogout] = useState(false);
+  const [errorsArr, setErrorsArr] = useState<string[]>([]);
+
   const { theme } = useContext(ThemeContext);
 
   const { accessToken } = getLocalStorageTokens();
   const {
     data,
     isLoading,
+    refetch,
   } = useGetChatsQuery({ accessToken });
 
   useEffect(() => {
@@ -35,6 +39,25 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
       setChatsList(data.data);
     }
   }, [data]);
+
+  useEffect(() => {
+    console.log('isSuccess, error, createData, status');
+    console.log(isSuccess, error, createData, status);
+  }, [isSuccess, error, createData, status]);
+
+  useEffect(() => {
+    const errorsArr: string[] = [];
+
+    if (error) {
+      errorsArr.push(...getErrorsArr(error));
+    }
+
+    setErrorsArr(errorsArr);
+
+    setTimeout(() => {
+      setErrorsArr([]);
+    }, 5000);
+  }, [error]);
 
   const referenceElement = useRef<HTMLButtonElement | null>(null);
 
@@ -48,15 +71,13 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
 
   const openCreating = () => setIsCreating(true);
   const closeCreating = () => setIsCreating(false);
-  const addNewChat = (name: string) => {
-    const newChatsList = [...chatsList];
-    newChatsList.push({
-      accountId: 2,
-      id: uniqueId,
-      name: name,
-    });
-    setUniqueId(uniqueId + 1);
-    setChatsList(newChatsList);
+
+  const addNewChat = async (name: string) => {
+    setErrorsArr([]);
+
+    const { accessToken } = getLocalStorageTokens();
+    await createChat({ accessToken, name });
+    await refetch();
   };
 
   const logout = () => {
@@ -100,6 +121,9 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
           <span className='chats__new-btn-text'>New chat</span>
         </button>
         {isCreating && <CreateChatPopper closeCreating={closeCreating} createChatItem={addNewChat} />}
+        <div className='sidebar__msg'>
+          <ErrorMessage errorsArr={errorsArr} />
+        </div>
         <ul className='chats__list'>
           {isLoading && <Spin isInset={true} />}
           {chatsList.length && (

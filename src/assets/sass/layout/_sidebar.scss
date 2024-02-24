@@ -20,6 +20,11 @@
     padding-bottom: 12px;
   }
 
+  &__msg {
+    position: absolute;
+    z-index: 50;
+  }
+
   &__footer {
     padding-top: 12px;
 
