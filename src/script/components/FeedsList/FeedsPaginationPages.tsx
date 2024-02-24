@@ -24,7 +24,6 @@ function FeedsPaginationPages() {
   }, [data]);
 
   const handleClickPage = (page: number) => {
-    console.log(page);
     dispatch(setPageNumber(page));
   };
 

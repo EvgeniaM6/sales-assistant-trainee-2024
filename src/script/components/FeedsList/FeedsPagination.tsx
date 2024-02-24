@@ -7,7 +7,7 @@ import Spin from '../Spin/Spin';
 import { ThemeContext } from '../../../App';
 import { FeedsPageSizeOption } from '../../models';
 import { useAppDispatch } from '../../hooks';
-import { setPageSize } from '../../store/feedsSlice';
+import { setPageNumber, setPageSize } from '../../store/feedsSlice';
 import FeedsPaginationPages from './FeedsPaginationPages';
 
 function FeedsPagination() {
@@ -38,6 +38,7 @@ function FeedsPagination() {
 
   const handleChangePageSize = (newValue: SingleValue<FeedsPageSizeOption>) => {
     if (!newValue) return;
+    dispatch(setPageNumber(1));
     dispatch(setPageSize(newValue.value));
   };
 
