@@ -30,7 +30,7 @@ export const columns = [
       const keywordsArr = info.getValue();
       return (
         <div className='feeds-table__cell-keywords'>
-          {keywordsArr.map((keyword) => (
+          {keywordsArr && keywordsArr.map((keyword) => (
             <span key={keyword} className='feeds-table__keyword'>{keyword}</span>
           ))}
         </div>

@@ -26,6 +26,10 @@ function FeedsBlock() {
     refresh();
   }, []);
 
+  useEffect(() => {
+    refresh();
+  }, [feedsValues]);
+
   return (
     <main className='feeds__main'>
       <div className='feeds__top'>

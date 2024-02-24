@@ -1,16 +1,21 @@
-import Select from 'react-select';
+import Select, { SingleValue } from 'react-select';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
 import { useContext, useEffect, useState } from 'react';
 import { IPaginatedResultDTO } from '../../../public-common/interfaces/dto/common/ipaginated-result.interface';
 import { IUpworkFeedItemDTO } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
 import Spin from '../Spin/Spin';
 import { ThemeContext } from '../../../App';
+import { FeedsPageSizeOption } from '../../models';
+import { useAppDispatch } from '../../hooks';
+import { setPageNumber, setPageSize } from '../../store/feedsSlice';
+import FeedsPaginationPages from './FeedsPaginationPages';
 
 function FeedsPagination() {
   const { theme } = useContext(ThemeContext);
+  const dispatch = useAppDispatch();
 
   const [
-    { pageNumber, pageSize, totalCount, totalPages },
+    { pageNumber, pageSize, totalCount },
     setFeedsPage,
   ] = useState<IPaginatedResultDTO<IUpworkFeedItemDTO>>({
     totalCount: 0,
@@ -29,16 +34,13 @@ function FeedsPagination() {
 
   const countOnPage = pageNumber * pageSize;
 
-  const pagesArr: number[] = [];
-  for (let i = 0; i < 5; i++) {
-    pagesArr.push(pageNumber + i);
-  }
+  const pagesOptions: FeedsPageSizeOption[] = [10, 20].map((num) => ({ value: num, label: num }));
 
-  const handleClickPage = (page: string) => {
-    console.log(page);
+  const handleChangePageSize = (newValue: SingleValue<FeedsPageSizeOption>) => {
+    if (!newValue) return;
+    dispatch(setPageNumber(1));
+    dispatch(setPageSize(newValue.value));
   };
-
-  const pagesOptions = [10, 20].map((num) => ({ value: num, label: num }));
 
   return (
     <div className={`feeds__pagination feeds-pagination ${theme}`}>
@@ -51,53 +53,18 @@ function FeedsPagination() {
       <div className={`feeds-pagination__divider ${theme}`}></div>
       <div className='feeds-pagination__page-size'>
         <span>Items per page</span>
-        {isLoading ? <Spin isInset={true} /> : <Select
+        {isLoading && <Spin isInset={true} />}
+        {!isLoading && data && <Select
           options={pagesOptions}
           placeholder={''}
-          defaultValue={pagesOptions.find(({ value }) => value === pageSize)}
+          defaultValue={pagesOptions.find(({ value }) => value === data.data.items.pageSize)}
           menuPlacement='auto'
           className={`react-select-container ${theme}`}
           classNamePrefix='react-select'
+          onChange={handleChangePageSize}
         />}
       </div>
-      <div className='feeds-pagination__pages'>
-        <div className='feeds-pagination__page pagination'>
-          <button className={`pagination__item pagination__btn ${theme}`} disabled>
-            <span className={`pagination__btn-icon first ${theme}`}></span>
-          </button>
-        </div>
-        <div className='feeds-pagination__page pagination'>
-          <button className={`pagination__item pagination__btn ${theme}`} disabled>
-            <span className={`pagination__btn-icon previous ${theme}`}></span>
-          </button>
-        </div>
-        {pagesArr.map((page) => (
-          <div className='feeds-pagination__page pagination' key={page}>
-            <button
-              className={`pagination__item pagination__btn ${page === pageNumber ? 'btn-secondary' : ''} ${theme}`}
-              onClick={() => handleClickPage(`${page}`)}
-            >
-              {page}
-            </button>
-          </div>
-        ))}
-        <div className='feeds-pagination__page pagination'>
-          <span className='pagination__item'>{'...'}</span>
-        </div>
-        <div className='feeds-pagination__page pagination'>
-          <button className={`pagination__item pagination__btn ${theme}`}>{totalPages}</button>
-        </div>
-        <div className='feeds-pagination__page pagination'>
-          <button className={`pagination__item pagination__btn ${theme}`}>
-            <span className={`pagination__btn-icon next ${theme}`}></span>
-          </button>
-        </div>
-        <div className='feeds-pagination__page pagination'>
-          <button className={`pagination__item pagination__btn ${theme}`}>
-            <span className={`pagination__btn-icon last ${theme}`}></span>
-          </button>
-        </div>
-      </div>
+      <FeedsPaginationPages />
     </div>
   );
 }

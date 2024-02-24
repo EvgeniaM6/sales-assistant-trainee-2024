@@ -13,8 +13,11 @@ const feedsSlice = createSlice({
     setPageNumber(state, action: PayloadAction<number>) {
       return { ...state, pageNumber: action.payload };
     },
+    setPageSize(state, action: PayloadAction<number>) {
+      return { ...state, pageSize: action.payload };
+    },
   },
 });
 
-export const { setPageNumber } = feedsSlice.actions;
+export const { setPageNumber, setPageSize } = feedsSlice.actions;
 export default feedsSlice.reducer;
