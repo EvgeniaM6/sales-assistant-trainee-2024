@@ -4,25 +4,27 @@ import { CreateChatForm } from '../../models';
 import { Popup } from '../Popup';
 import { ThemeContext } from '../../../App';
 
-function CreateChatPopper({ createChatItem, closeCreating }: {
-  createChatItem: (name: string) => void;
-  closeCreating: () => void;
+function EditPopper({ id, name, editChatItem, closeEditing }: {
+  id: number;
+  name: string;
+  editChatItem: (id: number, name: string) => void;
+  closeEditing: () => void;
 }) {
   const { theme } = useContext(ThemeContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<CreateChatForm>({ reValidateMode: 'onSubmit' });
+  } = useForm<CreateChatForm>({ reValidateMode: 'onSubmit', defaultValues: { chatName: name } });
 
-  const createChat: SubmitHandler<CreateChatForm> = ({ chatName }) => {
-    createChatItem(chatName);
-    closeCreating();
+  const editChat: SubmitHandler<CreateChatForm> = ({ chatName }) => {
+    editChatItem(id, chatName);
+    closeEditing();
   };
 
   return (
-    <Popup close={closeCreating} confirm={handleSubmit(createChat)} confirmAction='Create'>
-      <h3 className='popup__title'>Create chat name</h3>
+    <Popup close={closeEditing} confirm={handleSubmit(editChat)} confirmAction='Edit'>
+      <h3 className='popup__title'>Edit chat name</h3>
       <form className='popup__form'>
         <label className='popup__label' htmlFor='chatName'>Chat history name</label>
         <input
@@ -38,4 +40,4 @@ function CreateChatPopper({ createChatItem, closeCreating }: {
   );
 }
 
-export default CreateChatPopper;
+export default EditPopper;

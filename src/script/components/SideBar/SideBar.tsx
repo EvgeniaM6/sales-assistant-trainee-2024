@@ -64,8 +64,8 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
     localStorage.removeItem('tokens');
   };
 
-  const editChatItem = (id: number) => {
-    console.log('editChatItem', id);
+  const editChatItem = (id: number, name: string) => {
+    console.log('editChatItem', id, name);
   };
 
   const deleteChatItem = (id: number) => {

@@ -5,15 +5,17 @@ import { createPortal } from 'react-dom';
 import DeletePopper from './DeletePopper';
 import { PopupTooltip } from '../Popup';
 import { ThemeContext } from '../../../App';
+import EditPopper from './EditPopper';
 
 function ChatItem({ id, name, deleteChatItem, editChatItem }: {
   id: number;
   name: string;
   deleteChatItem: (id: number) => void;
-  editChatItem: (id: number) => void
+  editChatItem: (id: number, name: string) => void
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
   const { theme } = useContext(ThemeContext);
 
   const openMore = () => {
@@ -27,6 +29,15 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
 
   const closeDeleting = () => {
     setIsDeleting(false);
+  };
+
+  const openEditing = () => {
+    setIsEditing(true);
+    hideMore();
+  };
+
+  const closeEditing = () => {
+    setIsEditing(false);
   };
 
   const hideMore = () => {
@@ -45,7 +56,7 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
       </button>
       {isVisible && (
         <PopupTooltip close={hideMore} refElem={referenceElement}>
-          <button className={`popup__btn ${theme}`} onClick={() => editChatItem(id)}>
+          <button className={`popup__btn ${theme}`} onClick={openEditing}>
             <span className={`popup__btn-icon popup__btn-edit ${theme}`}></span>
             <span>Edit</span>
           </button>
@@ -55,6 +66,17 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
           </button>
         </PopupTooltip>
       )}
+      {isEditing && (
+        createPortal(
+          <EditPopper
+            id={id}
+            name={name}
+            editChatItem={editChatItem}
+            closeEditing={closeEditing}
+          />,
+          document.body
+        ))
+      }
       {isDeleting && (
         createPortal(
           <DeletePopper
