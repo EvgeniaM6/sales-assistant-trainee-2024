@@ -122,7 +122,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
         </button>
         {isCreating && <CreateChatPopper closeCreating={closeCreating} createChatItem={addNewChat} />}
         <div className='sidebar__msg'>
-          <ErrorMessage errorsArr={errorsArr} />
+          {errorsArr.map((errorMsg) => <ErrorMessage errorMsg={errorMsg} key={errorMsg} />)}
         </div>
         <ul className='chats__list'>
           {isLoading && <Spin isInset={true} />}

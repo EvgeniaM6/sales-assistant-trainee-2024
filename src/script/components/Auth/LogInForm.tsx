@@ -66,7 +66,7 @@ function LogInForm() {
   return (
     <div className='auth__block'>
       <h3 className='auth__title'>Log in</h3>
-      <ErrorMessage errorsArr={errorsArr} />
+      {errorsArr.map((errorMsg) => <ErrorMessage errorMsg={errorMsg} key={errorMsg} />)}
       <form onSubmit={handleSubmit(login)} className='auth__form auth-form'>
         <label htmlFor='login' className='auth__label'>Login</label>
         <input

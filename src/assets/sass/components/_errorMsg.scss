@@ -4,6 +4,11 @@
   padding: 8px 12px;
   border-radius: 8px;
   background: $color-error-background;
+  margin-bottom: 12px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
 
   &.dark {
     background: $color-error-background-dark;
