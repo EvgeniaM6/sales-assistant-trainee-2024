@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logOut } from '../../store/authSlice';
 import { PopupTooltip } from '../Popup';
 import { ThemeContext } from '../../../App';
-import { useCreateChatMutation, useEditChatMutation, useGetChatsQuery } from '../../redux/chatApi';
+import { useCreateChatMutation, useDeleteChatMutation, useEditChatMutation, useGetChatsQuery } from '../../redux/chatApi';
 import { getErrorsArr, getLocalStorageTokens } from '../../utils';
 import Spin from '../Spin/Spin';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
@@ -20,6 +20,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   const { userData } = useAppSelector((store) => store.auth);
   const [createChat, { error }] = useCreateChatMutation();
   const [editChat, { error: editError }] = useEditChatMutation();
+  const [deleteChat, { error: deleteError, isSuccess: isDeleteSuccess }] = useDeleteChatMutation();
 
   const [chatsList, setChatsList] = useState<IChatItem[]>([]);
   const [isCreating, setIsCreating] = useState(false);
@@ -52,12 +53,16 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
       errorsArr.push(...getErrorsArr(editError));
     }
 
+    if (deleteError) {
+      errorsArr.push(...getErrorsArr(deleteError));
+    }
+
     setErrorsArr(errorsArr);
 
     setTimeout(() => {
       setErrorsArr([]);
     }, 5000);
-  }, [error, editError]);
+  }, [error, editError, deleteError]);
 
   const referenceElement = useRef<HTMLButtonElement | null>(null);
 
@@ -91,29 +96,32 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
     await refetch();
   };
 
-  const deleteChatItem = (id: number) => {
-    let chatIdToRedirect = 0;
-    const newChatsList = chatsList.filter((chat, i) => {
-      if (chat.id !== id) {
-        return true;
-      }
-      chatIdToRedirect = i;
-      return false;
-    });
-
-    setChatsList(newChatsList);
-
-    let nextChatItem: IChatItem | null = newChatsList[chatIdToRedirect];
-    if (!nextChatItem) {
-      nextChatItem = newChatsList[chatIdToRedirect - 1];
-    }
-    if (!nextChatItem) {
-      nextChatItem = null;
-    }
-
-    const redirectTo = nextChatItem ? `/${PageRoutes.Chat}/${nextChatItem.id}` : `/${PageRoutes.Feed}`;
-    new Promise((res) => res('')).then(() => navigate(redirectTo));
+  const deleteChatItem = async (id: number) => {
+    const { accessToken } = getLocalStorageTokens();
+    await deleteChat({ accessToken, id });
   };
+
+  useEffect(() => {
+    if (!isDeleteSuccess) return;
+    const [path, chatId] = location.pathname.split('/').slice(1);
+
+    if (path === PageRoutes.Chat && chatId) {
+      const i = chatsList.findIndex(({ id }) => id === Number(chatId));
+      let nextChatItem: IChatItem | null = chatsList[i + 1];
+
+      if (!nextChatItem) {
+        nextChatItem = chatsList[i - 1];
+      }
+      if (!nextChatItem) {
+        nextChatItem = null;
+      }
+
+      const redirectTo = nextChatItem ? `/${PageRoutes.Chat}/${nextChatItem.id}` : `/${PageRoutes.Feed}`;
+      navigate(redirectTo);
+    }
+
+    refetch();
+  }, [isDeleteSuccess]);
 
   return (
     <aside className={`sidebar ${isOpen ? '' : 'hidden'} ${theme}`}>

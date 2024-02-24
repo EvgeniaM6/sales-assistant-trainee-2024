@@ -2,7 +2,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from './baseQueryWithReauth';
 import { BaseRoutes } from '../../public-common/enums/routes/base-routes.enum';
 import { ChatRoutes } from '../../public-common/enums/routes/chat-routes.enum';
-import { RequestCreateChat, RequestEditChat, RequestGetChats, ResponseGetChat, ResponseGetChats } from '../models';
+import { RequestCreateChat, RequestDeleteChat, RequestEditChat, RequestGetChats, ResponseDeleteChat, ResponseGetChat, ResponseGetChats } from '../models';
 import { REQUEST_METHODS } from '../constants';
 
 export const chatApi = createApi({
@@ -43,7 +43,18 @@ export const chatApi = createApi({
         body: { name },
       }),
     }),
+    deleteChat: build.mutation<ResponseDeleteChat, RequestDeleteChat>({
+      query: ({ accessToken, id }: RequestDeleteChat) => ({
+        url: `${BaseRoutes.V1}/${ChatRoutes.BasePrefix}/${id}`,
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'accept': 'application/json',
+          'Content-type': 'application/json',
+        },
+        method: REQUEST_METHODS.DELETE,
+      }),
+    }),
   }),
 });
 
-export const { useGetChatsQuery, useCreateChatMutation, useEditChatMutation } = chatApi;
+export const { useGetChatsQuery, useCreateChatMutation, useEditChatMutation, useDeleteChatMutation } = chatApi;

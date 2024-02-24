@@ -4,6 +4,7 @@ import { IMessageDTO } from '../../public-common/interfaces/dto/message/imessage
 
 export type ResponseGetChats = IApiResponseGenericDTO<IChatItem[]>;
 export type ResponseGetChat = IApiResponseGenericDTO<IChatItem>;
+export type ResponseDeleteChat = IApiResponseGenericDTO<boolean>;
 export type RespGetMessagesByChatId = IApiResponseGenericDTO<IMessageDTO[]>;
 
 export type RequestGetChats = {
@@ -14,6 +15,8 @@ export type RequestCreateChat = RequestGetChats & {
   name: string,
 };
 
-export type RequestEditChat = RequestCreateChat & {
+export type RequestEditChat = RequestCreateChat & RequestDeleteChat;
+
+export type RequestDeleteChat = RequestGetChats & {
   id: number,
 };
