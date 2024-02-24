@@ -8,7 +8,7 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logOut } from '../../store/authSlice';
 import { PopupTooltip } from '../Popup';
 import { ThemeContext } from '../../../App';
-import { useCreateChatMutation, useGetChatsQuery } from '../../redux/chatApi';
+import { useCreateChatMutation, useEditChatMutation, useGetChatsQuery } from '../../redux/chatApi';
 import { getErrorsArr, getLocalStorageTokens } from '../../utils';
 import Spin from '../Spin/Spin';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
@@ -18,7 +18,8 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { userData } = useAppSelector((store) => store.auth);
-  const [createChat, { isSuccess, error, data: createData, status }] = useCreateChatMutation();
+  const [createChat, { error }] = useCreateChatMutation();
+  const [editChat, { error: editError }] = useEditChatMutation();
 
   const [chatsList, setChatsList] = useState<IChatItem[]>([]);
   const [isCreating, setIsCreating] = useState(false);
@@ -41,15 +42,14 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   }, [data]);
 
   useEffect(() => {
-    console.log('isSuccess, error, createData, status');
-    console.log(isSuccess, error, createData, status);
-  }, [isSuccess, error, createData, status]);
-
-  useEffect(() => {
     const errorsArr: string[] = [];
 
     if (error) {
       errorsArr.push(...getErrorsArr(error));
+    }
+
+    if (editError) {
+      errorsArr.push(...getErrorsArr(editError));
     }
 
     setErrorsArr(errorsArr);
@@ -57,7 +57,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
     setTimeout(() => {
       setErrorsArr([]);
     }, 5000);
-  }, [error]);
+  }, [error, editError]);
 
   const referenceElement = useRef<HTMLButtonElement | null>(null);
 
@@ -85,8 +85,10 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
     localStorage.removeItem('tokens');
   };
 
-  const editChatItem = (id: number, name: string) => {
-    console.log('editChatItem', id, name);
+  const editChatItem = async (id: number, name: string) => {
+    const { accessToken } = getLocalStorageTokens();
+    await editChat({ accessToken, id, name });
+    await refetch();
   };
 
   const deleteChatItem = (id: number) => {

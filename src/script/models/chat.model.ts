@@ -13,3 +13,7 @@ export type RequestGetChats = {
 export type RequestCreateChat = RequestGetChats & {
   name: string,
 };
+
+export type RequestEditChat = RequestCreateChat & {
+  id: number,
+};
