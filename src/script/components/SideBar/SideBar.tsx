@@ -8,26 +8,32 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { logOut } from '../../store/authSlice';
 import { PopupTooltip } from '../Popup';
 import { ThemeContext } from '../../../App';
-import { useGetChatsQuery } from '../../redux/chatApi';
-import { getLocalStorageTokens } from '../../utils';
+import { useCreateChatMutation, useDeleteChatMutation, useEditChatMutation, useGetChatsQuery } from '../../redux/chatApi';
+import { getErrorsArr, getLocalStorageTokens } from '../../utils';
 import Spin from '../Spin/Spin';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 function SideBar({ isOpen }: { isOpen: boolean }) {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { userData } = useAppSelector((store) => store.auth);
+  const [createChat, { error }] = useCreateChatMutation();
+  const [editChat, { error: editError }] = useEditChatMutation();
+  const [deleteChat, { error: deleteError, isSuccess: isDeleteSuccess }] = useDeleteChatMutation();
 
   const [chatsList, setChatsList] = useState<IChatItem[]>([]);
-  const [uniqueId, setUniqueId] = useState(0);
   const [isCreating, setIsCreating] = useState(false);
   const [isShowLogout, setIsShowLogout] = useState(false);
+  const [errorsArr, setErrorsArr] = useState<string[]>([]);
+
   const { theme } = useContext(ThemeContext);
 
   const { accessToken } = getLocalStorageTokens();
   const {
     data,
     isLoading,
+    refetch,
   } = useGetChatsQuery({ accessToken });
 
   useEffect(() => {
@@ -35,6 +41,28 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
       setChatsList(data.data);
     }
   }, [data]);
+
+  useEffect(() => {
+    const errorsArr: string[] = [];
+
+    if (error) {
+      errorsArr.push(...getErrorsArr(error));
+    }
+
+    if (editError) {
+      errorsArr.push(...getErrorsArr(editError));
+    }
+
+    if (deleteError) {
+      errorsArr.push(...getErrorsArr(deleteError));
+    }
+
+    setErrorsArr(errorsArr);
+
+    setTimeout(() => {
+      setErrorsArr([]);
+    }, 5000);
+  }, [error, editError, deleteError]);
 
   const referenceElement = useRef<HTMLButtonElement | null>(null);
 
@@ -48,15 +76,13 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
 
   const openCreating = () => setIsCreating(true);
   const closeCreating = () => setIsCreating(false);
-  const addNewChat = (name: string) => {
-    const newChatsList = [...chatsList];
-    newChatsList.push({
-      accountId: 2,
-      id: uniqueId,
-      name: name,
-    });
-    setUniqueId(uniqueId + 1);
-    setChatsList(newChatsList);
+
+  const addNewChat = async (name: string) => {
+    setErrorsArr([]);
+
+    const { accessToken } = getLocalStorageTokens();
+    await createChat({ accessToken, name });
+    await refetch();
   };
 
   const logout = () => {
@@ -64,33 +90,38 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
     localStorage.removeItem('tokens');
   };
 
-  const editChatItem = (id: number) => {
-    console.log('editChatItem', id);
+  const editChatItem = async (id: number, name: string) => {
+    const { accessToken } = getLocalStorageTokens();
+    await editChat({ accessToken, id, name });
+    await refetch();
   };
 
-  const deleteChatItem = (id: number) => {
-    let chatIdToRedirect = 0;
-    const newChatsList = chatsList.filter((chat, i) => {
-      if (chat.id !== id) {
-        return true;
+  const deleteChatItem = async (id: number) => {
+    const { accessToken } = getLocalStorageTokens();
+    await deleteChat({ accessToken, id });
+  };
+
+  useEffect(() => {
+    if (!isDeleteSuccess) return;
+    const [path, chatId] = location.pathname.split('/').slice(1);
+
+    if (path === PageRoutes.Chat && chatId) {
+      const i = chatsList.findIndex(({ id }) => id === Number(chatId));
+      let nextChatItem: IChatItem | null = chatsList[i + 1];
+
+      if (!nextChatItem) {
+        nextChatItem = chatsList[i - 1];
       }
-      chatIdToRedirect = i;
-      return false;
-    });
+      if (!nextChatItem) {
+        nextChatItem = null;
+      }
 
-    setChatsList(newChatsList);
-
-    let nextChatItem: IChatItem | null = newChatsList[chatIdToRedirect];
-    if (!nextChatItem) {
-      nextChatItem = newChatsList[chatIdToRedirect - 1];
-    }
-    if (!nextChatItem) {
-      nextChatItem = null;
+      const redirectTo = nextChatItem ? `/${PageRoutes.Chat}/${nextChatItem.id}` : `/${PageRoutes.Feed}`;
+      navigate(redirectTo);
     }
 
-    const redirectTo = nextChatItem ? `/${PageRoutes.Chat}/${nextChatItem.id}` : `/${PageRoutes.Feed}`;
-    new Promise((res) => res('')).then(() => navigate(redirectTo));
-  };
+    refetch();
+  }, [isDeleteSuccess]);
 
   return (
     <aside className={`sidebar ${isOpen ? '' : 'hidden'} ${theme}`}>
@@ -100,6 +131,9 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
           <span className='chats__new-btn-text'>New chat</span>
         </button>
         {isCreating && <CreateChatPopper closeCreating={closeCreating} createChatItem={addNewChat} />}
+        <div className='sidebar__msg'>
+          {errorsArr.map((errorMsg) => <ErrorMessage errorMsg={errorMsg} key={errorMsg} />)}
+        </div>
         <ul className='chats__list'>
           {isLoading && <Spin isInset={true} />}
           {chatsList.length && (

@@ -8,6 +8,7 @@ function DeletePopper({ id, name, deleteChatItem, closeDeleting }: {
 }) {
   const deleteChat = () => {
     deleteChatItem(id);
+    closeDeleting();
   };
 
   return (
