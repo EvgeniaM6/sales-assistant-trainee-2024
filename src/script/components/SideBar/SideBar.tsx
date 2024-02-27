@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { IChatItem } from '../../../public-common/interfaces/dto/chat/dto/ichat-item';
 import { PageRoutes } from '../../constants';
@@ -22,7 +22,6 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   const [editChat, { error: editError }] = useEditChatMutation();
   const [deleteChat, { error: deleteError, isSuccess: isDeleteSuccess }] = useDeleteChatMutation();
 
-  const [chatsList, setChatsList] = useState<IChatItem[]>([]);
   const [isCreating, setIsCreating] = useState(false);
   const [isShowLogout, setIsShowLogout] = useState(false);
   const [errorsArr, setErrorsArr] = useState<string[]>([]);
@@ -36,11 +35,9 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
     refetch,
   } = useGetChatsQuery({ accessToken });
 
-  useEffect(() => {
-    if (data) {
-      setChatsList(data.data);
-    }
-  }, [data]);
+  const { chatsList } = useMemo(() => ({
+    chatsList: data?.data ?? [],
+  }), [data]);
 
   useEffect(() => {
     const errorsArr: string[] = [];

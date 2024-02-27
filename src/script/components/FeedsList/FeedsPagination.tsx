@@ -1,8 +1,6 @@
 import Select, { SingleValue } from 'react-select';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
-import { useContext, useEffect, useState } from 'react';
-import { IPaginatedResultDTO } from '../../../public-common/interfaces/dto/common/ipaginated-result.interface';
-import { IUpworkFeedItemDTO } from '../../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
+import { useContext, useMemo } from 'react';
 import Spin from '../Spin/Spin';
 import { ThemeContext } from '../../../App';
 import { FeedsPageSizeOption } from '../../models';
@@ -14,23 +12,14 @@ function FeedsPagination() {
   const { theme } = useContext(ThemeContext);
   const dispatch = useAppDispatch();
 
-  const [
-    { pageNumber, pageSize, totalCount },
-    setFeedsPage,
-  ] = useState<IPaginatedResultDTO<IUpworkFeedItemDTO>>({
-    totalCount: 0,
-    totalPages: 0,
-    pageNumber: 0,
-    pageSize: 0,
-    items: [],
-  });
-
   const { data, isLoading } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
 
-  useEffect(() => {
-    if (!data) return;
-    setFeedsPage(data.data.items);
-  }, [data]);
+  const { pageNumber, pageSize, totalCount } = useMemo(() => ({
+    totalCount: data?.data.items.totalCount ?? 0,
+    totalPages: data?.data.items.totalPages ?? 0,
+    pageNumber: data?.data.items.pageNumber ?? 0,
+    pageSize: data?.data.items.pageSize ?? 0,
+  }), [data]);
 
   const countOnPage = pageNumber * pageSize;
 
