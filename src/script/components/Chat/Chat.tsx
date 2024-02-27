@@ -5,8 +5,9 @@ import { ThemeContext } from '../../../App';
 import { IMessageDTO } from '../../../public-common/interfaces/dto/message/imessage-dto';
 import { useGetMessagesByChatIdQuery, useSendMessageMutation } from '../../redux/messageApi';
 import { useForm } from 'react-hook-form';
-import { getLocalStorageTokens } from '../../utils';
+import { getErrorsArr, getLocalStorageTokens } from '../../utils';
 import { SendMsgForm } from '../../models';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
   const { theme } = useContext(ThemeContext);
@@ -16,7 +17,7 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
   const [chatId] = location.pathname.split('/').slice(2);
   const { accessToken } = getLocalStorageTokens();
 
-  const [sendMessage, { isSuccess, isLoading }] = useSendMessageMutation();
+  const [sendMessage, { error, isSuccess, isLoading, reset: resetSendMsg }] = useSendMessageMutation();
   const { refetch } = useGetMessagesByChatIdQuery({ accessToken, id: chatId });
 
   const {
@@ -44,6 +45,14 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
       refetch();
     }
   }, [isSuccess]);
+
+  useEffect(() => {
+    if (!error) return;
+
+    setTimeout(() => {
+      resetSendMsg();
+    }, 5000);
+  }, [error]);
 
   return (
     <main className='chat'>
@@ -84,6 +93,9 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
                 <ReactMarkdown>{'looking for answer...'}</ReactMarkdown>
               </div>
             </div>
+          </>}
+          {error && <>
+            {getErrorsArr(error).map((errMsg) => <ErrorMessage errorMsg={errMsg} key={errMsg} />)}
           </>}
         </div>
       </div>

@@ -12,12 +12,13 @@ import FeedsTableHead from './FeedsTableHead';
 import { FeedItem } from '../../models';
 import { ThemeContext } from '../../../App';
 import { PageRoutes } from '../../constants';
-import { getClassNameByScore } from '../../utils';
+import { getClassNameByScore, getErrorsArr } from '../../utils';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 function FeedsTable() {
   const navigate = useNavigate();
   const { theme } = useContext(ThemeContext);
-  const { data: feedsData, isLoading } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
+  const { data: feedsData, isLoading, error } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
 
   const [data, setData] = useState<FeedItem[]>([]);
 
@@ -98,6 +99,9 @@ function FeedsTable() {
           </tbody>
         </table>
       }
+      {error && <>
+        {getErrorsArr(error).map((errMsg) => <ErrorMessage errorMsg={errMsg} key={errMsg} />)}
+      </>}
     </div>
   );
 }

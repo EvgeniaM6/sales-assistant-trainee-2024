@@ -19,7 +19,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   const dispatch = useAppDispatch();
   const { userData } = useAppSelector((store) => store.auth);
 
-  const [createChat, { data: createData, isLoading: isCreateLoading, error }] = useCreateChatMutation();
+  const [createChat, { data: createData, isLoading: isCreateLoading, error: createError }] = useCreateChatMutation();
   const [editChat, { isLoading: isEditLoading, error: editError }] = useEditChatMutation();
   const [
     deleteChat,
@@ -28,7 +28,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
 
   const [isCreating, setIsCreating] = useState(false);
   const [isShowLogout, setIsShowLogout] = useState(false);
-  const [errorsArr, setErrorsArr] = useState<string[]>([]);
+  const [errorsArr, setErrorsArr] = useState<{[key: string]: string[]}>({});
 
   const { theme } = useContext(ThemeContext);
 
@@ -44,26 +44,52 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   }), [chatsData]);
 
   useEffect(() => {
-    const errorsArr: string[] = [];
+    if (!createError) return;
+    const errorsArr = getErrorsArr(createError);
 
-    if (error) {
-      errorsArr.push(...getErrorsArr(error));
-    }
-
-    if (editError) {
-      errorsArr.push(...getErrorsArr(editError));
-    }
-
-    if (deleteError) {
-      errorsArr.push(...getErrorsArr(deleteError));
-    }
-
-    setErrorsArr(errorsArr);
+    const time = Date.now();
+    setErrorsArr((prevState) => ({ ...prevState, [time.toString()]: errorsArr }));
 
     setTimeout(() => {
-      setErrorsArr([]);
+      setErrorsArr((prevState) => {
+        const newState = { ...prevState };
+        delete newState[time];
+        return newState;
+      });
     }, 5000);
-  }, [error, editError, deleteError]);
+  }, [createError]);
+
+  useEffect(() => {
+    if (!editError) return;
+    const errorsArr = getErrorsArr(editError);
+
+    const time = Date.now();
+    setErrorsArr((prevState) => ({ ...prevState, [time.toString()]: errorsArr }));
+
+    setTimeout(() => {
+      setErrorsArr((prevState) => {
+        const newState = { ...prevState };
+        delete newState[time];
+        return newState;
+      });
+    }, 5000);
+  }, [editError]);
+
+  useEffect(() => {
+    if (!deleteError) return;
+    const errorsArr = getErrorsArr(deleteError);
+
+    const time = Date.now();
+    setErrorsArr((prevState) => ({ ...prevState, [time.toString()]: errorsArr }));
+
+    setTimeout(() => {
+      setErrorsArr((prevState) => {
+        const newState = { ...prevState };
+        delete newState[time];
+        return newState;
+      });
+    }, 5000);
+  }, [deleteError]);
 
   const referenceElement = useRef<HTMLButtonElement | null>(null);
 
@@ -79,8 +105,6 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   const closeCreating = () => setIsCreating(false);
 
   const addNewChat = async (name: string) => {
-    setErrorsArr([]);
-
     const { accessToken } = getLocalStorageTokens();
     await createChat({ accessToken, name });
     await refetch();
@@ -144,7 +168,11 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
         </button>
         {isCreating && <CreateChatPopper closeCreating={closeCreating} createChatItem={addNewChat} />}
         <div className='sidebar__msg'>
-          {errorsArr.map((errorMsg) => <ErrorMessage errorMsg={errorMsg} key={errorMsg} />)}
+          {Object.entries(errorsArr).map(
+            ([time, errorMsgArr]) => errorMsgArr.map(
+              (errorMsg) => <ErrorMessage errorMsg={errorMsg} key={`${time}${errorMsg}`} />
+            )
+          )}
         </div>
         <ul className='chats__list'>
           {isCreateBtnDisabled && <Spin isInset={true} />}
