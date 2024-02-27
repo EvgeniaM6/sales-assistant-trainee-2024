@@ -36,7 +36,6 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
   useEffect(() => {
     chatsListRef.current?.scrollTo({
       top: chatsListRef.current.scrollHeight,
-      behavior: 'smooth',
     });
   }, [messagesArr, sentContent]);
 
@@ -48,43 +47,45 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
 
   return (
     <main className='chat'>
-      <div className='chat__messages' ref={chatsListRef}>
-        {[...messagesArr]
-          .sort(({ created: createdA }, { created: createdB }) => {
-            return new Date(createdA) > new Date(createdB) ? 1 : -1;
-          })
-          .map((message) => {
-            const authorClassName = message.isBot ? 'bot' : 'user';
-            return (
-              <div className={`chat__message msg ${authorClassName} ${theme}`} key={message.id}>
-                <div className='msg__author'>
-                  <div className={`msg__author-icon ${authorClassName} ${theme}`}></div>
+      <div className='chat__messages-container' ref={chatsListRef}>
+        <div className='chat__messages'>
+          {[...messagesArr]
+            .sort(({ created: createdA }, { created: createdB }) => {
+              return new Date(createdA) > new Date(createdB) ? 1 : -1;
+            })
+            .map((message) => {
+              const authorClassName = message.isBot ? 'bot' : 'user';
+              return (
+                <div className={`chat__message msg ${authorClassName} ${theme}`} key={message.id}>
+                  <div className='msg__author'>
+                    <div className={`msg__author-icon ${authorClassName} ${theme}`}></div>
+                  </div>
+                  <div className='msg__content'>
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                  </div>
                 </div>
-                <div className='msg__content'>
-                  <ReactMarkdown>{message.content}</ReactMarkdown>
-                </div>
+              );
+            })
+          }
+          {isLoading && <>
+            <div className={`chat__message msg ${'user'} ${theme}`}>
+              <div className='msg__author'>
+                <div className={`msg__author-icon ${'user'} ${theme}`}></div>
               </div>
-            );
-          })
-        }
-        {isLoading && <>
-          <div className={`chat__message msg ${'user'} ${theme}`}>
-            <div className='msg__author'>
-              <div className={`msg__author-icon ${'user'} ${theme}`}></div>
+              <div className='msg__content'>
+                <ReactMarkdown>{sentContent}</ReactMarkdown>
+              </div>
             </div>
-            <div className='msg__content'>
-              <ReactMarkdown>{sentContent}</ReactMarkdown>
+            <div className={`chat__message msg ${'bot'} ${theme}`}>
+              <div className='msg__author'>
+                <div className={`msg__author-icon ${'bot'} ${theme}`}></div>
+              </div>
+              <div className='msg__content'>
+                <ReactMarkdown>{'looking for answer...'}</ReactMarkdown>
+              </div>
             </div>
-          </div>
-          <div className={`chat__message msg ${'bot'} ${theme}`}>
-            <div className='msg__author'>
-              <div className={`msg__author-icon ${'bot'} ${theme}`}></div>
-            </div>
-            <div className='msg__content'>
-              <ReactMarkdown>{'looking for answer...'}</ReactMarkdown>
-            </div>
-          </div>
-        </>}
+          </>}
+        </div>
       </div>
       <div className={`chat__input ${theme}`}>
         <form className='chat__form' onSubmit={handleSubmit(handleSubmitForm)}>
