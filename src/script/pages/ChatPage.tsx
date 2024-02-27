@@ -16,6 +16,7 @@ function ChatPage() {
   const {
     data,
     isLoading,
+    isFetching,
   } = useGetMessagesByChatIdQuery({ accessToken, id });
 
   const toggleOpenSideBar = () => {
@@ -27,8 +28,8 @@ function ChatPage() {
       <SideBar isOpen={isSideBarOpen} />
       <div className={`page__part${isSideBarOpen ? '-full' : ''} chat-page__main ${theme}`}>
         <Header isSideBarOpen={isSideBarOpen} toggleOpenSideBar={toggleOpenSideBar} />
-        {isLoading && <Spin />}
-        {data && !isLoading && <Chat messagesArr={data.data} />}
+        {(isLoading || isFetching) && <Spin />}
+        {data && !isLoading && !isFetching && <Chat messagesArr={data.data} />}
       </div>
     </div>
   );

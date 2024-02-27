@@ -18,9 +18,13 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
   const location = useLocation();
   const dispatch = useAppDispatch();
   const { userData } = useAppSelector((store) => store.auth);
-  const [createChat, { error }] = useCreateChatMutation();
-  const [editChat, { error: editError }] = useEditChatMutation();
-  const [deleteChat, { error: deleteError, isSuccess: isDeleteSuccess }] = useDeleteChatMutation();
+
+  const [createChat, { data: createData, isLoading: isCreateLoading, error }] = useCreateChatMutation();
+  const [editChat, { isLoading: isEditLoading, error: editError }] = useEditChatMutation();
+  const [
+    deleteChat,
+    { isLoading: isDeleteLoading, error: deleteError, isSuccess: isDeleteSuccess },
+  ] = useDeleteChatMutation();
 
   const [isCreating, setIsCreating] = useState(false);
   const [isShowLogout, setIsShowLogout] = useState(false);
@@ -30,14 +34,14 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
 
   const { accessToken } = getLocalStorageTokens();
   const {
-    data,
-    isLoading,
+    data: chatsData,
+    isLoading: isGetChatsLoading,
     refetch,
   } = useGetChatsQuery({ accessToken });
 
   const { chatsList } = useMemo(() => ({
-    chatsList: data?.data ?? [],
-  }), [data]);
+    chatsList: chatsData?.data ?? [],
+  }), [chatsData]);
 
   useEffect(() => {
     const errorsArr: string[] = [];
@@ -120,10 +124,21 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
     refetch();
   }, [isDeleteSuccess]);
 
+  useEffect(() => {
+    if (!createData) return;
+    navigate(`/${PageRoutes.Chat}/${createData.data.id}`);
+  }, [createData]);
+
+  const isCreateBtnDisabled = isGetChatsLoading || isCreateLoading || isEditLoading || isDeleteLoading;
+
   return (
     <aside className={`sidebar ${isOpen ? '' : 'hidden'} ${theme}`}>
       <div className='sidebar__main chats'>
-        <button className={`chats__new-btn btn-secondary ${theme}`} onClick={openCreating}>
+        <button
+          className={`chats__new-btn btn-secondary ${theme}`}
+          onClick={openCreating}
+          disabled={isCreateBtnDisabled}
+        >
           <span className={`chats__new-btn-icon ${theme}`}></span>
           <span className='chats__new-btn-text'>New chat</span>
         </button>
@@ -132,7 +147,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
           {errorsArr.map((errorMsg) => <ErrorMessage errorMsg={errorMsg} key={errorMsg} />)}
         </div>
         <ul className='chats__list'>
-          {isLoading && <Spin isInset={true} />}
+          {isCreateBtnDisabled && <Spin isInset={true} />}
           {chatsList.length && (
             <>
               {chatsList.map((chat) => (
