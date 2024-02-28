@@ -29,7 +29,9 @@ const feedsSlice = createSlice({
         (searchParam) => searchParam.searchBy !== searchBy
       );
 
-      if (searchQuery) {
+      const isArr = Array.isArray(searchQuery);
+
+      if ((!isArr && searchQuery) || (isArr && searchQuery.length)) {
         newSearchParameters.push(action.payload);
       }
 

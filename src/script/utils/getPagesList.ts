@@ -4,6 +4,14 @@ export const getPagesList = (
 ): Array<number | string> => {
   const pagesArr: Array<number | string> = [];
 
+  if (totalPages < 7) {
+    for (let i = 1; i <= totalPages; i++) {
+      pagesArr.push(i);
+    }
+
+    return pagesArr;
+  }
+
   if (pageNumber > 3) {
     pagesArr.push(1);
     pagesArr.push('ellipsis');

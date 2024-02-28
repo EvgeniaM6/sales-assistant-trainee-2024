@@ -12,19 +12,19 @@ function DateInput() {
   const { theme } = useContext(ThemeContext);
 
   const feedsValues = useAppSelector((store) => store.feeds);
-  const titleSearchParam = feedsValues.searchParameters?.find(
+  const publishedSearchParam = feedsValues.searchParameters?.find(
     ({ searchBy }) => searchBy === UpworkFeedSearchBy.Published
   );
 
   let dateFromState: Date | null = null;
-  if (titleSearchParam && titleSearchParam.searchQuery) {
-    dateFromState = new Date(titleSearchParam.searchQuery as string);
+  if (publishedSearchParam && publishedSearchParam.searchQuery) {
+    dateFromState = new Date(publishedSearchParam.searchQuery as string);
   }
 
   const [startDate, setStartDate] = useState<Date | null>(dateFromState);
 
   const filterByDate = (): void => {
-    if (dateFromState === startDate || (!titleSearchParam && !startDate)) return;
+    if (dateFromState === startDate || (!publishedSearchParam && !startDate)) return;
 
     const newSearchParameter: Required<ISearchParameterDTO<UpworkFeedSearchBy>> = {
       searchBy: UpworkFeedSearchBy.Published,

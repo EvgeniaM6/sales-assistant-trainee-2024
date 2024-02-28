@@ -35,7 +35,7 @@ function FeedsPagination() {
     <div className={`feeds__pagination feeds-pagination ${theme}`}>
       <div className='feeds-pagination__info info'>
         <span>Items shown:</span>
-        <span className='info__bold'>{` ${countOnPage - pageSize + 1}-${countOnPage} `}</span>
+        <span className='info__bold'>{` ${countOnPage - pageSize + 1}-${Math.min(countOnPage, totalCount)} `}</span>
         <span>out of</span>
         <span className='info__bold'>{` ${totalCount}`}</span>
       </div>
