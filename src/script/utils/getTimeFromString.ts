@@ -18,3 +18,14 @@ export const getTimeFromString = (timeStr: string): string => {
 const getFullNumber = (value: number): string => {
   return value > 9 ? `${value}` : `0${value}`;
 };
+
+export const getStringFromDate = (timeDate: Date): string => {
+  const date = timeDate.getDate();
+  const month = timeDate.getMonth() + 1;
+  const yearFull = timeDate.getFullYear();
+
+  const dateFull = getFullNumber(date);
+  const monthFull = getFullNumber(month);
+
+  return `${yearFull}-${monthFull}-${dateFull}`;
+};
