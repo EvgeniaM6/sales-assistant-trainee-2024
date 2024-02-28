@@ -8,6 +8,7 @@ import { REQUEST_METHODS } from '../constants';
 export const chatApi = createApi({
   reducerPath: 'chatApi',
   baseQuery: baseQueryWithReauth,
+  tagTypes: ['Chat'],
   endpoints: (build) => ({
     getChats: build.query<ResponseGetChats, RequestGetChats>({
       query: ({ accessToken }: RequestGetChats) => ({
@@ -18,6 +19,7 @@ export const chatApi = createApi({
           'Content-type': 'application/json',
         },
       }),
+      providesTags: ['Chat'],
     }),
     createChat: build.mutation<ResponseGetChat, RequestCreateChat>({
       query: ({ accessToken, name }: RequestCreateChat) => ({
@@ -30,6 +32,7 @@ export const chatApi = createApi({
         method: REQUEST_METHODS.POST,
         body: { name },
       }),
+      invalidatesTags: ['Chat'],
     }),
     editChat: build.mutation<ResponseGetChat, RequestEditChat>({
       query: ({ accessToken, id, name }: RequestEditChat) => ({
@@ -42,6 +45,7 @@ export const chatApi = createApi({
         method: REQUEST_METHODS.PUT,
         body: { name },
       }),
+      invalidatesTags: ['Chat'],
     }),
     deleteChat: build.mutation<ResponseDeleteChat, RequestDeleteChat>({
       query: ({ accessToken, id }: RequestDeleteChat) => ({
@@ -53,6 +57,7 @@ export const chatApi = createApi({
         },
         method: REQUEST_METHODS.DELETE,
       }),
+      invalidatesTags: ['Chat'],
     }),
   }),
 });
