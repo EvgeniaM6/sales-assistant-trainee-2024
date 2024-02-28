@@ -1,3 +1,4 @@
+import DateInput from './DateInput';
 import TitleInput from './TitleInput';
 
-export { TitleInput };
+export { DateInput, TitleInput };

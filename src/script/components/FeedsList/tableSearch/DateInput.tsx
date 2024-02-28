@@ -1,11 +1,11 @@
 import { useContext, useState } from 'react';
 import DatePicker from 'react-datepicker';
-import { ThemeContext } from '../../../App';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { UpworkFeedSearchBy } from '../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
-import { ISearchParameterDTO } from '../../../public-common/interfaces/dto/common/isearch-parameter.interface';
-import { setSearchParam } from '../../store/feedsSlice';
-import { getStringFromDate } from '../../utils';
+import { ThemeContext } from '../../../../App';
+import { useAppDispatch, useAppSelector } from '../../../hooks';
+import { UpworkFeedSearchBy } from '../../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
+import { ISearchParameterDTO } from '../../../../public-common/interfaces/dto/common/isearch-parameter.interface';
+import { setSearchParam } from '../../../store/feedsSlice';
+import { getStringFromDate } from '../../../utils';
 
 function DateInput() {
   const dispatch = useAppDispatch();

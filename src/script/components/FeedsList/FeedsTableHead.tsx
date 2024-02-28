@@ -2,10 +2,9 @@ import { useContext, useMemo } from 'react';
 import { Table, flexRender } from '@tanstack/react-table';
 import Select from 'react-select';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
-import DateInput from './DataInput';
 import { FeedItem } from '../../models';
 import { ThemeContext } from '../../../App';
-import { TitleInput } from './tableSearch';
+import { DateInput, TitleInput } from './tableSearch';
 
 function FeedsTableHead({ table }: {
   table: Table<FeedItem>;
