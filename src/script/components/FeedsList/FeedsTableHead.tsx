@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { Table, flexRender } from '@tanstack/react-table';
 import Select from 'react-select';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
@@ -17,6 +17,11 @@ function FeedsTableHead({ table }: {
     { value: 'like', label: 'Like' },
     { value: 'dislike', label: 'Dislike' },
   ];
+
+  const { keywordsOptions, scoreOptions } = useMemo(() => ({
+    keywordsOptions: feedsData?.data.keywordsOptions ?? [],
+    scoreOptions: feedsData?.data.scoreOptions ?? [],
+  }), [feedsData]);
 
   return (
     <thead className='feeds-table__head'>
@@ -62,7 +67,7 @@ function FeedsTableHead({ table }: {
                   {isPublished && <DateInput />}
                   {(headerId === 'keywords') && (
                     <Select
-                      options={feedsData ? feedsData.data.keywordsOptions : []}
+                      options={keywordsOptions}
                       placeholder={''}
                       isClearable={true}
                       className={`react-select-container ${theme}`}
@@ -71,7 +76,7 @@ function FeedsTableHead({ table }: {
                   )}
                   {isScore && (
                     <Select
-                      options={feedsData ? feedsData.data.scoreOptions : []}
+                      options={scoreOptions}
                       placeholder={''}
                       isClearable={true}
                       className={`react-select-container ${theme}`}

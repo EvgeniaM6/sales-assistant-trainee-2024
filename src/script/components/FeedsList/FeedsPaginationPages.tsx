@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { ThemeContext } from '../../../App';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
 import Spin from '../Spin/Spin';
@@ -10,18 +10,13 @@ import { setPageNumber } from '../../store/feedsSlice';
 function FeedsPaginationPages() {
   const { theme } = useContext(ThemeContext);
   const { data, isLoading } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
-  const [pageNumber, setLocalPageNumber] = useState(0);
-  const [totalPages, setTotalPages] = useState(0);
-  const [pagesArr, setPagesArr] = useState<Array<number | string>>([]);
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    if (!data) return;
-    setLocalPageNumber(data.data.items.pageNumber);
-    setTotalPages(data.data.items.totalPages);
-    const newPagesArr: Array<number | string> = getPagesList(data.data.items.pageNumber, data.data.items.totalPages);
-    setPagesArr(newPagesArr);
-  }, [data]);
+  const { pageNumber, totalPages, pagesArr } = useMemo(() => ({
+    pageNumber: data?.data.items.pageNumber ?? 0,
+    totalPages: data?.data.items.totalPages ?? 0,
+    pagesArr: getPagesList(data?.data.items.pageNumber ?? 0, data?.data.items.totalPages ?? 0),
+  }), [data]);
 
   const handleClickPage = (page: number) => {
     dispatch(setPageNumber(page));

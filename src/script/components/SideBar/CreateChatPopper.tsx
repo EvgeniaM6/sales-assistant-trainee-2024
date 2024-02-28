@@ -3,9 +3,10 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { CreateChatForm } from '../../models';
 import { Popup } from '../Popup';
 import { ThemeContext } from '../../../App';
+import { useCreateChatMutation } from '../../redux/chatApi';
+import { getLocalStorageTokens } from '../../utils';
 
-function CreateChatPopper({ createChatItem, closeCreating }: {
-  createChatItem: (name: string) => void;
+function CreateChatPopper({ closeCreating }: {
   closeCreating: () => void;
 }) {
   const { theme } = useContext(ThemeContext);
@@ -15,9 +16,12 @@ function CreateChatPopper({ createChatItem, closeCreating }: {
     formState: { errors },
   } = useForm<CreateChatForm>({ reValidateMode: 'onSubmit' });
 
-  const createChat: SubmitHandler<CreateChatForm> = ({ chatName }) => {
-    createChatItem(chatName);
+  const [createChatItem] = useCreateChatMutation({ fixedCacheKey: 'createCacheKey' });
+
+  const createChat: SubmitHandler<CreateChatForm> = async ({ chatName }) => {
     closeCreating();
+    const { accessToken } = getLocalStorageTokens();
+    await createChatItem({ accessToken, name: chatName });
   };
 
   return (

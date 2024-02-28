@@ -1,14 +1,18 @@
+import { useDeleteChatMutation } from '../../redux/chatApi';
+import { getLocalStorageTokens } from '../../utils';
 import { Popup } from '../Popup';
 
-function DeletePopper({ id, name, deleteChatItem, closeDeleting }: {
+function DeletePopper({ id, name, closeDeleting }: {
   id: number;
   name: string;
-  deleteChatItem: (id: number) => void;
   closeDeleting: () => void;
 }) {
-  const deleteChat = () => {
-    deleteChatItem(id);
+  const [deleteChatItem] = useDeleteChatMutation({ fixedCacheKey: 'deleteCacheKey' });
+
+  const deleteChat = async () => {
     closeDeleting();
+    const { accessToken } = getLocalStorageTokens();
+    await deleteChatItem({ accessToken, id });
   };
 
   return (

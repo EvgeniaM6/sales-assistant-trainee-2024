@@ -19,14 +19,19 @@
     margin: auto;
 
     &__messages {
-      flex-shrink: 1;
-      flex-grow: 1;
       display: flex;
       flex-direction: column;
+      justify-content: flex-end;
       gap: 8px;
-      overflow: auto;
+      min-height: 100%;
       transition: .2s ease-in-out;
       padding: 0px 16px;
+
+      &-container {
+        flex-shrink: 1;
+        flex-grow: 1;
+        overflow: auto;
+      }
 
       .msg {
         display: flex;
@@ -119,7 +124,7 @@
       }
     }
 
-    &__messages,
+    &__messages-container,
     &__form-textarea {
       &::-webkit-scrollbar-track {
         background: transparent;

@@ -5,8 +5,9 @@ import { ThemeContext } from '../../../App';
 import { IMessageDTO } from '../../../public-common/interfaces/dto/message/imessage-dto';
 import { useGetMessagesByChatIdQuery, useSendMessageMutation } from '../../redux/messageApi';
 import { useForm } from 'react-hook-form';
-import { getLocalStorageTokens } from '../../utils';
+import { getErrorsArr, getLocalStorageTokens } from '../../utils';
 import { SendMsgForm } from '../../models';
+import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
 function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
   const { theme } = useContext(ThemeContext);
@@ -16,7 +17,7 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
   const [chatId] = location.pathname.split('/').slice(2);
   const { accessToken } = getLocalStorageTokens();
 
-  const [sendMessage, { isSuccess, isLoading }] = useSendMessageMutation();
+  const [sendMessage, { error, isSuccess, isLoading, reset: resetSendMsg }] = useSendMessageMutation();
   const { refetch } = useGetMessagesByChatIdQuery({ accessToken, id: chatId });
 
   const {
@@ -36,7 +37,6 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
   useEffect(() => {
     chatsListRef.current?.scrollTo({
       top: chatsListRef.current.scrollHeight,
-      behavior: 'smooth',
     });
   }, [messagesArr, sentContent]);
 
@@ -46,45 +46,58 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
     }
   }, [isSuccess]);
 
+  useEffect(() => {
+    if (!error) return;
+
+    setTimeout(() => {
+      resetSendMsg();
+    }, 5000);
+  }, [error]);
+
   return (
     <main className='chat'>
-      <div className='chat__messages' ref={chatsListRef}>
-        {[...messagesArr]
-          .sort(({ created: createdA }, { created: createdB }) => {
-            return new Date(createdA) > new Date(createdB) ? 1 : -1;
-          })
-          .map((message) => {
-            const authorClassName = message.isBot ? 'bot' : 'user';
-            return (
-              <div className={`chat__message msg ${authorClassName} ${theme}`} key={message.id}>
-                <div className='msg__author'>
-                  <div className={`msg__author-icon ${authorClassName} ${theme}`}></div>
+      <div className='chat__messages-container' ref={chatsListRef}>
+        <div className='chat__messages'>
+          {[...messagesArr]
+            .sort(({ created: createdA }, { created: createdB }) => {
+              return new Date(createdA) > new Date(createdB) ? 1 : -1;
+            })
+            .map((message) => {
+              const authorClassName = message.isBot ? 'bot' : 'user';
+              return (
+                <div className={`chat__message msg ${authorClassName} ${theme}`} key={message.id}>
+                  <div className='msg__author'>
+                    <div className={`msg__author-icon ${authorClassName} ${theme}`}></div>
+                  </div>
+                  <div className='msg__content'>
+                    <ReactMarkdown>{message.content}</ReactMarkdown>
+                  </div>
                 </div>
-                <div className='msg__content'>
-                  <ReactMarkdown>{message.content}</ReactMarkdown>
-                </div>
+              );
+            })
+          }
+          {isLoading && <>
+            <div className={`chat__message msg ${'user'} ${theme}`}>
+              <div className='msg__author'>
+                <div className={`msg__author-icon ${'user'} ${theme}`}></div>
               </div>
-            );
-          })
-        }
-        {isLoading && <>
-          <div className={`chat__message msg ${'user'} ${theme}`}>
-            <div className='msg__author'>
-              <div className={`msg__author-icon ${'user'} ${theme}`}></div>
+              <div className='msg__content'>
+                <ReactMarkdown>{sentContent}</ReactMarkdown>
+              </div>
             </div>
-            <div className='msg__content'>
-              <ReactMarkdown>{sentContent}</ReactMarkdown>
+            <div className={`chat__message msg ${'bot'} ${theme}`}>
+              <div className='msg__author'>
+                <div className={`msg__author-icon ${'bot'} ${theme}`}></div>
+              </div>
+              <div className='msg__content'>
+                <ReactMarkdown>{'looking for answer...'}</ReactMarkdown>
+              </div>
             </div>
-          </div>
-          <div className={`chat__message msg ${'bot'} ${theme}`}>
-            <div className='msg__author'>
-              <div className={`msg__author-icon ${'bot'} ${theme}`}></div>
-            </div>
-            <div className='msg__content'>
-              <ReactMarkdown>{'looking for answer...'}</ReactMarkdown>
-            </div>
-          </div>
-        </>}
+          </>}
+          {error && <>
+            {getErrorsArr(error).map((errMsg) => <ErrorMessage errorMsg={errMsg} key={errMsg} />)}
+          </>}
+        </div>
       </div>
       <div className={`chat__input ${theme}`}>
         <form className='chat__form' onSubmit={handleSubmit(handleSubmitForm)}>
