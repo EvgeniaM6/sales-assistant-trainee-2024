@@ -5,6 +5,7 @@ import { useGetFeedsMutation } from '../../redux/feedsApi';
 import DateInput from './DataInput';
 import { FeedItem } from '../../models';
 import { ThemeContext } from '../../../App';
+import { TitleInput } from './tableSearch';
 
 function FeedsTableHead({ table }: {
   table: Table<FeedItem>;
@@ -61,9 +62,7 @@ function FeedsTableHead({ table }: {
                       </div>
                     )}
                   </div>
-                  {isTitle && (
-                    <input type='text' className={`head-cell__input ${theme}`} id='title' />
-                  )}
+                  {isTitle && <TitleInput />}
                   {isPublished && <DateInput />}
                   {(headerId === 'keywords') && (
                     <Select

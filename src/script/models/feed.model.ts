@@ -1,18 +1,22 @@
 import { IApiResponseGenericDTO } from '../../public-common/interfaces/dto/common/iapi-response.interface';
+import { IPaginatedRequestDTO } from '../../public-common/interfaces/dto/common/ipaginated-request.interface';
+import { IGetAllUpworkFeedRequest } from '../../public-common/interfaces/dto/upwork-feed/iget-all-upwork-feed-request.interface';
 import { IUpworkFeedDetailItemDTO } from '../../public-common/interfaces/dto/upwork-feed/iupwork-feed-detail-item.dto';
 import { IUpworkFeedItemDTO } from '../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
 import { IUpworkResponseListFeedsDto } from '../../public-common/interfaces/dto/upwork-feed/iupwork-response-list-feeds.dto';
-import { IGetWebDocumentsRequestDTO } from '../../public-common/interfaces/dto/web-document/iget-web-documents-request.interface';
 
 export type FeedItem = Omit<IUpworkFeedItemDTO, 'presetId' | 'accountId' | 'id'> & { feedId: string };
 
 export type ResponseGetFeeds = IApiResponseGenericDTO<IUpworkResponseListFeedsDto>;
 export type ResponseGetFeedById = IApiResponseGenericDTO<IUpworkFeedDetailItemDTO>;
 
+export type IGetFeedsRequestDTO = IPaginatedRequestDTO & IGetAllUpworkFeedRequest;
+
 export type RequestGetFeeds = {
   accessToken: string,
-  values: IGetWebDocumentsRequestDTO,
+  values: IGetFeedsRequestDTO,
 };
+
 export type RequestGetById = {
   accessToken: string,
   id: string,
