@@ -3,13 +3,15 @@ import { SubmitHandler, useForm } from 'react-hook-form';
 import { CreateChatForm } from '../../models';
 import { Popup } from '../Popup';
 import { ThemeContext } from '../../../App';
+import { useEditChatMutation } from '../../redux/chatApi';
+import { getLocalStorageTokens } from '../../utils';
 
-function EditPopper({ id, name, editChatItem, closeEditing }: {
+function EditPopper({ id, name, closeEditing }: {
   id: number;
   name: string;
-  editChatItem: (id: number, name: string) => void;
   closeEditing: () => void;
 }) {
+  const [editChatItem] = useEditChatMutation({ fixedCacheKey: 'editCacheKey' });
   const { theme } = useContext(ThemeContext);
   const {
     register,
@@ -17,9 +19,10 @@ function EditPopper({ id, name, editChatItem, closeEditing }: {
     formState: { errors },
   } = useForm<CreateChatForm>({ reValidateMode: 'onSubmit', defaultValues: { chatName: name } });
 
-  const editChat: SubmitHandler<CreateChatForm> = ({ chatName }) => {
-    editChatItem(id, chatName);
+  const editChat: SubmitHandler<CreateChatForm> = async ({ chatName }) => {
     closeEditing();
+    const { accessToken } = getLocalStorageTokens();
+    await editChatItem({ accessToken, id, name: chatName });
   };
 
   return (

@@ -7,11 +7,9 @@ import { PopupTooltip } from '../Popup';
 import { ThemeContext } from '../../../App';
 import EditPopper from './EditPopper';
 
-function ChatItem({ id, name, deleteChatItem, editChatItem }: {
+function ChatItem({ id, name }: {
   id: number;
   name: string;
-  deleteChatItem: (id: number) => void;
-  editChatItem: (id: number, name: string) => void
 }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -20,6 +18,10 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
 
   const openMore = () => {
     setIsVisible(true);
+  };
+
+  const hideMore = () => {
+    setIsVisible(false);
   };
 
   const openDeleting = () => {
@@ -40,14 +42,10 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
     setIsEditing(false);
   };
 
-  const hideMore = () => {
-    setIsVisible(false);
-  };
-
-  const referenceElement = useRef<HTMLLIElement | null>(null);
+  const referenceRef = useRef<HTMLLIElement | null>(null);
 
   return (
-    <li key={id} className='chats__item' ref={referenceElement}>
+    <li key={id} className='chats__item' ref={referenceRef}>
       <NavLink to={`/${PageRoutes.Chat}/${id}`} className={`chats__link ${theme}`}>
         <span className='chats__link-text'>{name}</span>
       </NavLink>
@@ -55,7 +53,7 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
         <span className={`chats__link-btn-icon ${theme}`}></span>
       </button>
       {isVisible && (
-        <PopupTooltip close={hideMore} refElem={referenceElement}>
+        <PopupTooltip close={hideMore} refElem={referenceRef}>
           <button className={`popup__btn ${theme}`} onClick={openEditing}>
             <span className={`popup__btn-icon popup__btn-edit ${theme}`}></span>
             <span>Edit</span>
@@ -71,7 +69,6 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
           <EditPopper
             id={id}
             name={name}
-            editChatItem={editChatItem}
             closeEditing={closeEditing}
           />,
           document.body
@@ -82,7 +79,6 @@ function ChatItem({ id, name, deleteChatItem, editChatItem }: {
           <DeletePopper
             id={id}
             name={name}
-            deleteChatItem={deleteChatItem}
             closeDeleting={closeDeleting}
           />,
           document.body
