@@ -20,7 +20,7 @@ const feedsSlice = createSlice({
     },
     setSearchParam(state, action: PayloadAction<Required<ISearchParameterDTO<UpworkFeedSearchBy>>>) {
       if (!state.searchParameters) {
-        return { ...state, searchParameters: [action.payload] };
+        return { ...state, pageNumber: 1, searchParameters: [action.payload] };
       }
 
       const { searchBy, searchQuery } = action.payload;
@@ -35,7 +35,7 @@ const feedsSlice = createSlice({
         newSearchParameters.push(action.payload);
       }
 
-      return { ...state, searchParameters: newSearchParameters };
+      return { ...state, pageNumber: 1, searchParameters: newSearchParameters };
     },
   },
 });
