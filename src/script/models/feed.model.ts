@@ -26,3 +26,8 @@ export type FeedsPageSizeOption = {
   value: number;
   label: number;
 };
+
+export type SelectOptionFeeds = {
+  value: string;
+  label: string;
+};

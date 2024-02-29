@@ -4,7 +4,7 @@ import Select from 'react-select';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
 import { FeedItem } from '../../models';
 import { ThemeContext } from '../../../App';
-import { DateInput, TitleInput } from './tableSearch';
+import { DateInput, KeywordsSelect, TitleInput } from './tableSearch';
 
 function FeedsTableHead({ table }: {
   table: Table<FeedItem>;
@@ -18,8 +18,7 @@ function FeedsTableHead({ table }: {
     { value: 'dislike', label: 'Dislike' },
   ];
 
-  const { keywordsOptions, scoreOptions } = useMemo(() => ({
-    keywordsOptions: feedsData?.data.keywordsOptions ?? [],
+  const { scoreOptions } = useMemo(() => ({
     scoreOptions: feedsData?.data.scoreOptions ?? [],
   }), [feedsData]);
 
@@ -63,15 +62,7 @@ function FeedsTableHead({ table }: {
                   </div>
                   {isTitle && <TitleInput />}
                   {isPublished && <DateInput />}
-                  {(headerId === 'keywords') && (
-                    <Select
-                      options={keywordsOptions}
-                      placeholder={''}
-                      isClearable={true}
-                      className={`react-select-container ${theme}`}
-                      classNamePrefix='react-select'
-                    />
-                  )}
+                  {(headerId === 'keywords') && <KeywordsSelect />}
                   {isScore && (
                     <Select
                       options={scoreOptions}
