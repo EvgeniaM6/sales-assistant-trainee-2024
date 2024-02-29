@@ -143,8 +143,18 @@
           background: $color-active-background;
         }
 
+        &.dark {
+          &:hover {
+            background: $color-button-background-dark-hover;
+          }
+        }
+
         &.clicked {
           border: 2px solid #abbde0;
+
+          &.dark {
+            border: 2px solid $color-btn-secondary-dark-focus;
+          }
         }
 
         &-icon {

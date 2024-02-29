@@ -33,6 +33,12 @@
     &:hover {
       background: $color-button-background-hover;
     }
+
+    &.dark {
+      &:hover {
+        background: $color-button-background-dark-hover;
+      }
+    }
   }
 
   &__divider {

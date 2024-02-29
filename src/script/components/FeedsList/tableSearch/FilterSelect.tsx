@@ -90,7 +90,7 @@ function FilterSelect({ searchByVal, optionsArr }: {
         <div
           {...innerProps}
           onClick={() => handleClick(data)}
-          className={`react-select__option ${isAllOption ? 'all' : ''}`}
+          className={`react-select__option ${isAllOption ? 'all' : ''} ${theme}`}
         >
           <input
             className={`react-select__checkbox ${isAllOption && isAllOptionClearable ? 'clear' : ''}`}

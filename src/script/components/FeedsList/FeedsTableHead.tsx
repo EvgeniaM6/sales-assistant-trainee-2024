@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useContext, useMemo } from 'react';
 import { Table, flexRender } from '@tanstack/react-table';
 import { FeedItem } from '../../models';
 import { DateInput, FilterSelect, TitleInput } from './tableSearch';
@@ -8,10 +8,12 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { removeSort, setSortBy, setSortDirection } from '../../store/feedsSlice';
 import { UpworkFeedSortBy } from '../../../public-common/enums/upwork-feed/upwork-feed-sort-by.enum';
 import { SortDirection } from '../../../public-common/enums/common/sort-direction.enum';
+import { ThemeContext } from '../../../App';
 
 function FeedsTableHead({ table }: {
   table: Table<FeedItem>;
 }) {
+  const { theme } = useContext(ThemeContext);
   const dispatch = useAppDispatch();
   const { data: feedsData } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
   const { sortBy, sortDirection } = useAppSelector((store) => store.feeds);
@@ -75,7 +77,7 @@ function FeedsTableHead({ table }: {
                     {(isTitle || isPublished || isScore || isReview) && (
                       <div className='head-cell__sort'>
                         <button
-                          className={`head-cell__sort-btn ${sortBy === headerId ? 'clicked' : ''}`}
+                          className={`head-cell__sort-btn ${sortBy === headerId ? 'clicked' : ''} ${theme}`}
                           onClick={() => sortFeedsByVal(headerId)}
                         >
                           <span className='head-cell__sort-btn-icon'></span>
