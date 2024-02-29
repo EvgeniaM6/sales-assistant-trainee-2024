@@ -1,27 +1,10 @@
-import { useContext, useMemo } from 'react';
 import { Table, flexRender } from '@tanstack/react-table';
-import Select from 'react-select';
-import { useGetFeedsMutation } from '../../redux/feedsApi';
 import { FeedItem } from '../../models';
-import { ThemeContext } from '../../../App';
-import { DateInput, KeywordsSelect, TitleInput } from './tableSearch';
+import { DateInput, KeywordsSelect, ReviewSelect, ScoreSelect, TitleInput } from './tableSearch';
 
 function FeedsTableHead({ table }: {
   table: Table<FeedItem>;
 }) {
-  const { theme } = useContext(ThemeContext);
-  const { data: feedsData } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
-
-  const reviewOptions = [
-    { value: 'all', label: 'All' },
-    { value: 'like', label: 'Like' },
-    { value: 'dislike', label: 'Dislike' },
-  ];
-
-  const { scoreOptions } = useMemo(() => ({
-    scoreOptions: feedsData?.data.scoreOptions ?? [],
-  }), [feedsData]);
-
   return (
     <thead className='feeds-table__head'>
       {table.getHeaderGroups().map((headerGroup) => (
@@ -63,24 +46,8 @@ function FeedsTableHead({ table }: {
                   {isTitle && <TitleInput />}
                   {isPublished && <DateInput />}
                   {(headerId === 'keywords') && <KeywordsSelect />}
-                  {isScore && (
-                    <Select
-                      options={scoreOptions}
-                      placeholder={''}
-                      isClearable={true}
-                      className={`react-select-container ${theme}`}
-                      classNamePrefix='react-select'
-                    />
-                  )}
-                  {isReview && (
-                    <Select
-                      options={reviewOptions}
-                      placeholder={''}
-                      isClearable={true}
-                      className={`react-select-container ${theme}`}
-                      classNamePrefix='react-select'
-                    />
-                  )}
+                  {isScore && <ScoreSelect />}
+                  {isReview && <ReviewSelect />}
                 </th>
               );
             })
