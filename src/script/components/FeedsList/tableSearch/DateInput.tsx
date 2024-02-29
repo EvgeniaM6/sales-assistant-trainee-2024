@@ -18,7 +18,8 @@ function DateInput() {
 
   let dateFromState: Date | null = null;
   if (publishedSearchParam && publishedSearchParam.searchQuery) {
-    dateFromState = new Date(publishedSearchParam.searchQuery as string);
+    const [from] = (publishedSearchParam.searchQuery as string).split(' - ');
+    dateFromState = new Date(from);
   }
 
   const [startDate, setStartDate] = useState<Date | null>(dateFromState);

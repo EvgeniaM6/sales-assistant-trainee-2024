@@ -27,5 +27,8 @@ export const getStringFromDate = (timeDate: Date): string => {
   const dateFull = getFullNumber(date);
   const monthFull = getFullNumber(month);
 
-  return `${yearFull}-${monthFull}-${dateFull}`;
+  const dayStr = `${yearFull}-${monthFull}-${dateFull}`;
+  const start = `${dayStr}T00:00:00.000Z`;
+  const finish = `${dayStr}T23:59:59.999Z`;
+  return `${start} - ${finish}`;
 };
