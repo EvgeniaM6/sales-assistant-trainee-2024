@@ -1,9 +1,9 @@
 export const getClassNameByScore = (score: number): string => {
-  const isFrom0To50 = score > 0 && score <= 50;
-  const isFrom50To100 = score > 50 && score <= 100;
-  const isFrom100To150 = score > 100 && score <= 150;
-  const isFrom150To200 = score > 150 && score <= 200;
-  const isFrom200To250 = score > 200 && score <= 250;
+  const isFrom0To50 = score >= 0 && score <= 19;
+  const isFrom50To100 = score > 19 && score <= 39;
+  const isFrom100To150 = score > 39 && score <= 59;
+  const isFrom150To200 = score > 59 && score <= 79;
+  const isFrom200To250 = score > 79 && score <= 100;
 
   let scoreClassName: string;
   if (isFrom0To50) {

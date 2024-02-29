@@ -77,7 +77,7 @@ function FeedsTable() {
                           key={cell.id}
                           className='feeds-table__cell'
                         >
-                          <span className={`feeds-table__cell-score score-${scoreClassName}`}>
+                          <span className={`feeds-table__cell-score score-${scoreClassName} ${theme}`}>
                             {flexRender(cell.column.columnDef.cell, cell.getContext())}
                           </span>
                         </td>

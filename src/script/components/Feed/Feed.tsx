@@ -28,7 +28,7 @@ function Feed({ data }: { data: IUpworkFeedDetailItemDTO }) {
             <h4 className='feed__note'>Project info</h4>
             <div className='feed-info__details'>
               <div className='feed-info__details-item score'>
-                <span className={`score__content score-${scoreClassName}`}>
+                <span className={`score__content score-${scoreClassName} ${theme}`}>
                   {score}
                 </span>
               </div>
