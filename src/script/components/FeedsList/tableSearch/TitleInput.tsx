@@ -28,15 +28,23 @@ function TitleInput() {
     setTitleVal(e.target.value);
   };
 
+  const clearValue = () => {
+    setTitleVal('');
+    dispatch(setSearchParam({ searchBy: UpworkFeedSearchBy.Title, searchQuery: '' }));
+  };
+
   return (
-    <input
-      type='text'
-      className={`head-cell__input ${theme}`}
-      id='title'
-      value={titleVal}
-      onChange={handleChangeTitleInput}
-      onBlur={filterByTitle}
-    />
+    <div className='head-cell__input-container'>
+      <input
+        type='text'
+        className={`head-cell__input ${theme}`}
+        id='title'
+        value={titleVal}
+        onChange={handleChangeTitleInput}
+        onBlur={filterByTitle}
+      />
+      {titleVal && <button type='button' className='title-clear' onClick={clearValue} />}
+    </div>
   );
 }
 
