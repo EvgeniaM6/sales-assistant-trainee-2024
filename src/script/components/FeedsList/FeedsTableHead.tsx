@@ -1,21 +1,18 @@
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { Table, flexRender } from '@tanstack/react-table';
-import Select from 'react-select';
-import { useGetFeedsMutation } from '../../redux/feedsApi';
-import DateInput from './DataInput';
 import { FeedItem } from '../../models';
-import { ThemeContext } from '../../../App';
+import { DateInput, FilterSelect, TitleInput } from './tableSearch';
+import { UpworkFeedSearchBy } from '../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
+import { useGetFeedsMutation } from '../../redux/feedsApi';
 
 function FeedsTableHead({ table }: {
   table: Table<FeedItem>;
 }) {
-  const { theme } = useContext(ThemeContext);
   const { data: feedsData } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
 
   const reviewOptions = [
-    { value: 'all', label: 'All' },
-    { value: 'like', label: 'Like' },
-    { value: 'dislike', label: 'Dislike' },
+    { value: 'Like', label: 'Like' },
+    { value: 'Dislike', label: 'Dislike' },
   ];
 
   const { keywordsOptions, scoreOptions } = useMemo(() => ({
@@ -61,37 +58,13 @@ function FeedsTableHead({ table }: {
                       </div>
                     )}
                   </div>
-                  {isTitle && (
-                    <input type='text' className={`head-cell__input ${theme}`} id='title' />
-                  )}
+                  {isTitle && <TitleInput />}
                   {isPublished && <DateInput />}
                   {(headerId === 'keywords') && (
-                    <Select
-                      options={keywordsOptions}
-                      placeholder={''}
-                      isClearable={true}
-                      className={`react-select-container ${theme}`}
-                      classNamePrefix='react-select'
-                    />
+                    <FilterSelect searchByVal={UpworkFeedSearchBy.Keywords} optionsArr={keywordsOptions} />
                   )}
-                  {isScore && (
-                    <Select
-                      options={scoreOptions}
-                      placeholder={''}
-                      isClearable={true}
-                      className={`react-select-container ${theme}`}
-                      classNamePrefix='react-select'
-                    />
-                  )}
-                  {isReview && (
-                    <Select
-                      options={reviewOptions}
-                      placeholder={''}
-                      isClearable={true}
-                      className={`react-select-container ${theme}`}
-                      classNamePrefix='react-select'
-                    />
-                  )}
+                  {isScore && <FilterSelect searchByVal={UpworkFeedSearchBy.Score} optionsArr={scoreOptions} />}
+                  {isReview && <FilterSelect searchByVal={UpworkFeedSearchBy.Review} optionsArr={reviewOptions} />}
                 </th>
               );
             })
