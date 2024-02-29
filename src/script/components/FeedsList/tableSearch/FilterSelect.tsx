@@ -14,8 +14,8 @@ function FilterSelect({ searchByVal, optionsArr }: {
   const dispatch = useAppDispatch();
   const { theme } = useContext(ThemeContext);
 
-  const feedsValues = useAppSelector((store) => store.feeds);
-  const searchParam = feedsValues.searchParameters?.find(
+  const { searchParameters } = useAppSelector((store) => store.feeds);
+  const searchParam = searchParameters?.find(
     ({ searchBy }) => searchBy === searchByVal
   );
   const [currentOptionsArr, setCurrentOptionsArr] = useState<string[]>((searchParam?.searchQuery as string[]) || ['all']);
