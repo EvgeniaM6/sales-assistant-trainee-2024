@@ -1,10 +1,25 @@
+import { useMemo } from 'react';
 import { Table, flexRender } from '@tanstack/react-table';
 import { FeedItem } from '../../models';
-import { DateInput, KeywordsSelect, ReviewSelect, ScoreSelect, TitleInput } from './tableSearch';
+import { DateInput, FilterSelect, TitleInput } from './tableSearch';
+import { UpworkFeedSearchBy } from '../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
+import { useGetFeedsMutation } from '../../redux/feedsApi';
 
 function FeedsTableHead({ table }: {
   table: Table<FeedItem>;
 }) {
+  const { data: feedsData } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
+
+  const reviewOptions = [
+    { value: 'Like', label: 'Like' },
+    { value: 'Dislike', label: 'Dislike' },
+  ];
+
+  const { keywordsOptions, scoreOptions } = useMemo(() => ({
+    keywordsOptions: feedsData?.data.keywordsOptions ?? [],
+    scoreOptions: feedsData?.data.scoreOptions ?? [],
+  }), [feedsData]);
+
   return (
     <thead className='feeds-table__head'>
       {table.getHeaderGroups().map((headerGroup) => (
@@ -45,9 +60,11 @@ function FeedsTableHead({ table }: {
                   </div>
                   {isTitle && <TitleInput />}
                   {isPublished && <DateInput />}
-                  {(headerId === 'keywords') && <KeywordsSelect />}
-                  {isScore && <ScoreSelect />}
-                  {isReview && <ReviewSelect />}
+                  {(headerId === 'keywords') && (
+                    <FilterSelect searchByVal={UpworkFeedSearchBy.Keywords} optionsArr={keywordsOptions} />
+                  )}
+                  {isScore && <FilterSelect searchByVal={UpworkFeedSearchBy.Score} optionsArr={scoreOptions} />}
+                  {isReview && <FilterSelect searchByVal={UpworkFeedSearchBy.Review} optionsArr={reviewOptions} />}
                 </th>
               );
             })

@@ -1,7 +1,5 @@
 import DateInput from './DateInput';
-import KeywordsSelect from './KeywordsSelect';
-import ReviewSelect from './ReviewSelect';
-import ScoreSelect from './ScoreSelect';
+import FilterSelect from './FilterSelect';
 import TitleInput from './TitleInput';
 
-export { DateInput, KeywordsSelect, ReviewSelect, ScoreSelect, TitleInput };
+export { DateInput, FilterSelect, TitleInput };
