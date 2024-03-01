@@ -6,11 +6,9 @@ import { UpworkFeedSearchBy } from '../../../../public-common/enums/upwork-feed/
 import { setSearchParam } from '../../../store/feedsSlice';
 import { ISearchParameterDTO } from '../../../../public-common/interfaces/dto/common/isearch-parameter.interface';
 import { SelectOptionFeeds } from '../../../models';
+import { SelectProps } from '../../../models/feed.model';
 
-function FilterSelect({ searchByVal, optionsArr }: {
-  searchByVal: UpworkFeedSearchBy,
-  optionsArr: SelectOptionFeeds[],
-}) {
+function FilterSelect({ searchByVal, optionsArr }: SelectProps) {
   const dispatch = useAppDispatch();
   const { theme } = useContext(ThemeContext);
 

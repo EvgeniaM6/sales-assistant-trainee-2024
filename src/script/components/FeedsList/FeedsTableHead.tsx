@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react';
 import { Table, flexRender } from '@tanstack/react-table';
-import { FeedItem } from '../../models';
-import { DateInput, FilterSelect, TitleInput } from './tableSearch';
+import { FeedItem, CustomFilterMeta } from '../../models';
+import { TitleInput } from './tableSearch';
 import { UpworkFeedSearchBy } from '../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
 import { useAppDispatch, useAppSelector } from '../../hooks';
@@ -18,14 +18,13 @@ function FeedsTableHead({ table }: {
   const { data: feedsData } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
   const { sortBy, sortDirection } = useAppSelector((store) => store.feeds);
 
-  const reviewOptions = [
-    { value: 'Like', label: 'Like' },
-    { value: 'Dislike', label: 'Dislike' },
-  ];
-
-  const { keywordsOptions, scoreOptions } = useMemo(() => ({
-    keywordsOptions: feedsData?.data.keywordsOptions ?? [],
-    scoreOptions: feedsData?.data.scoreOptions ?? [],
+  const options = useMemo(() => ({
+    [UpworkFeedSearchBy.Review]: [
+      { value: 'Like', label: 'Like' },
+      { value: 'Dislike', label: 'Dislike' },
+    ],
+    [UpworkFeedSearchBy.Keywords]: feedsData?.data.keywordsOptions ?? [],
+    [UpworkFeedSearchBy.Score]: feedsData?.data.scoreOptions ?? [],
   }), [feedsData]);
 
   const sortFeedsByVal = (val: UpworkFeedSortBy) => {
@@ -60,6 +59,7 @@ function FeedsTableHead({ table }: {
               const isPublished = headerId === UpworkFeedSortBy.Published;
               const isScore = headerId === UpworkFeedSortBy.Score;
               const isReview = headerId === UpworkFeedSortBy.Review;
+
               return (
                 <th
                   key={headerId}
@@ -101,22 +101,20 @@ function FeedsTableHead({ table }: {
             })
             .map((header) => {
               const headerId = header.id;
-              const isTitle = headerId === 'title';
-              const isPublished = headerId === 'published';
-              const isScore = headerId === 'score';
-              const isReview = headerId === 'review';
+
               return (
                 <th
                   key={headerId}
                   className='feeds-table__cell feeds-table__head-cell head-cell filter'
                 >
-                  {isTitle && <TitleInput />}
-                  {isPublished && <DateInput />}
-                  {(headerId === 'keywords') && (
-                    <FilterSelect searchByVal={UpworkFeedSearchBy.Keywords} optionsArr={keywordsOptions} />
-                  )}
-                  {isScore && <FilterSelect searchByVal={UpworkFeedSearchBy.Score} optionsArr={scoreOptions} />}
-                  {isReview && <FilterSelect searchByVal={UpworkFeedSearchBy.Review} optionsArr={reviewOptions} />}
+                  {header.column.getCanFilter() ? <>
+                    {header.column.columnDef.meta &&
+                      (header.column.columnDef.meta as CustomFilterMeta).filterComponent ? (
+                        (header.column.columnDef.meta as CustomFilterMeta).filterComponent(
+                          { searchByVal: headerId as UpworkFeedSearchBy, optionsArr: options[headerId] }
+                        )
+                      ) : <TitleInput />}
+                  </> : null}
                 </th>
               );
             })

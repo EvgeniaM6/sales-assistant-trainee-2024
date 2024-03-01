@@ -4,6 +4,7 @@ import { getTimeFromString } from '../../utils/getTimeFromString';
 import { FeedItem } from '../../models';
 import { useMemo } from 'react';
 import { IReviewDTO } from '../../../public-common/interfaces/dto/upwork-feed/ireview.dto';
+import { DateInput, FilterSelect } from './tableSearch';
 
 export const getFeedColumns = () => {
   const columns = useMemo<ColumnDef<FeedItem>[]>(() => [
@@ -30,6 +31,9 @@ export const getFeedColumns = () => {
         const timeStr = info.getValue() as string;
         return getTimeFromString(timeStr);
       },
+      meta: {
+        filterComponent: () => <DateInput />,
+      },
     },
     {
       accessorKey: 'keywords',
@@ -44,10 +48,20 @@ export const getFeedColumns = () => {
           </div>
         );
       },
+      meta: {
+        filterComponent: ({ searchByVal, optionsArr }) => (
+          <FilterSelect searchByVal={searchByVal} optionsArr={optionsArr} />
+        ),
+      },
     },
     {
       accessorKey: 'score',
       header: 'Score',
+      meta: {
+        filterComponent: ({ searchByVal, optionsArr }) => (
+          <FilterSelect searchByVal={searchByVal} optionsArr={optionsArr} />
+        ),
+      },
     },
     {
       accessorKey: 'review',
@@ -60,16 +74,23 @@ export const getFeedColumns = () => {
         }
         return <span></span>;
       },
+      meta: {
+        filterComponent: ({ searchByVal, optionsArr }) => (
+          <FilterSelect searchByVal={searchByVal} optionsArr={optionsArr} />
+        ),
+      },
     },
     {
       accessorKey: 'matchedCases',
       id: 'matched-cases',
       header: 'Matched cases',
+      enableColumnFilter: false,
     },
     {
       accessorKey: 'matchedBlogs',
       id: 'matched-blogs',
       header: 'Matched blogs',
+      enableColumnFilter: false,
     },
   ], []);
 

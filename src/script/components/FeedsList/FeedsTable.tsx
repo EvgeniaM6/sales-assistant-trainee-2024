@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   flexRender,
@@ -20,12 +20,8 @@ function FeedsTable() {
   const { theme } = useContext(ThemeContext);
   const { data: feedsData, isLoading, error } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
 
-  const [data, setData] = useState<FeedItem[]>([]);
-
-  useEffect(() => {
-    if (!feedsData) return;
-
-    const newData: FeedItem[] = feedsData.data.items.items.map((feed) => ({
+  const data: FeedItem[] = useMemo(() => {
+    return feedsData?.data.items.items.map((feed) => ({
       feedId: feed.id || '',
       url: feed.url,
       title: feed.title,
@@ -35,9 +31,7 @@ function FeedsTable() {
       matchedCases: feed.matchedCases,
       matchedBlogs: feed.matchedBlogs,
       review: feed.review,
-    }));
-
-    setData([...newData]);
+    })) ?? [];
   }, [feedsData]);
 
   const table = useReactTable({
