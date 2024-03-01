@@ -48,6 +48,7 @@ export const getFeedColumns = () => {
           </div>
         );
       },
+      enableSorting: false,
       meta: {
         filterComponent: ({ searchByVal, optionsArr }) => (
           <FilterSelect searchByVal={searchByVal} optionsArr={optionsArr} />
@@ -85,12 +86,14 @@ export const getFeedColumns = () => {
       id: 'matched-cases',
       header: 'Matched cases',
       enableColumnFilter: false,
+      enableSorting: false,
     },
     {
       accessorKey: 'matchedBlogs',
       id: 'matched-blogs',
       header: 'Matched blogs',
       enableColumnFilter: false,
+      enableSorting: false,
     },
   ], []);
 

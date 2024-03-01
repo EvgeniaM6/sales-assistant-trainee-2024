@@ -1,22 +1,15 @@
-import { useContext, useMemo } from 'react';
+import { Fragment, useMemo } from 'react';
 import { Table, flexRender } from '@tanstack/react-table';
 import { FeedItem, CustomFilterMeta } from '../../models';
-import { TitleInput } from './tableSearch';
+import { ColumnSort, TitleInput } from './tableSearch';
 import { UpworkFeedSearchBy } from '../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { removeSort, setSortBy, setSortDirection } from '../../store/feedsSlice';
 import { UpworkFeedSortBy } from '../../../public-common/enums/upwork-feed/upwork-feed-sort-by.enum';
-import { SortDirection } from '../../../public-common/enums/common/sort-direction.enum';
-import { ThemeContext } from '../../../App';
 
 function FeedsTableHead({ table }: {
   table: Table<FeedItem>;
 }) {
-  const { theme } = useContext(ThemeContext);
-  const dispatch = useAppDispatch();
   const { data: feedsData } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
-  const { sortBy, sortDirection } = useAppSelector((store) => store.feeds);
 
   const options = useMemo(() => ({
     [UpworkFeedSearchBy.Review]: [
@@ -27,100 +20,67 @@ function FeedsTableHead({ table }: {
     [UpworkFeedSearchBy.Score]: feedsData?.data.scoreOptions ?? [],
   }), [feedsData]);
 
-  const sortFeedsByVal = (val: UpworkFeedSortBy) => {
-    if (!sortBy) {
-      dispatch(setSortBy(val));
-    } else {
-      if (val === sortBy) {
-        if (sortDirection === SortDirection.ASC) {
-          dispatch(setSortDirection(SortDirection.DESC));
-        } else {
-          dispatch(removeSort());
-        }
-      } else {
-        dispatch(setSortBy(val));
-      }
-    }
-  };
-
   return (
     <thead className='feeds-table__head'>
-      {table.getHeaderGroups().map((headerGroup) => (
-        <tr key={headerGroup.id} className='feeds-table__row'>
-          {headerGroup.headers
-            .filter((header) => {
-              const columnId = header.id;
-              const haveToSkip = columnId === 'feedId' || columnId === 'url';
-              return !haveToSkip;
-            })
-            .map((header) => {
-              const headerId = header.id;
-              const isTitle = headerId === UpworkFeedSortBy.Title;
-              const isPublished = headerId === UpworkFeedSortBy.Published;
-              const isScore = headerId === UpworkFeedSortBy.Score;
-              const isReview = headerId === UpworkFeedSortBy.Review;
+      {table.getHeaderGroups().map((headerGroup) => {
+        const filteredHeaders = headerGroup.headers.filter((header) => {
+          const columnId = header.id;
+          const haveToSkip = columnId === 'feedId' || columnId === 'url';
+          return !haveToSkip;
+        });
 
-              return (
-                <th
-                  key={headerId}
-                  className='feeds-table__cell feeds-table__head-cell head-cell title'
-                >
-                  <div className='head-cell__title'>
-                    <div className={`head-cell__title-text ${headerId}`}>
-                      {header.isPlaceholder ?
-                        null :
-                        flexRender(
-                          header.column.columnDef.header,
-                          header.getContext()
-                        )}
-                    </div>
-                    {(isTitle || isPublished || isScore || isReview) && (
-                      <div className='head-cell__sort'>
-                        <button
-                          className={`head-cell__sort-btn ${sortBy === headerId ? 'clicked' : ''} ${theme}`}
-                          onClick={() => sortFeedsByVal(headerId)}
-                        >
-                          <span className='head-cell__sort-btn-icon'></span>
-                        </button>
+        return (
+          <Fragment key={headerGroup.id} >
+            <tr className='feeds-table__row'>
+              {filteredHeaders.map((header) => {
+                const headerId = header.id as UpworkFeedSortBy;
+
+                return (
+                  <th
+                    key={headerId}
+                    className='feeds-table__cell feeds-table__head-cell head-cell title'
+                  >
+                    <div className='head-cell__title'>
+                      <div className={`head-cell__title-text ${headerId}`}>
+                        {header.isPlaceholder ?
+                          null :
+                          flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
                       </div>
-                    )}
-                  </div>
-                </th>
-              );
-            })
-          }
-        </tr>
-      ))}
-      {table.getHeaderGroups().map((headerGroup) => (
-        <tr key={headerGroup.id} className='feeds-table__row'>
-          {headerGroup.headers
-            .filter((header) => {
-              const columnId = header.id;
-              const haveToSkip = columnId === 'feedId' || columnId === 'url';
-              return !haveToSkip;
-            })
-            .map((header) => {
-              const headerId = header.id;
+                      {header.column.getCanSort() ? (
+                        <ColumnSort headerId={headerId} />
+                      ) : null}
+                    </div>
+                  </th>
+                );
+              })}
+            </tr>
+            <tr className='feeds-table__row'>
+              {filteredHeaders.map((header) => {
+                const headerId = header.id;
 
-              return (
-                <th
-                  key={headerId}
-                  className='feeds-table__cell feeds-table__head-cell head-cell filter'
-                >
-                  {header.column.getCanFilter() ? <>
-                    {header.column.columnDef.meta &&
-                      (header.column.columnDef.meta as CustomFilterMeta).filterComponent ? (
-                        (header.column.columnDef.meta as CustomFilterMeta).filterComponent(
-                          { searchByVal: headerId as UpworkFeedSearchBy, optionsArr: options[headerId] }
-                        )
-                      ) : <TitleInput />}
-                  </> : null}
-                </th>
-              );
-            })
-          }
-        </tr>
-      ))}
+                return (
+                  <th
+                    key={headerId}
+                    className='feeds-table__cell feeds-table__head-cell head-cell filter'
+                  >
+                    {header.column.getCanFilter() ? <>
+                      {header.column.columnDef.meta &&
+                        (header.column.columnDef.meta as CustomFilterMeta).filterComponent ? (
+                          (header.column.columnDef.meta as CustomFilterMeta).filterComponent(
+                            { searchByVal: headerId as UpworkFeedSearchBy, optionsArr: options[headerId] }
+                          )
+                        ) : <TitleInput />}
+                    </> : null}
+                  </th>
+                );
+              })}
+            </tr>
+          </Fragment>
+        );
+      })}
     </thead>
   );
 }
