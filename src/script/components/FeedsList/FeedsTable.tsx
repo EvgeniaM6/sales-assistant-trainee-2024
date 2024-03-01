@@ -7,7 +7,7 @@ import {
 } from '@tanstack/react-table';
 import { useGetFeedsMutation } from '../../redux/feedsApi';
 import Spin from '../Spin/Spin';
-import { columns } from './feedColumns';
+import { getFeedColumns } from './feedColumns';
 import FeedsTableHead from './FeedsTableHead';
 import { FeedItem } from '../../models';
 import { ThemeContext } from '../../../App';
@@ -42,7 +42,7 @@ function FeedsTable() {
 
   const table = useReactTable({
     data,
-    columns,
+    columns: getFeedColumns(),
     getCoreRowModel: getCoreRowModel(),
   });
 
