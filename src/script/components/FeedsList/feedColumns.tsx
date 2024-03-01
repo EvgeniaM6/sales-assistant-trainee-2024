@@ -1,12 +1,12 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { ReviewType } from '../../../public-common/enums/upwork-feed/review-type.enum';
 import { getTimeFromString } from '../../utils/getTimeFromString';
-import { FeedItem } from '../../models';
+import { FeedItem, ColumnData } from '../../models';
 import { useMemo } from 'react';
 import { IReviewDTO } from '../../../public-common/interfaces/dto/upwork-feed/ireview.dto';
 import { DateInput, FilterSelect } from './tableSearch';
 
-export const getFeedColumns = () => {
+export const getFeedColumns = (): ColumnDef<FeedItem>[] => {
   const columns = useMemo<ColumnDef<FeedItem>[]>(() => [
     {
       accessorKey: 'feedId',
@@ -50,18 +50,14 @@ export const getFeedColumns = () => {
       },
       enableSorting: false,
       meta: {
-        filterComponent: ({ searchByVal, optionsArr }) => (
-          <FilterSelect searchByVal={searchByVal} optionsArr={optionsArr} />
-        ),
+        filterComponent: (columnData: ColumnData) => <FilterSelect {...columnData} />,
       },
     },
     {
       accessorKey: 'score',
       header: 'Score',
       meta: {
-        filterComponent: ({ searchByVal, optionsArr }) => (
-          <FilterSelect searchByVal={searchByVal} optionsArr={optionsArr} />
-        ),
+        filterComponent: (columnData: ColumnData) => <FilterSelect {...columnData} />,
       },
     },
     {
@@ -76,9 +72,7 @@ export const getFeedColumns = () => {
         return <span></span>;
       },
       meta: {
-        filterComponent: ({ searchByVal, optionsArr }) => (
-          <FilterSelect searchByVal={searchByVal} optionsArr={optionsArr} />
-        ),
+        filterComponent: (columnData: ColumnData) => <FilterSelect {...columnData} />,
       },
     },
     {

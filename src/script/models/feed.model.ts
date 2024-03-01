@@ -5,7 +5,7 @@ import { IUpworkFeedDetailItemDTO } from '../../public-common/interfaces/dto/upw
 import { IUpworkFeedItemDTO } from '../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
 import { IUpworkResponseListFeedsDto } from '../../public-common/interfaces/dto/upwork-feed/iupwork-response-list-feeds.dto';
 import { UpworkFeedSearchBy } from '../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
-import { ColumnMeta } from '@tanstack/react-table';
+import { Column, FilterMeta, Table } from '@tanstack/react-table';
 
 export type FeedItem = Omit<IUpworkFeedItemDTO, 'presetId' | 'accountId' | 'id'> & { feedId: string };
 
@@ -39,6 +39,14 @@ export type SelectProps = {
   optionsArr: SelectOptionFeeds[],
 };
 
-export interface CustomFilterMeta extends ColumnMeta<unknown, unknown> {
-  filterComponent: (columnData: SelectProps) => JSX.Element;
+export type ColumnData = {
+  column: Column<any, unknown>,
+};
+
+export type ColumnTableData = ColumnData & {
+  table: Table<any>,
+};
+
+export interface CustomFilterMeta extends FilterMeta {
+  filterComponent: (columnData: ColumnData | ColumnTableData) => JSX.Element;
 }

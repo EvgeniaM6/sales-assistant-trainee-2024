@@ -1,25 +1,12 @@
-import { Fragment, useMemo } from 'react';
+import { Fragment } from 'react';
 import { Table, flexRender } from '@tanstack/react-table';
 import { FeedItem, CustomFilterMeta } from '../../models';
-import { ColumnSort, TitleInput } from './tableSearch';
-import { UpworkFeedSearchBy } from '../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
-import { useGetFeedsMutation } from '../../redux/feedsApi';
+import { ColumnSort, DefaultFilterInput } from './tableSearch';
 import { UpworkFeedSortBy } from '../../../public-common/enums/upwork-feed/upwork-feed-sort-by.enum';
 
 function FeedsTableHead({ table }: {
   table: Table<FeedItem>;
 }) {
-  const { data: feedsData } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
-
-  const options = useMemo(() => ({
-    [UpworkFeedSearchBy.Review]: [
-      { value: 'Like', label: 'Like' },
-      { value: 'Dislike', label: 'Dislike' },
-    ],
-    [UpworkFeedSearchBy.Keywords]: feedsData?.data.keywordsOptions ?? [],
-    [UpworkFeedSearchBy.Score]: feedsData?.data.scoreOptions ?? [],
-  }), [feedsData]);
-
   return (
     <thead className='feeds-table__head'>
       {table.getHeaderGroups().map((headerGroup) => {
@@ -69,10 +56,11 @@ function FeedsTableHead({ table }: {
                     {header.column.getCanFilter() ? <>
                       {header.column.columnDef.meta &&
                         (header.column.columnDef.meta as CustomFilterMeta).filterComponent ? (
-                          (header.column.columnDef.meta as CustomFilterMeta).filterComponent(
-                            { searchByVal: headerId as UpworkFeedSearchBy, optionsArr: options[headerId] }
-                          )
-                        ) : <TitleInput />}
+                          (header.column.columnDef.meta as CustomFilterMeta).filterComponent({
+                            column: header.column,
+                            table,
+                          })
+                        ) : <DefaultFilterInput column={header.column} />}
                     </> : null}
                   </th>
                 );

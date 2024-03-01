@@ -1,14 +1,28 @@
-import { useContext, useState } from 'react';
+import { useContext, useMemo, useState } from 'react';
 import Select, { OptionProps } from 'react-select';
 import { ThemeContext } from '../../../../App';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { UpworkFeedSearchBy } from '../../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
 import { setSearchParam } from '../../../store/feedsSlice';
 import { ISearchParameterDTO } from '../../../../public-common/interfaces/dto/common/isearch-parameter.interface';
-import { SelectOptionFeeds } from '../../../models';
-import { SelectProps } from '../../../models/feed.model';
+import { ColumnData, SelectOptionFeeds } from '../../../models';
+import { useGetFeedsMutation } from '../../../redux/feedsApi';
 
-function FilterSelect({ searchByVal, optionsArr }: SelectProps) {
+function FilterSelect({ column }: ColumnData) {
+  const { data: feedsData } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
+
+  const options = useMemo(() => ({
+    [UpworkFeedSearchBy.Review]: [
+      { value: 'Like', label: 'Like' },
+      { value: 'Dislike', label: 'Dislike' },
+    ],
+    [UpworkFeedSearchBy.Keywords]: feedsData?.data.keywordsOptions ?? [],
+    [UpworkFeedSearchBy.Score]: feedsData?.data.scoreOptions ?? [],
+  }), [feedsData]);
+
+  const searchByVal = column.id as UpworkFeedSearchBy;
+  const optionsArr = options[searchByVal];
+
   const dispatch = useAppDispatch();
   const { theme } = useContext(ThemeContext);
 
