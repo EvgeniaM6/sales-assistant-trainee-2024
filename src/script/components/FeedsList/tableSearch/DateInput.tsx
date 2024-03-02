@@ -32,7 +32,7 @@ function DateInput({ column }: ColumnData) {
   const [endDate, setEndDate] = useState<Date | null>(endDateFromState);
 
   const filterByDate = (): void => {
-    if (startDate && !endDate) return;
+    if (!dateSearchParam && !startDate || startDate && !endDate) return;
 
     const newSearchParameter: Required<ISearchParameterDTO<UpworkFeedSearchBy>> = {
       searchBy: columnId,
@@ -43,6 +43,7 @@ function DateInput({ column }: ColumnData) {
   };
 
   useEffect(() => {
+    console.log('endDate=', endDate);
     const timeout = setTimeout(() => filterByDate(), 500);
     return () => clearTimeout(timeout);
   }, [endDate]);
