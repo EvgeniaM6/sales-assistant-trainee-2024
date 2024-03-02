@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { ThemeContext } from '../../../../App';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
@@ -35,11 +35,15 @@ function DateInput() {
     dispatch(setSearchParam(newSearchParameter));
   };
 
+  useEffect(() => {
+    const timeout = setTimeout(() => filterByDate(), 500);
+    return () => clearTimeout(timeout);
+  }, [startDate]);
+
   return (
     <DatePicker
       selected={startDate}
       onChange={(date) => setStartDate(date)}
-      onBlur={filterByDate}
       isClearable
       dateFormat='dd/MM/yyyy'
       maxDate={new Date()}

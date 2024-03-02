@@ -64,7 +64,7 @@ function SideBar({ isOpen }: { isOpen: boolean }) {
         <SideBarErrors />
         <ul className='chats__list'>
           {isCreateBtnDisabled && <Spin isInset={true} />}
-          {chatsList.length && <>
+          {!!chatsList.length && <>
             {chatsList.map((chat) => (
               <ChatItem
                 key={chat.id}

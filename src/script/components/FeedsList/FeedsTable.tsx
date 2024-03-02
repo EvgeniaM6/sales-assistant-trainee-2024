@@ -47,11 +47,11 @@ function FeedsTable() {
 
   return (
     <div className='feeds__content'>
-      {isLoading ? <Spin isInset={true} /> :
-        <table className={`feeds__table feeds-table ${theme}`}>
-          <FeedsTableHead
-            table={table}
-          />
+      <table className={`feeds__table feeds-table ${theme}`}>
+        <FeedsTableHead
+          table={table}
+        />
+        {!isLoading &&
           <tbody className='feeds-table__body'>
             {table.getRowModel().rows.map((row) => (
               <tr key={row.id} className='feeds-table__row' onClick={(e) => openFeedById(e, row.getValue('feedId'))}>
@@ -91,9 +91,10 @@ function FeedsTable() {
               </tr>
             ))}
           </tbody>
-        </table>
-      }
-      {error && <>
+        }
+      </table>
+      {isLoading && <Spin isInset={true} />}
+      {!!error && <>
         {getErrorsArr(error).map((errMsg) => <ErrorMessage errorMsg={errMsg} key={errMsg} />)}
       </>}
     </div>

@@ -1,4 +1,4 @@
-import { useContext, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import Select, { OptionProps } from 'react-select';
 import { ThemeContext } from '../../../../App';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
@@ -30,6 +30,7 @@ function FilterSelect({ column }: ColumnData) {
   const searchParam = searchParameters?.find(
     ({ searchBy }) => searchBy === searchByVal
   );
+
   const [currentOptionsArr, setCurrentOptionsArr] = useState<string[]>((searchParam?.searchQuery as string[]) || ['all']);
 
   const allItemsOption = { value: 'all', label: 'All' };
@@ -59,6 +60,11 @@ function FilterSelect({ column }: ColumnData) {
 
     dispatch(setSearchParam(newSearchParameter));
   };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => filterByVal(), 500);
+    return () => clearTimeout(timeout);
+  }, [currentOptionsArr]);
 
   const handleClick = (data: SelectOptionFeeds) => {
     const isAlreadyChecked = currentOptionsArr.some((optionVal) => optionVal === data.value);
@@ -126,8 +132,7 @@ function FilterSelect({ column }: ColumnData) {
   return (
     <Select
       options={allOptionsArr}
-      defaultValue={defaultOption}
-      onBlur={filterByVal}
+      value={defaultOption}
       placeholder={''}
       className={`react-select-container ${theme}`}
       classNamePrefix='react-select'

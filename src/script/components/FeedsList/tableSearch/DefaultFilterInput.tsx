@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { ThemeContext } from '../../../../App';
 import { UpworkFeedSearchBy } from '../../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
@@ -26,6 +26,11 @@ function DefaultFilterInput({ column }: ColumnData) {
 
     dispatch(setSearchParam(newSearchParameter));
   };
+
+  useEffect(() => {
+    const timeout = setTimeout(() => filterByValue(), 500);
+    return () => clearTimeout(timeout);
+  }, [currentFilterValue]);
 
   const handleChangeInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setCurrentFilterValue(e.target.value);
