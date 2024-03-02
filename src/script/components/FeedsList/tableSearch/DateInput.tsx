@@ -6,30 +6,37 @@ import { UpworkFeedSearchBy } from '../../../../public-common/enums/upwork-feed/
 import { ISearchParameterDTO } from '../../../../public-common/interfaces/dto/common/isearch-parameter.interface';
 import { setSearchParam } from '../../../store/feedsSlice';
 import { getStringFromDate } from '../../../utils';
+import { ColumnData } from '../../../models';
 
-function DateInput() {
+function DateInput({ column }: ColumnData) {
+  const columnId = column.id as UpworkFeedSearchBy;
+
   const dispatch = useAppDispatch();
   const { theme } = useContext(ThemeContext);
 
-  const feedsValues = useAppSelector((store) => store.feeds);
-  const publishedSearchParam = feedsValues.searchParameters?.find(
-    ({ searchBy }) => searchBy === UpworkFeedSearchBy.Published
+  const { searchParameters } = useAppSelector((store) => store.feeds);
+  const dateSearchParam = searchParameters?.find(
+    ({ searchBy }) => searchBy === columnId
   );
 
-  let dateFromState: Date | null = null;
-  if (publishedSearchParam && publishedSearchParam.searchQuery) {
-    const [from] = (publishedSearchParam.searchQuery as string).split(' - ');
-    dateFromState = new Date(from);
+  let startDateFromState: Date | null = null;
+  let endDateFromState: Date | null = null;
+
+  if (dateSearchParam && dateSearchParam.searchQuery) {
+    const [from, to] = (dateSearchParam.searchQuery as string).split(' - ');
+    startDateFromState = new Date(from);
+    endDateFromState = new Date(to);
   }
 
-  const [startDate, setStartDate] = useState<Date | null>(dateFromState);
+  const [startDate, setStartDate] = useState<Date | null>(startDateFromState);
+  const [endDate, setEndDate] = useState<Date | null>(endDateFromState);
 
   const filterByDate = (): void => {
-    if (dateFromState === startDate || (!publishedSearchParam && !startDate)) return;
+    if (startDate && !endDate) return;
 
     const newSearchParameter: Required<ISearchParameterDTO<UpworkFeedSearchBy>> = {
-      searchBy: UpworkFeedSearchBy.Published,
-      searchQuery: startDate ? getStringFromDate(startDate) : '',
+      searchBy: columnId,
+      searchQuery: !!startDate ? getStringFromDate(startDate, endDate) : '',
     };
 
     dispatch(setSearchParam(newSearchParameter));
@@ -38,20 +45,28 @@ function DateInput() {
   useEffect(() => {
     const timeout = setTimeout(() => filterByDate(), 500);
     return () => clearTimeout(timeout);
-  }, [startDate]);
+  }, [endDate]);
+
+  const handleChangeDate = (dates: Array<Date | null>) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
+  };
 
   return (
     <DatePicker
-      selected={startDate}
-      onChange={(date) => setStartDate(date)}
-      isClearable
+      selectsRange
+      startDate={startDate}
+      endDate={endDate}
+      onChange={handleChangeDate}
+      isClearable={true}
       dateFormat='dd/MM/yyyy'
       maxDate={new Date()}
       calendarStartDay={1}
       showPopperArrow={false}
       formatWeekDay={(nameOfDay: string) => nameOfDay.slice(0, 3).toUpperCase()}
       className={`head-cell__input ${theme}`}
-      id='published'
+      id={columnId}
       autoComplete='off'
     />
   );

@@ -32,7 +32,7 @@ export const getFeedColumns = (): ColumnDef<FeedItem>[] => {
         return getTimeFromString(timeStr);
       },
       meta: {
-        filterComponent: () => <DateInput />,
+        filterComponent: (columnData: ColumnData) => <DateInput {...columnData} />,
       },
     },
     {

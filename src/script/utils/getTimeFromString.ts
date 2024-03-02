@@ -19,16 +19,35 @@ const getFullNumber = (value: number): string => {
   return value > 9 ? `${value}` : `0${value}`;
 };
 
-export const getStringFromDate = (timeDate: Date): string => {
-  const date = timeDate.getDate();
-  const month = timeDate.getMonth() + 1;
-  const yearFull = timeDate.getFullYear();
+export const getStringFromDate = (startTimeDate: Date, endTimeDate: Date | null): string => {
+  const dates = {
+    start: '',
+    end: '',
+  };
 
-  const dateFull = getFullNumber(date);
-  const monthFull = getFullNumber(month);
+  const startDate = startTimeDate.getDate();
+  const startMonth = startTimeDate.getMonth() + 1;
+  const startYearFull = startTimeDate.getFullYear();
 
-  const dayStr = `${yearFull}-${monthFull}-${dateFull}`;
-  const start = `${dayStr}T00:00:00.000Z`;
-  const finish = `${dayStr}T23:59:59.999Z`;
+  const startDateFull = getFullNumber(startDate);
+  const startMonthFull = getFullNumber(startMonth);
+
+  const startDayStr = `${startYearFull}-${startMonthFull}-${startDateFull}`;
+  dates.start = startDayStr;
+
+  if (endTimeDate) {
+    const endDate = endTimeDate.getDate();
+    const endMonth = endTimeDate.getMonth() + 1;
+    const endYearFull = endTimeDate.getFullYear();
+
+    const endDateFull = getFullNumber(endDate);
+    const endMonthFull = getFullNumber(endMonth);
+
+    const endDayStr = `${endYearFull}-${endMonthFull}-${endDateFull}`;
+    dates.end = endDayStr;
+  }
+
+  const start = `${dates.start}T00:00:00.000Z`;
+  const finish = `${dates.end || dates.start}T23:59:59.999Z`;
   return `${start} - ${finish}`;
 };
