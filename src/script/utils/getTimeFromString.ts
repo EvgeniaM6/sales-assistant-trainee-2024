@@ -48,6 +48,6 @@ export const getStringFromDate = (startTimeDate: Date, endTimeDate: Date | null)
   }
 
   const start = `${dates.start}T00:00:00.000Z`;
-  const finish = `${dates.end || dates.start}T23:59:59.999Z`;
+  const finish = `${dates.end || dates.start}T00:00:00.000Z`;
   return `${start} - ${finish}`;
 };

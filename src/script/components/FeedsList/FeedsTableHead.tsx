@@ -10,16 +10,12 @@ function FeedsTableHead({ table }: {
   return (
     <thead className='feeds-table__head'>
       {table.getHeaderGroups().map((headerGroup) => {
-        const filteredHeaders = headerGroup.headers.filter((header) => {
-          const columnId = header.id;
-          const haveToSkip = columnId === 'feedId' || columnId === 'url';
-          return !haveToSkip;
-        });
+        const { headers } = headerGroup;
 
         return (
           <Fragment key={headerGroup.id} >
             <tr className='feeds-table__row'>
-              {filteredHeaders.map((header) => {
+              {headers.map((header) => {
                 const headerId = header.id as UpworkFeedSortBy;
 
                 return (
@@ -45,26 +41,24 @@ function FeedsTableHead({ table }: {
               })}
             </tr>
             <tr className='feeds-table__row'>
-              {filteredHeaders.map((header) => {
-                const headerId = header.id;
-
-                return (
-                  <th
-                    key={headerId}
-                    className='feeds-table__cell feeds-table__head-cell head-cell filter'
-                  >
-                    {header.column.getCanFilter() ? <>
-                      {header.column.columnDef.meta &&
-                        (header.column.columnDef.meta as CustomFilterMeta).filterComponent ? (
-                          (header.column.columnDef.meta as CustomFilterMeta).filterComponent({
+              {headers.map((header) => (
+                <th
+                  key={header.id}
+                  className='feeds-table__cell feeds-table__head-cell head-cell filter'
+                >
+                  {header.column.getCanFilter() ? (
+                    <>
+                      {header.column.columnDef?.meta &&
+                        (header.column.columnDef?.meta as CustomFilterMeta).filterComponent ? (
+                          (header.column.columnDef?.meta as CustomFilterMeta).filterComponent({
                             column: header.column,
                             table,
                           })
                         ) : <DefaultFilterInput column={header.column} />}
-                    </> : null}
-                  </th>
-                );
-              })}
+                    </>
+                  ) : null}
+                </th>
+              ))}
             </tr>
           </Fragment>
         );

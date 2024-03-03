@@ -1,37 +1,16 @@
-import { useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import Select, { OptionProps } from 'react-select';
 import { ThemeContext } from '../../../../App';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { UpworkFeedSearchBy } from '../../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
-import { setSearchParam } from '../../../store/feedsSlice';
-import { ISearchParameterDTO } from '../../../../public-common/interfaces/dto/common/isearch-parameter.interface';
-import { ColumnData, SelectOptionFeeds } from '../../../models';
-import { useGetFeedsMutation } from '../../../redux/feedsApi';
+import { ColumnTableData, CustomFilterMeta, SelectOptionFeeds } from '../../../models';
 
-function FilterSelect({ column }: ColumnData) {
-  const { data: feedsData } = useGetFeedsMutation({ fixedCacheKey: 'feedsCacheKey' })[1];
+function FilterSelect({ column }: ColumnTableData) {
+  const optionsArr = (column.columnDef.meta as CustomFilterMeta)?.options ?? [];
 
-  const options = useMemo(() => ({
-    [UpworkFeedSearchBy.Review]: [
-      { value: 'Like', label: 'Like' },
-      { value: 'Dislike', label: 'Dislike' },
-    ],
-    [UpworkFeedSearchBy.Keywords]: feedsData?.data.keywordsOptions ?? [],
-    [UpworkFeedSearchBy.Score]: feedsData?.data.scoreOptions ?? [],
-  }), [feedsData]);
-
-  const searchByVal = column.id as UpworkFeedSearchBy;
-  const optionsArr = options[searchByVal];
-
-  const dispatch = useAppDispatch();
   const { theme } = useContext(ThemeContext);
 
-  const { searchParameters } = useAppSelector((store) => store.feeds);
-  const searchParam = searchParameters?.find(
-    ({ searchBy }) => searchBy === searchByVal
-  );
+  const columnFilterValue = column.getFilterValue() as string[] | undefined;
 
-  const [currentOptionsArr, setCurrentOptionsArr] = useState<string[]>((searchParam?.searchQuery as string[]) || ['all']);
+  const [currentOptionsArr, setCurrentOptionsArr] = useState<string[]>(columnFilterValue ?? ['all']);
 
   const allItemsOption = { value: 'all', label: 'All' };
 
@@ -42,23 +21,24 @@ function FilterSelect({ column }: ColumnData) {
   const defaultOption: SelectOptionFeeds = isAllSelected ? allItemsOption : amountOption;
 
   const filterByVal = (): void => {
-    const isAllSelected = !searchParam && currentOptionsArr[0] === 'all';
+    const isAllSelected = (!columnFilterValue || !columnFilterValue.length) && currentOptionsArr[0] === 'all';
     if (isAllSelected) return;
 
     if (!currentOptionsArr.length) {
       setCurrentOptionsArr([allItemsOption.value]);
-      if (searchParam && searchParam.searchQuery && searchParam.searchQuery[0] !== 'all') {
-        dispatch(setSearchParam({ searchBy: searchByVal, searchQuery: [] }));
-      }
       return;
     }
 
-    const newSearchParameter: Required<ISearchParameterDTO<UpworkFeedSearchBy>> = {
-      searchBy: searchByVal,
-      searchQuery: currentOptionsArr.filter((val) => val !== 'all'),
-    };
+    const isSameLength = currentOptionsArr.length === columnFilterValue?.length;
+    const isSameArray = isSameLength && currentOptionsArr?.every((option) => (
+      !!columnFilterValue?.find((filterValue) => filterValue === option))
+    );
 
-    dispatch(setSearchParam(newSearchParameter));
+    if (isSameArray) return;
+
+    const newSearchQuery = currentOptionsArr.filter((val) => val !== 'all');
+
+    column.setFilterValue(newSearchQuery.length ? newSearchQuery : undefined);
   };
 
   useEffect(() => {

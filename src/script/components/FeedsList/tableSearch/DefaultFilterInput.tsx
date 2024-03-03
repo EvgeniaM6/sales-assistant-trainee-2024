@@ -1,44 +1,29 @@
 import { useContext, useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
 import { ThemeContext } from '../../../../App';
-import { UpworkFeedSearchBy } from '../../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
-import { ISearchParameterDTO } from '../../../../public-common/interfaces/dto/common/isearch-parameter.interface';
-import { setSearchParam } from '../../../store/feedsSlice';
 import { ColumnData } from '../../../models';
 
 function DefaultFilterInput({ column }: ColumnData) {
-  const columnId = column.id as UpworkFeedSearchBy;
-
-  const dispatch = useAppDispatch();
   const { theme } = useContext(ThemeContext);
 
-  const { searchParameters } = useAppSelector((store) => store.feeds);
-  const filterValue = searchParameters?.find(({ searchBy }) => searchBy === columnId);
-  const [currentFilterValue, setCurrentFilterValue] = useState(filterValue?.searchQuery || '');
+  const columnFilter = (column.getFilterValue() ?? '') as string;
+  const [currentFilter, setCurrentFilter] = useState(columnFilter);
 
   const filterByValue = () => {
-    if (filterValue?.searchQuery === currentFilterValue || (!filterValue && !currentFilterValue)) return;
-
-    const newSearchParameter: Required<ISearchParameterDTO<UpworkFeedSearchBy>> = {
-      searchBy: columnId,
-      searchQuery: currentFilterValue,
-    };
-
-    dispatch(setSearchParam(newSearchParameter));
+    if (columnFilter === currentFilter || (!columnFilter && !currentFilter)) return;
+    column.setFilterValue(currentFilter);
   };
 
   useEffect(() => {
     const timeout = setTimeout(() => filterByValue(), 500);
     return () => clearTimeout(timeout);
-  }, [currentFilterValue]);
+  }, [currentFilter]);
 
-  const handleChangeInput: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setCurrentFilterValue(e.target.value);
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    setCurrentFilter(e.target.value);
   };
 
-  const clearValue = () => {
-    setCurrentFilterValue('');
-    dispatch(setSearchParam({ searchBy: columnId, searchQuery: '' }));
+  const clearCurrentFilter = (): void => {
+    setCurrentFilter('');
   };
 
   return (
@@ -46,12 +31,13 @@ function DefaultFilterInput({ column }: ColumnData) {
       <input
         type='text'
         className={`head-cell__input ${theme}`}
-        id={columnId}
-        value={currentFilterValue}
-        onChange={handleChangeInput}
-        onBlur={filterByValue}
+        id={column.id}
+        value={currentFilter}
+        onChange={handleChange}
       />
-      {!!currentFilterValue && <button type='button' className='filter-clear' onClick={clearValue} />}
+      {!!currentFilter && (
+        <button type='button' className='filter-clear' onClick={clearCurrentFilter} />
+      )}
     </div>
   );
 }

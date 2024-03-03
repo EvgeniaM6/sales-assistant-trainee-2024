@@ -1,29 +1,19 @@
 import { useContext, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { ThemeContext } from '../../../../App';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { UpworkFeedSearchBy } from '../../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
-import { ISearchParameterDTO } from '../../../../public-common/interfaces/dto/common/isearch-parameter.interface';
-import { setSearchParam } from '../../../store/feedsSlice';
 import { getStringFromDate } from '../../../utils';
 import { ColumnData } from '../../../models';
 
 function DateInput({ column }: ColumnData) {
-  const columnId = column.id as UpworkFeedSearchBy;
-
-  const dispatch = useAppDispatch();
   const { theme } = useContext(ThemeContext);
 
-  const { searchParameters } = useAppSelector((store) => store.feeds);
-  const dateSearchParam = searchParameters?.find(
-    ({ searchBy }) => searchBy === columnId
-  );
+  const columnFilterValue = column.getFilterValue() as string | undefined;
 
   let startDateFromState: Date | null = null;
   let endDateFromState: Date | null = null;
 
-  if (dateSearchParam && dateSearchParam.searchQuery) {
-    const [from, to] = (dateSearchParam.searchQuery as string).split(' - ');
+  if (columnFilterValue) {
+    const [from, to] = (columnFilterValue as string).split(' - ');
     startDateFromState = new Date(from);
     endDateFromState = new Date(to);
   }
@@ -32,18 +22,12 @@ function DateInput({ column }: ColumnData) {
   const [endDate, setEndDate] = useState<Date | null>(endDateFromState);
 
   const filterByDate = (): void => {
-    if (!dateSearchParam && !startDate || startDate && !endDate) return;
+    if (!columnFilterValue && !startDate || startDate && !endDate) return;
 
-    const newSearchParameter: Required<ISearchParameterDTO<UpworkFeedSearchBy>> = {
-      searchBy: columnId,
-      searchQuery: !!startDate ? getStringFromDate(startDate, endDate) : '',
-    };
-
-    dispatch(setSearchParam(newSearchParameter));
+    column.setFilterValue(!!startDate ? getStringFromDate(startDate, endDate) : undefined);
   };
 
   useEffect(() => {
-    console.log('endDate=', endDate);
     const timeout = setTimeout(() => filterByDate(), 500);
     return () => clearTimeout(timeout);
   }, [endDate]);
@@ -67,7 +51,7 @@ function DateInput({ column }: ColumnData) {
       showPopperArrow={false}
       formatWeekDay={(nameOfDay: string) => nameOfDay.slice(0, 3).toUpperCase()}
       className={`head-cell__input ${theme}`}
-      id={columnId}
+      id={column.id}
       autoComplete='off'
     />
   );

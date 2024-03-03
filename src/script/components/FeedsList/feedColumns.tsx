@@ -1,13 +1,23 @@
 import { ColumnDef } from '@tanstack/react-table';
 import { ReviewType } from '../../../public-common/enums/upwork-feed/review-type.enum';
 import { getTimeFromString } from '../../utils/getTimeFromString';
-import { FeedItem, ColumnData } from '../../models';
-import { useMemo } from 'react';
+import { FeedItem, ResponseGetFeeds } from '../../models';
 import { IReviewDTO } from '../../../public-common/interfaces/dto/upwork-feed/ireview.dto';
 import { DateInput, FilterSelect } from './tableSearch';
+import { UpworkFeedSearchBy } from '../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
+import { getClassNameByScore } from '../../utils';
 
-export const getFeedColumns = (): ColumnDef<FeedItem>[] => {
-  const columns = useMemo<ColumnDef<FeedItem>[]>(() => [
+export const getFeedColumns = (feedsData: ResponseGetFeeds | undefined): ColumnDef<FeedItem>[] => {
+  const options = {
+    [UpworkFeedSearchBy.Review]: [
+      { value: 'Like', label: 'Like' },
+      { value: 'Dislike', label: 'Dislike' },
+    ],
+    [UpworkFeedSearchBy.Keywords]: feedsData?.data.keywordsOptions ?? [],
+    [UpworkFeedSearchBy.Score]: feedsData?.data.scoreOptions ?? [],
+  };
+
+  const columns: ColumnDef<FeedItem>[] = [
     {
       accessorKey: 'feedId',
     },
@@ -32,7 +42,7 @@ export const getFeedColumns = (): ColumnDef<FeedItem>[] => {
         return getTimeFromString(timeStr);
       },
       meta: {
-        filterComponent: (columnData: ColumnData) => <DateInput {...columnData} />,
+        filterComponent: DateInput,
       },
     },
     {
@@ -50,14 +60,25 @@ export const getFeedColumns = (): ColumnDef<FeedItem>[] => {
       },
       enableSorting: false,
       meta: {
-        filterComponent: (columnData: ColumnData) => <FilterSelect {...columnData} />,
+        options: options[UpworkFeedSearchBy.Keywords],
+        filterComponent: FilterSelect,
       },
     },
     {
       accessorKey: 'score',
       header: 'Score',
+      cell: (info) => {
+        const score = info.getValue() as number;
+        const scoreClassName = getClassNameByScore(score);
+        return (
+          <span className={`feeds-table__cell-score score-${scoreClassName}`}>
+            {score}
+          </span>
+        );
+      },
       meta: {
-        filterComponent: (columnData: ColumnData) => <FilterSelect {...columnData} />,
+        options: options[UpworkFeedSearchBy.Score],
+        filterComponent: FilterSelect,
       },
     },
     {
@@ -72,7 +93,8 @@ export const getFeedColumns = (): ColumnDef<FeedItem>[] => {
         return <span></span>;
       },
       meta: {
-        filterComponent: (columnData: ColumnData) => <FilterSelect {...columnData} />,
+        options: options[UpworkFeedSearchBy.Review],
+        filterComponent: FilterSelect,
       },
     },
     {
@@ -89,7 +111,7 @@ export const getFeedColumns = (): ColumnDef<FeedItem>[] => {
       enableColumnFilter: false,
       enableSorting: false,
     },
-  ], []);
+  ];
 
   return columns;
 };
