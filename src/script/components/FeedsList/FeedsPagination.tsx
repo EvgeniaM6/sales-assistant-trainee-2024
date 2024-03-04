@@ -33,25 +33,27 @@ function FeedsPagination() {
 
   return (
     <div className={`feeds__pagination feeds-pagination ${theme}`}>
-      <div className='feeds-pagination__info info'>
-        <span>Items shown:</span>
-        <span className='info__bold'>{` ${countOnPage - pageSize + 1}-${Math.min(countOnPage, totalCount)} `}</span>
-        <span>out of</span>
-        <span className='info__bold'>{` ${totalCount}`}</span>
-      </div>
-      <div className={`feeds-pagination__divider ${theme}`}></div>
-      <div className='feeds-pagination__page-size'>
-        <span>Items per page</span>
-        {isLoading && <Spin isInset={true} />}
-        {!isLoading && data && <Select
-          options={pagesOptions}
-          placeholder={''}
-          defaultValue={pagesOptions.find(({ value }) => value === data.data.items.pageSize)}
-          menuPlacement='auto'
-          className={`react-select-container ${theme}`}
-          classNamePrefix='react-select'
-          onChange={handleChangePageSize}
-        />}
+      <div className='feeds-pagination__details'>
+        <div className='feeds-pagination__info info'>
+          <span className='feeds-pagination__text'>Items shown:</span>
+          <span className='info__bold'>{` ${countOnPage - pageSize + 1}-${Math.min(countOnPage, totalCount)} `}</span>
+          <span>out of</span>
+          <span className='info__bold'>{` ${totalCount}`}</span>
+        </div>
+        <div className={`feeds-pagination__divider ${theme}`}></div>
+        <div className='feeds-pagination__page-size'>
+          <span className='feeds-pagination__text'>Items per page</span>
+          {isLoading && <Spin isInset={true} />}
+          {!isLoading && data && <Select
+            options={pagesOptions}
+            placeholder={''}
+            defaultValue={pagesOptions.find(({ value }) => value === data.data.items.pageSize)}
+            menuPlacement='auto'
+            className={`react-select-container ${theme}`}
+            classNamePrefix='react-select'
+            onChange={handleChangePageSize}
+          />}
+        </div>
       </div>
       <FeedsPaginationPages />
     </div>
