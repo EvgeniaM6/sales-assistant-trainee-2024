@@ -20,24 +20,8 @@ const feedsSlice = createSlice({
     setPageSize(state, action: PayloadAction<number>) {
       return { ...state, pageSize: action.payload };
     },
-    setSearchParam(state, action: PayloadAction<Required<ISearchParameterDTO<UpworkFeedSearchBy>>>) {
-      if (!state.searchParameters) {
-        return { ...state, pageNumber: 1, searchParameters: [action.payload] };
-      }
-
-      const { searchBy, searchQuery } = action.payload;
-
-      const newSearchParameters = [...state.searchParameters].filter(
-        (searchParam) => searchParam.searchBy !== searchBy
-      );
-
-      const isArr = Array.isArray(searchQuery);
-
-      if ((!isArr && searchQuery) || (isArr && searchQuery.length)) {
-        newSearchParameters.push(action.payload);
-      }
-
-      return { ...state, pageNumber: 1, searchParameters: newSearchParameters };
+    setSearchParam(state, action: PayloadAction<Required<ISearchParameterDTO<UpworkFeedSearchBy>>[]>) {
+      return { ...state, pageNumber: 1, searchParameters: action.payload };
     },
     setSortBy(state, action: PayloadAction<UpworkFeedSortBy>) {
       return { ...state, sortBy: action.payload, sortDirection: SortDirection.ASC };

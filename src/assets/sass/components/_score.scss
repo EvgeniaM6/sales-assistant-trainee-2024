@@ -1,49 +1,51 @@
 .score {
   &-red {
     background: hsl(0, 100%, 80%);
-
-    &.dark {
-      background: hsl(0, 100%, 30%);
-    }
   }
 
   &-orange {
     background: hsl(39, 100%, 80%);
-
-    &.dark {
-      background: hsl(39, 100%, 30%);
-    }
   }
 
   &-yellow {
     background: hsl(60, 100%, 80%);
-
-    &.dark {
-      background: hsl(60, 100%, 30%);
-    }
   }
 
   &-yellowgreen {
     background: hsl(80, 61%, 80%);
-
-    &.dark {
-      background: hsl(80, 61%, 30%);
-    }
   }
 
   &-green {
     background: hsl(120, 100%, 80%);
-
-    &.dark {
-      background: hsl(120, 100%, 30%);
-    }
   }
 
   &-blue {
     background: hsl(177, 70%, 80%);
+  }
+}
 
-    &.dark {
-      background: hsl(177, 70%, 30%);
-    }
+.dark .score {
+  &-red {
+    background: hsl(0, 100%, 30%);
+  }
+
+  &-orange {
+    background: hsl(39, 100%, 30%);
+  }
+
+  &-yellow {
+    background: hsl(60, 100%, 30%);
+  }
+
+  &-yellowgreen {
+    background: hsl(80, 61%, 30%);
+  }
+
+  &-green {
+    background: hsl(120, 100%, 30%);
+  }
+
+  &-blue {
+    background: hsl(177, 70%, 30%);
   }
 }

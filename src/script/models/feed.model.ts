@@ -4,6 +4,9 @@ import { IGetAllUpworkFeedRequest } from '../../public-common/interfaces/dto/upw
 import { IUpworkFeedDetailItemDTO } from '../../public-common/interfaces/dto/upwork-feed/iupwork-feed-detail-item.dto';
 import { IUpworkFeedItemDTO } from '../../public-common/interfaces/dto/upwork-feed/iupwork-feed-item.dto';
 import { IUpworkResponseListFeedsDto } from '../../public-common/interfaces/dto/upwork-feed/iupwork-response-list-feeds.dto';
+import { UpworkFeedSearchBy } from '../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
+import { Column, FilterMeta, Table } from '@tanstack/react-table';
+import { IOptionInterface } from '../../public-common/interfaces/dto/common/ioption.interface';
 
 export type FeedItem = Omit<IUpworkFeedItemDTO, 'presetId' | 'accountId' | 'id'> & { feedId: string };
 
@@ -31,3 +34,21 @@ export type SelectOptionFeeds = {
   value: string;
   label: string;
 };
+
+export type SelectProps = {
+  searchByVal: UpworkFeedSearchBy,
+  optionsArr: SelectOptionFeeds[],
+};
+
+export type ColumnData = {
+  column: Column<any, unknown>,
+};
+
+export type ColumnTableData = ColumnData & {
+  table: Table<any>,
+};
+
+export interface CustomFilterMeta extends FilterMeta {
+  options: IOptionInterface[];
+  filterComponent: (info: ColumnData | ColumnTableData) => JSX.Element;
+}

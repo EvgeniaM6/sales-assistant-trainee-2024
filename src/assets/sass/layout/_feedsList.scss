@@ -40,7 +40,12 @@
 
     &__content {
       overflow: auto;
-      height: calc(100vh - 200px);
+      height: calc(100vh - 192px);
+      padding-top: 8px;
+
+      @include media-tablet {
+        height: calc(100vh - 252px);
+      }
 
       &::-webkit-scrollbar-track {
         background: transparent;
@@ -62,7 +67,7 @@
     }
 
     &__list {
-      padding: 8px 32px 0px 32px;
+      padding: 0px 32px;
     }
   }
 }

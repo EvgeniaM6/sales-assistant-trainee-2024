@@ -7,6 +7,10 @@
   line-height: 20px;
   box-shadow: 0 4px 16px -2px rgba($color: #000000, $alpha: 0.16);
 
+  &-wrapper {
+    width: 100%;
+  }
+
   &__close-icon {
     &::after {
       background-color: $color-label;
@@ -83,6 +87,10 @@
 
   &__day {
     font-weight: 400;
+
+      &--outside-month {
+        opacity: 0.7;
+      }
 
     &:not(.react-datepicker__day--disabled) {
       color: $color-date-day-text;

@@ -33,7 +33,7 @@ function Feed({ data }: { data: IUpworkFeedDetailItemDTO }) {
                 </span>
               </div>
               <div className='feed-info__details-item'>
-                <a href={url} className='feed__link'>{title}</a>
+                <a href={url} target='_blank' rel='noreferrer' className='feed__link'>{title}</a>
               </div>
               <div className='feed-info__details-item published'>
                 <span className='published__content'>{getTimeFromString(published)}</span>

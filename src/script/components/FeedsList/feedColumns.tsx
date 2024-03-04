@@ -1,62 +1,117 @@
-import { createColumnHelper } from '@tanstack/react-table';
+import { ColumnDef } from '@tanstack/react-table';
 import { ReviewType } from '../../../public-common/enums/upwork-feed/review-type.enum';
 import { getTimeFromString } from '../../utils/getTimeFromString';
-import { FeedItem } from '../../models';
+import { FeedItem, ResponseGetFeeds } from '../../models';
+import { IReviewDTO } from '../../../public-common/interfaces/dto/upwork-feed/ireview.dto';
+import { DateInput, FilterSelect } from './tableSearch';
+import { UpworkFeedSearchBy } from '../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
+import { getClassNameByScore } from '../../utils';
 
-const columnHelper = createColumnHelper<FeedItem>();
+export const getFeedColumns = (feedsData: ResponseGetFeeds | undefined): ColumnDef<FeedItem>[] => {
+  const options = {
+    [UpworkFeedSearchBy.Review]: [
+      { value: 'Like', label: 'Like' },
+      { value: 'Dislike', label: 'Dislike' },
+    ],
+    [UpworkFeedSearchBy.Keywords]: feedsData?.data.keywordsOptions ?? [],
+    [UpworkFeedSearchBy.Score]: feedsData?.data.scoreOptions ?? [],
+  };
 
-export const columns = [
-  columnHelper.accessor('feedId', {}),
-  columnHelper.accessor('url', {}),
-  columnHelper.accessor('title', {
-    header: 'Title',
-    cell: (info) => {
-      const title = info.getValue();
-      const url: string = info.row.getValue('url');
-      return <a href={url} target='_blank' rel="noreferrer">{title}</a>;
+  const columns: ColumnDef<FeedItem>[] = [
+    {
+      accessorKey: 'feedId',
     },
-  }),
-  columnHelper.accessor((row) => row.published, {
-    id: 'published',
-    header: 'Published',
-    cell: (info) => {
-      const timeStr = info.getValue();
-      return getTimeFromString(timeStr);
+    {
+      accessorKey: 'url',
     },
-  }),
-  columnHelper.accessor('keywords', {
-    header: 'Keywords',
-    cell: (info) => {
-      const keywordsArr = info.getValue();
-      return (
-        <div className='feeds-table__cell-keywords'>
-          {keywordsArr && keywordsArr.map((keyword) => (
-            <span key={keyword} className='feeds-table__keyword'>{keyword}</span>
-          ))}
-        </div>
-      );
+    {
+      accessorKey: 'title',
+      header: 'Title',
+      cell: (info) => {
+        const title = info.getValue() as string;
+        const url: string = info.row.getValue('url');
+        return <a href={url} target='_blank' rel="noreferrer">{title}</a>;
+      },
     },
-  }),
-  columnHelper.accessor('score', {
-    header: 'Score',
-  }),
-  columnHelper.accessor('review', {
-    header: 'Reaction',
-    cell: (info) => {
-      const review = info.getValue();
-      if (review) {
-        const isLike = review.type === ReviewType.Like;
-        return <span className={`feeds-table__reaction ${isLike ? 'like' : 'dislike'}`}></span>;
-      }
-      return <span></span>;
+    {
+      accessorKey: 'published',
+      id: 'published',
+      header: 'Published',
+      cell: (info) => {
+        const timeStr = info.getValue() as string;
+        return getTimeFromString(timeStr);
+      },
+      meta: {
+        filterComponent: DateInput,
+      },
     },
-  }),
-  columnHelper.accessor('matchedCases', {
-    id: 'matched-cases',
-    header: 'Matched cases',
-  }),
-  columnHelper.accessor('matchedBlogs', {
-    id: 'matched-blogs',
-    header: 'Matched blogs',
-  }),
-];
+    {
+      accessorKey: 'keywords',
+      header: 'Keywords',
+      cell: (info) => {
+        const keywordsArr = info.getValue() as string[];
+        return (
+          <div className='feeds-table__cell-keywords'>
+            {keywordsArr && keywordsArr.map((keyword) => (
+              <span key={keyword} className='feeds-table__keyword'>{keyword}</span>
+            ))}
+          </div>
+        );
+      },
+      enableSorting: false,
+      meta: {
+        options: options[UpworkFeedSearchBy.Keywords],
+        filterComponent: FilterSelect,
+      },
+    },
+    {
+      accessorKey: 'score',
+      header: 'Score',
+      cell: (info) => {
+        const score = info.getValue() as number;
+        const scoreClassName = getClassNameByScore(score);
+        return (
+          <span className={`feeds-table__cell-score score-${scoreClassName}`}>
+            {score}
+          </span>
+        );
+      },
+      meta: {
+        options: options[UpworkFeedSearchBy.Score],
+        filterComponent: FilterSelect,
+      },
+    },
+    {
+      accessorKey: 'review',
+      header: 'Reaction',
+      cell: (info) => {
+        const review = info.getValue() as IReviewDTO;
+        if (review) {
+          const isLike = review.type === ReviewType.Like;
+          return <span className={`feeds-table__reaction ${isLike ? 'like' : 'dislike'}`}></span>;
+        }
+        return <span></span>;
+      },
+      meta: {
+        options: options[UpworkFeedSearchBy.Review],
+        filterComponent: FilterSelect,
+      },
+    },
+    {
+      accessorKey: 'matchedCases',
+      id: 'matched-cases',
+      header: 'Matched cases',
+      enableColumnFilter: false,
+      enableSorting: false,
+    },
+    {
+      accessorKey: 'matchedBlogs',
+      id: 'matched-blogs',
+      header: 'Matched blogs',
+      enableColumnFilter: false,
+      enableSorting: false,
+    },
+  ];
+
+  return columns;
+};

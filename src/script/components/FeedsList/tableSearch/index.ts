@@ -1,5 +1,6 @@
+import ColumnSort from './ColumnSort';
 import DateInput from './DateInput';
 import FilterSelect from './FilterSelect';
-import TitleInput from './TitleInput';
+import DefaultFilterInput from './DefaultFilterInput';
 
-export { DateInput, FilterSelect, TitleInput };
+export { ColumnSort, DateInput, FilterSelect, DefaultFilterInput };

@@ -15,7 +15,7 @@ const store = configureStore({
     auth: authSlice,
     feeds: feedsSlice,
   },
-  middleware: (getDefaultMiddlware) => getDefaultMiddlware().concat([
+  middleware: (getDefaultMiddlware) => getDefaultMiddlware({ serializableCheck: false }).concat([
     authApi.middleware,
     feedsApi.middleware,
     chatApi.middleware,

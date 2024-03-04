@@ -75,7 +75,7 @@
         }
     
         &.published {
-          min-width: 92px;
+          min-width: 180px;
         }
     
         &.keywords {
@@ -100,7 +100,7 @@
       }
     }
 
-    .title-clear {
+    .filter-clear {
       cursor: pointer;
       background-color: transparent;
       border: 0;
@@ -149,19 +149,20 @@
           }
         }
 
-        &.clicked {
-          border: 2px solid #abbde0;
-
-          &.dark {
-            border: 2px solid $color-btn-secondary-dark-focus;
-          }
-        }
-
         &-icon {
           display: block;
           width: 16px;
           height: 16px;
           background: url('../../images/sort.svg') center / cover no-repeat;
+
+          &.asc {
+            background: url('../../images/sort-arrow.svg') center / cover no-repeat;
+            transform: rotate(180deg);
+          }
+
+          &.desc {
+            background: url('../../images/sort-arrow.svg') center / cover no-repeat;
+          }
         }
       }
     }

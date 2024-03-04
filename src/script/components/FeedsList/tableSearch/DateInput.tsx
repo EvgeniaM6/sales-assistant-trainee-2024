@@ -1,53 +1,57 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { ThemeContext } from '../../../../App';
-import { useAppDispatch, useAppSelector } from '../../../hooks';
-import { UpworkFeedSearchBy } from '../../../../public-common/enums/upwork-feed/upwork-feed-search-by.enum';
-import { ISearchParameterDTO } from '../../../../public-common/interfaces/dto/common/isearch-parameter.interface';
-import { setSearchParam } from '../../../store/feedsSlice';
 import { getStringFromDate } from '../../../utils';
+import { ColumnData } from '../../../models';
 
-function DateInput() {
-  const dispatch = useAppDispatch();
+function DateInput({ column }: ColumnData) {
   const { theme } = useContext(ThemeContext);
 
-  const feedsValues = useAppSelector((store) => store.feeds);
-  const publishedSearchParam = feedsValues.searchParameters?.find(
-    ({ searchBy }) => searchBy === UpworkFeedSearchBy.Published
-  );
+  const columnFilterValue = column.getFilterValue() as string | undefined;
 
-  let dateFromState: Date | null = null;
-  if (publishedSearchParam && publishedSearchParam.searchQuery) {
-    const [from] = (publishedSearchParam.searchQuery as string).split(' - ');
-    dateFromState = new Date(from);
+  let startDateFromState: Date | null = null;
+  let endDateFromState: Date | null = null;
+
+  if (columnFilterValue) {
+    const [from, to] = (columnFilterValue as string).split(' - ');
+    startDateFromState = new Date(from);
+    endDateFromState = new Date(to);
   }
 
-  const [startDate, setStartDate] = useState<Date | null>(dateFromState);
+  const [startDate, setStartDate] = useState<Date | null>(startDateFromState);
+  const [endDate, setEndDate] = useState<Date | null>(endDateFromState);
 
   const filterByDate = (): void => {
-    if (dateFromState === startDate || (!publishedSearchParam && !startDate)) return;
+    if (!columnFilterValue && !startDate || startDate && !endDate) return;
 
-    const newSearchParameter: Required<ISearchParameterDTO<UpworkFeedSearchBy>> = {
-      searchBy: UpworkFeedSearchBy.Published,
-      searchQuery: startDate ? getStringFromDate(startDate) : '',
-    };
+    column.setFilterValue(!!startDate ? getStringFromDate(startDate, endDate) : undefined);
+  };
 
-    dispatch(setSearchParam(newSearchParameter));
+  useEffect(() => {
+    const timeout = setTimeout(() => filterByDate(), 500);
+    return () => clearTimeout(timeout);
+  }, [endDate]);
+
+  const handleChangeDate = (dates: Array<Date | null>) => {
+    const [start, end] = dates;
+    setStartDate(start);
+    setEndDate(end);
   };
 
   return (
     <DatePicker
-      selected={startDate}
-      onChange={(date) => setStartDate(date)}
-      onBlur={filterByDate}
-      isClearable
+      selectsRange
+      startDate={startDate}
+      endDate={endDate}
+      onChange={handleChangeDate}
+      isClearable={true}
       dateFormat='dd/MM/yyyy'
       maxDate={new Date()}
       calendarStartDay={1}
       showPopperArrow={false}
       formatWeekDay={(nameOfDay: string) => nameOfDay.slice(0, 3).toUpperCase()}
       className={`head-cell__input ${theme}`}
-      id='published'
+      id={column.id}
       autoComplete='off'
     />
   );
