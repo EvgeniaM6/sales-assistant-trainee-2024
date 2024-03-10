@@ -2,17 +2,18 @@ import { useEffect, useState } from 'react';
 import { useCreateChatMutation, useDeleteChatMutation, useEditChatMutation } from '../../redux/chatApi';
 import { getErrorsArr } from '../../utils';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
+import { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import { SerializedError } from '@reduxjs/toolkit';
 
 function SideBarErrors() {
   const [errorsArr, setErrorsArr] = useState<{[key: string]: string[]}>({});
 
-  const { error: createError } = useCreateChatMutation({ fixedCacheKey: 'createCacheKey' })[1];
-  const { error: editError } = useEditChatMutation({ fixedCacheKey: 'editCacheKey' })[1];
-  const { error: deleteError } = useDeleteChatMutation({ fixedCacheKey: 'deleteCacheKey' })[1];
+  const { error: createError, reset: resetCreateResult } = useCreateChatMutation({ fixedCacheKey: 'createCacheKey' })[1];
+  const { error: editError, reset: resetEditResult } = useEditChatMutation({ fixedCacheKey: 'editCacheKey' })[1];
+  const { error: deleteError, reset: resetDeleteResult } = useDeleteChatMutation({ fixedCacheKey: 'deleteCacheKey' })[1];
 
-  useEffect(() => {
-    if (!createError) return;
-    const errorsArr = getErrorsArr(createError);
+  const showError = (error: FetchBaseQueryError | SerializedError): void => {
+    const errorsArr = getErrorsArr(error);
 
     const time = Date.now();
     setErrorsArr((prevState) => ({ ...prevState, [time.toString()]: errorsArr }));
@@ -23,38 +24,33 @@ function SideBarErrors() {
         delete newState[time];
         return newState;
       });
+    }, 5000);
+  };
+
+  useEffect(() => {
+    if (!createError) return;
+    showError(createError);
+
+    setTimeout(() => {
+      resetCreateResult();
     }, 5000);
   }, [createError]);
 
   useEffect(() => {
     if (!editError) return;
-    const errorsArr = getErrorsArr(editError);
-
-    const time = Date.now();
-    setErrorsArr((prevState) => ({ ...prevState, [time.toString()]: errorsArr }));
+    showError(editError);
 
     setTimeout(() => {
-      setErrorsArr((prevState) => {
-        const newState = { ...prevState };
-        delete newState[time];
-        return newState;
-      });
+      resetEditResult();
     }, 5000);
   }, [editError]);
 
   useEffect(() => {
     if (!deleteError) return;
-    const errorsArr = getErrorsArr(deleteError);
-
-    const time = Date.now();
-    setErrorsArr((prevState) => ({ ...prevState, [time.toString()]: errorsArr }));
+    showError(deleteError);
 
     setTimeout(() => {
-      setErrorsArr((prevState) => {
-        const newState = { ...prevState };
-        delete newState[time];
-        return newState;
-      });
+      resetDeleteResult();
     }, 5000);
   }, [deleteError]);
 
