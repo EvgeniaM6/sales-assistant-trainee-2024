@@ -35,7 +35,7 @@ function useRecoverUser() {
     if (e.key === 'tokens') {
       if (e.newValue === null) {
         dispatch(logOut());
-      } else if (e.oldValue === null) {
+      } else {
         navigate(`/${PageRoutes.Feed}`);
       }
     }
