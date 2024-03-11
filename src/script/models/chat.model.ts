@@ -8,6 +8,7 @@ export type ResponseGetChat = IApiResponseGenericDTO<IChatItem>;
 export type ResponseDeleteChat = IApiResponseGenericDTO<boolean>;
 export type RespGetMessagesByChatId = IApiResponseGenericDTO<IMessageDTO[]>;
 export type RespSendMsg = IApiResponseGenericDTO<IMessageDTO>;
+export type RespSubscribeChat = IApiResponseGenericDTO<boolean>;
 
 export type RequestGetChats = {
   accessToken: string,
