@@ -3,22 +3,21 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import TextareaAutosize from 'react-textarea-autosize';
 import { ThemeContext } from '../../../App';
 import { IMessageDTO } from '../../../public-common/interfaces/dto/message/imessage-dto';
-import { useGetMessagesByChatIdQuery, useSendMessageMutation } from '../../redux/messageApi';
+import { useSendMessageMutation } from '../../redux/messageApi';
 import { useForm } from 'react-hook-form';
 import { getErrorsArr, getLocalStorageTokens } from '../../utils';
 import { SendMsgForm } from '../../models';
 import ErrorMessage from '../ErrorMessage/ErrorMessage';
 
-function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
+function Chat({ messagesArr, showSentMessage }: {
+  messagesArr: IMessageDTO[],
+  showSentMessage:(data: IMessageDTO) => void,
+}) {
   const { theme } = useContext(ThemeContext);
   const chatsListRef = useRef<HTMLDivElement>(null);
   const [sentContent, setSentContent] = useState('');
 
-  const [chatId] = location.pathname.split('/').slice(2);
-  const { accessToken } = getLocalStorageTokens();
-
-  const [sendMessage, { error, isSuccess, isLoading, reset: resetSendMsg }] = useSendMessageMutation();
-  const { refetch } = useGetMessagesByChatIdQuery({ accessToken, id: chatId });
+  const [sendMessage, { error, isLoading, reset: resetSendMsg }] = useSendMessageMutation();
 
   const {
     register,
@@ -31,6 +30,15 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
     const [chatId] = location.pathname.split('/').slice(2);
     const { accessToken } = getLocalStorageTokens();
     sendMessage({ accessToken, values: { chatId: Number(chatId), content }});
+
+    showSentMessage({
+      id: Date.now().toString(),
+      content,
+      created: new Date(Date.now()).toISOString(),
+      isBot: false,
+      accountId: 0,
+      chatId: 0,
+    });
     reset();
   };
 
@@ -39,12 +47,6 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
       top: chatsListRef.current.scrollHeight,
     });
   }, [messagesArr, sentContent]);
-
-  useEffect(() => {
-    if (isSuccess) {
-      refetch();
-    }
-  }, [isSuccess]);
 
   useEffect(() => {
     if (!error) return;
@@ -77,14 +79,6 @@ function Chat({ messagesArr }: { messagesArr: IMessageDTO[] }) {
             })
           }
           {isLoading && <>
-            <div className={`chat__message msg ${'user'} ${theme}`}>
-              <div className='msg__author'>
-                <div className={`msg__author-icon ${'user'} ${theme}`}></div>
-              </div>
-              <div className='msg__content'>
-                <ReactMarkdown>{sentContent}</ReactMarkdown>
-              </div>
-            </div>
             <div className={`chat__message msg ${'bot'} ${theme}`}>
               <div className='msg__author'>
                 <div className={`msg__author-icon ${'bot'} ${theme}`}></div>
