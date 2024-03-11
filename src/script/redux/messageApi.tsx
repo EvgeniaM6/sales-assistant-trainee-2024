@@ -33,34 +33,15 @@ export const messageApi = createApi({
         body: values,
       }),
     }),
-    subscribe: build.mutation<string, ISubscriptionToChatMessagesDTO>({
+    subscribe: build.mutation<RespSubscribeChat, ISubscriptionToChatMessagesDTO>({
       queryFn: async (values: ISubscriptionToChatMessagesDTO) => {
-        // const result: RespSubscribeChat = await new Promise((res) => {
-        //   socket.emit(MessagesRoutesEnum.Subscribe, values, (resp: RespSubscribeChat) => {
-        //     console.log('resp=', resp);
-        //     res(resp);
-        //   });
-        // });
-        await new Promise((res) => {
+        const result = await new Promise<RespSubscribeChat>((res) => {
           socket.emit(MessagesRoutesEnum.Subscribe, values, (resp: RespSubscribeChat) => {
-            // console.log('resp=', resp);
             res(resp);
           });
         });
 
-        // console.log('result=', result);
-
-        // if (!result.error) {
-        //   // return { status: result.statusCode, data: result.data as unknown };
-        //   return undefined;
-        // }
-        // return { data: result.data };
-
-        // const err: FetchBaseQueryError = { status: result.statusCode, data: result.error as unknown };
-        // return err;
-        // return result;
-        // return { error: result.error };
-        return { data: '' };
+        return { data: result };
       },
     }),
   }),
